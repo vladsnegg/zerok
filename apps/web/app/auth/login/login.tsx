@@ -1,7 +1,6 @@
 'use client'
 
 import React, { useState } from 'react'
-import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { useTranslation } from 'react-i18next'
 import { ArrowRight, Info, Lock, Mail } from 'lucide-react'
@@ -14,11 +13,8 @@ interface LoginClientProps {
   org: any
 }
 
-const STATUS_TOKEN_KEY = 'lh_access_status_token'
-
 export default function LoginClient({ org }: LoginClientProps) {
   const { t } = useTranslation()
-  const router = useRouter()
   const { signIn } = useAuth()
 
   const [email, setEmail] = useState('')
@@ -63,25 +59,6 @@ export default function LoginClient({ org }: LoginClientProps) {
         parsed = JSON.parse(result?.error || '{}')
       } catch {
         parsed = {}
-      }
-
-      // Only an account that has not been approved yet lands on the waiting
-      // screen. Approved users simply sign in; nothing is requested again.
-      if (parsed?.code === 'ACCESS_PENDING' && parsed?.status_token) {
-        try {
-          sessionStorage.setItem(STATUS_TOKEN_KEY, parsed.status_token)
-        } catch {
-          /* private mode: the pending page can still ask to sign in again */
-        }
-        router.push('/pending')
-        return
-      }
-
-      if (parsed?.code === 'ACCESS_REJECTED') {
-        setError(t('auth.access_rejected', {
-          defaultValue: 'Your access request was declined. Contact an administrator.',
-        }))
-        return
       }
 
       setError(parsed?.message || t('auth.wrong_email_password', {
@@ -185,8 +162,8 @@ export default function LoginClient({ org }: LoginClientProps) {
           </div>
 
           <p className="mt-3 text-center text-xs text-black/30">
-            {t('auth.access_review_note', {
-              defaultValue: 'New accounts are activated by an administrator after review.',
+            {t('auth.registration_open_note', {
+              defaultValue: 'Registration is open; new accounts start with the student role.',
             })}
           </p>
         </div>

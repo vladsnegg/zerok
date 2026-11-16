@@ -52,11 +52,7 @@ from src.services.users.email_verification import (
     resend_verification_email,
 )
 from src.services.auth.session import issue_session_or_challenge
-from src.services.auth.access import (
-    create_access_request,
-    get_access_status,
-    normalize_gmail,
-)
+from src.services.auth.access import normalize_login_email, register_user
 from src.security.session_context import (
     AUTH_METHOD_GOOGLE,
     AUTH_METHOD_PASSWORD,
@@ -599,9 +595,9 @@ async def login(
     org_slug: Optional[str] = Form(None),
     db_session: AsyncSession = Depends(get_db_session),
 ):
-    # Gmail ignores dots and +suffix. Normalize before the lookup so an address
-    # registered as john.doe+x@gmail.com is found when typed as johndoe@gmail.com.
-    username = normalize_gmail(username)
+    # Normalize the address before the lookup so a stored lower-case email is
+    # found regardless of how the user typed it.
+    username = normalize_login_email(username)
     # Step 1: Check rate limit (IP-based)
     is_allowed, retry_after = check_login_rate_limit(request)
     if not is_allowed:
@@ -731,7 +727,7 @@ async def login(
     return result
 
 
-class AccessRequestBody(BaseModel):
+class RegisterBody(BaseModel):
     email: EmailStr
     password: str
     first_name: str = ""
@@ -739,39 +735,36 @@ class AccessRequestBody(BaseModel):
 
 
 @router.post(
-    "/access-request",
-    summary="Request access to the platform",
+    "/register",
+    summary="Create an account",
     description=(
-        "Create a pending account. Only @gmail.com addresses are accepted. "
-        "The account cannot sign in until an organization administrator approves "
-        "the request and assigns a role. The response is deliberately generic so "
-        "the endpoint cannot be used to enumerate registered addresses."
+        "Open registration. The new account is attached to the default "
+        "organization with the student role and can sign in immediately."
     ),
     responses={
-        200: {"description": "Request received (generic response)."},
-        400: {"description": "Non-Gmail address, weak password, or invalid profile fields"},
-        429: {"description": "Too many access requests from this IP"},
+        200: {"description": "Account created."},
+        400: {"description": "Weak password, invalid profile fields, or email already in use"},
+        429: {"description": "Too many registrations from this IP"},
+        503: {"description": "The platform has no organization yet"},
     },
 )
-async def api_access_request(
+async def api_register(
     request: Request,
-    body: AccessRequestBody,
+    body: RegisterBody,
     db_session: AsyncSession = Depends(get_db_session),
 ):
     ip = get_client_ip(request)
-    is_allowed, _count, retry_after = check_rate_limit(
-        f"access_request:{ip}", 5, 3600
-    )
+    is_allowed, _count, retry_after = check_rate_limit(f"register:{ip}", 10, 3600)
     if not is_allowed:
         raise HTTPException(
             status_code=status.HTTP_429_TOO_MANY_REQUESTS,
             detail={
                 "code": "RATE_LIMITED",
-                "message": "Too many access requests. Please try again later.",
+                "message": "Too many registrations. Please try again later.",
                 "retry_after": retry_after,
             },
         )
-    return await create_access_request(
+    return await register_user(
         request,
         db_session,
         email=str(body.email),
@@ -779,28 +772,6 @@ async def api_access_request(
         first_name=body.first_name,
         last_name=body.last_name,
     )
-
-
-@router.get(
-    "/access-status",
-    summary="Check an access request",
-    description=(
-        "Read the status of a pending request using the short-lived status token "
-        "returned by a rejected login (detail.status_token). The token only proves "
-        "the e-mail; it cannot access any other endpoint."
-    ),
-)
-async def api_access_status(
-    request: Request,
-    db_session: AsyncSession = Depends(get_db_session),
-):
-    authorization = request.headers.get("authorization", "")
-    if not authorization.lower().startswith("bearer "):
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail={"code": "MISSING_STATUS_TOKEN", "message": "Status token required"},
-        )
-    return await get_access_status(db_session, authorization[7:].strip())
 
 
 class ThirdPartyLogin(BaseModel):

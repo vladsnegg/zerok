@@ -1,5 +1,4 @@
 from typing import List, Literal, Optional, Union
-from pydantic import BaseModel
 from fastapi import APIRouter, Depends, Request, UploadFile, Query, Path, HTTPException
 from sqlmodel.ext.asyncio.session import AsyncSession
 from src.services.orgs.invites import (
@@ -75,11 +74,6 @@ from src.services.orgs.orgs import (
 )
 from src.db.organization_config import AuthBrandingConfig, SeoOrgConfig
 from src.security.session_context import refuse_lms_session
-from src.services.auth.access import (
-    approve_access_request,
-    list_access_requests,
-    reject_access_request,
-)
 
 
 router = APIRouter()
@@ -310,77 +304,6 @@ async def api_update_user_role(
     """
     return await update_user_role(
         request, org_id, user_id, role_uuid, db_session, current_user
-    )
-
-
-class ApproveAccessRequestBody(BaseModel):
-    role: str
-
-
-@router.get(
-    "/{org_id}/access-requests",
-    summary="List pending access requests",
-    description="List accounts waiting for an administrator's approval.",
-    responses={
-        200: {"description": "Pending requests."},
-        401: {"description": "Not authenticated"},
-        403: {"description": "Caller is not an organization administrator"},
-    },
-)
-async def api_list_access_requests(
-    request: Request,
-    org_id: int,
-    current_user: PublicUser = Depends(get_current_user),
-    db_session: AsyncSession = Depends(get_db_session),
-):
-    return await list_access_requests(request, db_session, org_id, current_user)
-
-
-@router.post(
-    "/{org_id}/access-requests/{user_id}/approve",
-    summary="Approve an access request",
-    description="Approve a pending account and assign one of: admin, teacher, student.",
-    responses={
-        200: {"description": "User approved and added to the organization."},
-        400: {"description": "Unknown role"},
-        403: {"description": "Caller is not an organization administrator"},
-        404: {"description": "User or role not found"},
-        409: {"description": "Request is not pending"},
-    },
-)
-async def api_approve_access_request(
-    request: Request,
-    org_id: int,
-    user_id: int,
-    body: ApproveAccessRequestBody,
-    current_user: PublicUser = Depends(get_current_user),
-    db_session: AsyncSession = Depends(get_db_session),
-):
-    return await approve_access_request(
-        request, db_session, org_id, user_id, body.role, current_user
-    )
-
-
-@router.post(
-    "/{org_id}/access-requests/{user_id}/reject",
-    summary="Reject an access request",
-    description="Decline a pending account. The account cannot sign in.",
-    responses={
-        200: {"description": "Request rejected."},
-        403: {"description": "Caller is not an organization administrator"},
-        404: {"description": "User not found"},
-        409: {"description": "Request is not pending"},
-    },
-)
-async def api_reject_access_request(
-    request: Request,
-    org_id: int,
-    user_id: int,
-    current_user: PublicUser = Depends(get_current_user),
-    db_session: AsyncSession = Depends(get_db_session),
-):
-    return await reject_access_request(
-        request, db_session, org_id, user_id, current_user
     )
 
 

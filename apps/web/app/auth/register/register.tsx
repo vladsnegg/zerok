@@ -2,12 +2,12 @@
 
 import React, { useState } from 'react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { useTranslation } from 'react-i18next'
 import { ArrowRight, CheckCircle2, Info, Lock, Mail, User } from 'lucide-react'
 
 import AuthLayout from '@components/Auth/AuthLayout'
-
-const GMAIL_RE = /^[a-z0-9](?:[a-z0-9._%+-]*[a-z0-9])?@gmail\.com$/i
+import { useAuth } from '@components/Contexts/AuthContext'
 
 interface RegisterClientProps {
   org: any
@@ -15,6 +15,8 @@ interface RegisterClientProps {
 
 export default function RegisterClient({ org }: RegisterClientProps) {
   const { t } = useTranslation()
+  const router = useRouter()
+  const { signIn } = useAuth()
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -33,10 +35,8 @@ export default function RegisterClient({ org }: RegisterClientProps) {
     setError('')
 
     const cleanEmail = email.trim().toLowerCase()
-    if (!GMAIL_RE.test(cleanEmail)) {
-      setError(t('auth.gmail_only', {
-        defaultValue: 'Registration is available only for @gmail.com addresses.',
-      }))
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(cleanEmail)) {
+      setError(t('validation.invalid_email', { defaultValue: 'Enter a valid email address.' }))
       return
     }
     if (!password) {
@@ -46,7 +46,7 @@ export default function RegisterClient({ org }: RegisterClientProps) {
 
     setSubmitting(true)
     try {
-      const response = await fetch('/api/v1/auth/access-request', {
+      const response = await fetch('/api/v1/auth/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -61,13 +61,27 @@ export default function RegisterClient({ org }: RegisterClientProps) {
         const detail = data?.detail
         setError(
           (typeof detail === 'string' ? detail : detail?.message) ||
-            t('auth.access_request_failed', { defaultValue: 'Could not send the request.' }),
+            t('auth.access_request_failed', { defaultValue: 'Could not create the account.' }),
         )
+        return
+      }
+
+      // The account is active immediately: sign in and land in the student
+      // cabinet. If automatic sign-in fails, the success screen links to login.
+      const result: any = await signIn('credentials', {
+        redirect: false,
+        email: cleanEmail,
+        password,
+        orgSlug: org?.slug,
+        callbackUrl: '/cabinet',
+      })
+      if (result?.ok) {
+        window.location.href = '/cabinet'
         return
       }
       setSent(true)
     } catch {
-      setError(t('auth.access_request_failed', { defaultValue: 'Could not send the request.' }))
+      setError(t('auth.access_request_failed', { defaultValue: 'Could not create the account.' }))
     } finally {
       setSubmitting(false)
     }
@@ -87,12 +101,12 @@ export default function RegisterClient({ org }: RegisterClientProps) {
           <div className="w-full max-w-[420px] py-10 text-center">
             <CheckCircle2 size={36} className="mx-auto text-green-600" />
             <h1 className="mt-4 text-2xl font-black text-black">
-              {t('auth.access_request_sent_title', { defaultValue: 'Request sent' })}
+              {t('auth.register_success_title', { defaultValue: 'Account created' })}
             </h1>
             <p className="mt-3 text-sm text-black/45">
-              {t('auth.access_request_sent', {
+              {t('auth.register_success_body', {
                 defaultValue:
-                  'An administrator will review your request and assign a role. After approval, sign in with your e-mail and password.',
+                  'Your account is active with the student role. Sign in with your e-mail and password.',
               })}
             </p>
             <Link
@@ -119,12 +133,11 @@ export default function RegisterClient({ org }: RegisterClientProps) {
       <div className="flex-1 flex items-center justify-center px-6 md:px-12 lg:px-20">
         <div className="w-full max-w-[420px] py-10">
           <h1 className="text-[28px] md:text-[32px] font-black text-black tracking-tight leading-tight">
-            {t('auth.request_access_title', { defaultValue: 'Request access' })}
+            {t('auth.register_title', { defaultValue: 'Create an account' })}
           </h1>
           <p className="mt-2 text-black/45 text-[15px] font-medium">
-            {t('auth.request_access_subtitle', {
-              defaultValue:
-                'Registration is limited to @gmail.com. An administrator approves every account.',
+            {t('auth.register_subtitle', {
+              defaultValue: 'New accounts start with the student role and are active immediately.',
             })}
           </p>
 
@@ -219,7 +232,7 @@ export default function RegisterClient({ org }: RegisterClientProps) {
                 </span>
               ) : (
                 <span className="flex items-center gap-2">
-                  {t('auth.request_access_submit', { defaultValue: 'Send request' })}
+                  {t('auth.register_submit', { defaultValue: 'Create account' })}
                   <ArrowRight size={15} />
                 </span>
               )}

@@ -318,7 +318,6 @@ export default async function proxy(req: NextRequest) {
   const isAuthEntry =
     pathname === '/login' ||
     pathname === '/register' ||
-    pathname === '/pending' ||
     pathname === '/health' ||
     pathname.startsWith('/auth/') ||
     pathname.startsWith('/api/')
@@ -332,12 +331,7 @@ export default async function proxy(req: NextRequest) {
     return NextResponse.redirect(new URL('/login', req.url))
   }
 
-  // The pending-approval screen is a top-level auth page, not org content.
-  if (pathname === '/pending') {
-    return NextResponse.rewrite(new URL(`/auth/pending${search}`, req.url))
-  }
-
-  // Registration (access request) is a top-level auth page as well.
+  // Registration is a top-level auth page, not org content.
   if (pathname === '/register') {
     return NextResponse.rewrite(new URL(`/auth/register${search}`, req.url))
   }

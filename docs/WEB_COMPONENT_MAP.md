@@ -42,7 +42,7 @@ app/
 
 | Контекст | Файл | Роль | Потребители |
 |---|---|---|---|
-| Auth | `components/Contexts/AuthContext.tsx` | `SessionProvider`, `useSession`, `signIn`, `signOut`, MFA, magic link, OAuth state; кэш сессии; передаёт `status_token` при `ACCESS_PENDING` | Все auth-страницы, header, guards |
+| Auth | `components/Contexts/AuthContext.tsx` | `SessionProvider`, `useSession`, `signIn`, `signOut`, MFA, magic link, OAuth state; кэш сессии | Все auth-страницы, header, guards |
 | LH Session | `components/Contexts/LHSessionContext.tsx` | `SessionGate`, `useLHSession`; статус и токены | Layouts, почти все интерактивные страницы |
 | Org | `components/Contexts/OrgContext.tsx` | Текущая организация, config, features, членство | Меню, страницы, feature gates |
 | Course | `components/Contexts/CourseContext.tsx` | Текущий курс и дерево | Плеер, редактор курса |
@@ -192,8 +192,8 @@ app/
 - `app/api/auth/token-exchange/route.ts` — обмен кода платформы, проверка сессии, установка cookies.
 - `lib/auth/server.ts` — server-side сессия без расхода refresh-токена; при отсутствии access-токена возвращает `unresolved`.
 - `proxy.ts` — tenancy, cookie-контекст, рерайты, canonical URL, embed/board/editor обходы, health, sitemap/robots/feeds, open-redirect защита.
-- **Phase 2 access gate:** `proxy.ts` редиректит любой запрос без `LH_access`/`LH_refresh` на `/login` (кроме `/login`, `/pending`, `/auth/*`, health). `/signup` → `/login`.
-- **Access request UI:** `app/auth/login/login.tsx` (только вход), `app/auth/register/*` (заявка, gmail-only), `app/auth/pending/page.tsx` (опрос статуса), `components/Dashboard/Pages/Users/OrgAccessRequests/OrgAccessRequests.tsx` (очередь одобрения).
+- **Phase 2 access gate:** `proxy.ts` редиректит любой запрос без `LH_access`/`LH_refresh` на `/login` (кроме `/login`, `/register`, `/auth/*`, health). `/signup` → `/login`.
+- **Access request UI:** `app/auth/login/login.tsx` (только вход), `app/auth/register/*` (свободная регистрация, автовход), `services/auth/redirects.ts` (роль → `/dash` или `/cabinet`).
 - **Student cabinet:** `app/orgs/[orgslug]/(withmenu)/cabinet/page.tsx` — агрегирует `/trail` и `/calendar`; ссылка «My learning» в `HeaderProfileBox`.
 
 ## 7. Сквозные зависимости
@@ -216,7 +216,7 @@ Editor ← activities/blocks API + versioning + AI (optional)
 
 ### Критичные общие точки
 
-- **Access gate — единая точка.** `services/auth/session.py::issue_session_or_challenge` не выдаёт сессию при `access_status != approved`, поэтому пароль, MFA, magic link и OAuth не обходят одобрение. `proxy.ts` лишь не пускает браузер к shell без cookie; `AuthContext` передаёт `status_token` для экрана ожидания.
+- **Access gate — единая точка.** `proxy.ts` не пускает браузер к shell без cookie `LH_access`/`LH_refresh`; `POST /auth/register` создаёт активного пользователя с ролью студента, после чего Web автоматически входит и ведёт в `/cabinet`. Пароль, MFA и magic link работают без отдельных проверок доступа.
 
 1. **`OrgContext`** — почти каждая страница читает `org.config.config` (v1 или v2), `resolved_features`, `plan`. Ошибка загрузки организации ломает навигацию и feature gates.
 2. **`LHSessionContext`/`AuthContext`** — единый источник токена и ролей; 401-обработка централизована в `services/utils/ts/requests.ts` и `AuthFetchInterceptor`.

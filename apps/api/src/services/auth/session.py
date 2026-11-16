@@ -187,22 +187,7 @@ async def issue_session_or_challenge(
 ) -> SessionIssueResult:
     """Mint a session, unless the user has a confirmed second factor, in which
     case mint a short-lived pending token instead and demand a code. Provenance
-    (``amr`` / ``org_id``) is carried through both branches.
-
-    Accounts that have not been approved by an organization admin never get a
-    session. This is the single chokepoint every sign-in path goes through, so
-    the gate applies to password login, MFA completion, magic links and OAuth
-    without a per-route check.
-    """
-    from src.services.auth.access import (
-        ACCESS_APPROVED,
-        access_denied_exception,
-    )
-
-    access_status = getattr(user, "access_status", ACCESS_APPROVED) or ACCESS_APPROVED
-    if access_status != ACCESS_APPROVED:
-        raise access_denied_exception(user, access_status)
-
+    (``amr`` / ``org_id``) is carried through both branches."""
     if await is_mfa_active(db_session, user.id):
         return SessionIssueResult(
             mfa_required=True,

@@ -58,15 +58,13 @@
 
 `AdminAuthorization` проверяет `dashboard.action_access`; для User он `false`, поэтому `/dash*` после гидратации показывает 403-экран, хотя HTTP-ответ страницы — 200.
 
-## 3.1 Новая модель входа (реализовано)
+## 3.1 Модель входа (реализовано)
 
 - На любой URL без сессионной cookie прокси отвечает редиректом на `/login`; других публичных страниц нет.
-- На `/login` — только вход по e-mail и паролю. Отдельная страница `/register` отправляет заявку на регистрацию (только `@gmail.com`; точки и `+tag` нормализуются).
-- Новая заявка создаёт аккаунт в статусе `pending`. Вход невозможен: API отвечает 403 `ACCESS_PENDING` и выдаёт короткоживущий status-token.
-- `/pending` опрашивает `/api/v1/auth/access-status` каждые 5 секунд и показывает ожидание, одобрение или отказ.
-- Администратор открывает `/dash/users/settings/requests`, выбирает роль (`student`, `teacher`, `admin`) и одобряет либо отклоняет заявку. После одобрения пользователь сразу может войти.
+- `/login` — обычный вход по e-mail и паролю для уже созданных аккаунтов.
+- `/register` — свободная регистрация: имя, e-mail (любой домен) и пароль. Новый аккаунт сразу активен, автоматически получает роль студента и попадает в `/cabinet`; почтового подтверждения и одобрения нет.
 - После входа: `admin`/`teacher` → `/dash`, `student` → `/cabinet`.
-- Google OAuth и старый `/api/signup` отключены. Самостоятельной регистрации, кроме заявки, нет.
+- Google OAuth и старый `/api/signup` отключены: на платформу можно попасть только через `/login` или `/register`.
 - Роль `Maintainer` удалена из базы и сидирования; в системе три роли: Admin, Instructor (teacher), User (student).
 
 Проверенные тестовые аккаунты:
@@ -152,7 +150,6 @@
 
 ### Этап D. Администратор (`admin@school.dev`)
 
-0. `/dash/users/settings/requests` — очередь заявок: e-mail, имя, дата, выбор роли, «Одобрить»/«Отклонить».
 1. `/dash/users/settings/users` — участники, роли, удаление, приглашения.
 2. `/dash/users/settings/{signups,add,usergroups,roles,sign-in,two-factor,audit-logs}` — управление доступом. `audit-logs` — EE.
 3. `/dash/org/settings/{general,features,branding,menu,landing,course-end,ai,usage,other,danger}` — конфигурация организации.
@@ -212,7 +209,7 @@
 | AI-генераторы, copilot, Atlas, AI-миграция | `LEARNHOUSE_IS_AI_ENABLED=false` | Ключ провайдера (Gemini/OpenAI/...), включить AI |
 | Выполнение кода, CODE-задания | Judge0 не запущен | Judge0 |
 | Email: приглашения, reset, verification, magic link | Нет Resend/SMTP | Настроить провайдера |
-| Уведомления о заявках | Provider не настроен, поэтому письма пропускаются; in-app статус работает | Настроить Resend/SMTP и `system_email_address` |
+| Почтовое подтверждение при регистрации | Не требуется: аккаунт активируется сразу | — |
 | Turnstile, Loops, PostHog, Sentry | Нет ключей | Ключи соответствующего сервиса |
 | Messaging | `messaging` — EE-only в `deployment_mode.py` | EE/SaaS |
 | HLS/транскодирование | Отключено по умолчанию (`LEARNHOUSE_HLS_ENABLED`) | Включить и настроить worker |

@@ -12,7 +12,7 @@ Web использует Next.js App Router и tenancy-прокси `apps/web/pr
 - Прямой запрос `/orgs/default/dash` снаружи даёт 404: прокси повторно добавляет префикс (`/orgs/default/orgs/default/dash`). Для ручного обзора используйте URL без `/orgs/{slug}`.
 - Параметр `?chrome=none` отключает публичную шапку, подвал и watermark на страницах организации (используется для встраивания).
 - `/embed/...`, `/board/...`, `/editor/...` и служебные `/api/...` обходятся прокси по отдельным правилам.
-- **Глобальный auth-gate (Phase 2):** без cookie `LH_access`/`LH_refresh` любой путь, кроме `/login`, `/register`, `/pending`, `/auth/*` и health, редиректит на `/login`. `/signup` всегда редиректит на `/login`; самостоятельная регистрация закрыта, заявка отправляется только на `/register`.
+- **Глобальный auth-gate (Phase 2):** без cookie `LH_access`/`LH_refresh` любой путь, кроме `/login`, `/register`, `/auth/*` и health, редиректит на `/login`. `/signup` всегда редиректит на `/login`; регистрация доступна на `/register` и сразу активирует аккаунт с ролью студента.
 
 Легенда доступа:
 
@@ -31,8 +31,7 @@ Web использует Next.js App Router и tenancy-прокси `apps/web/pr
 |---|---|---|---|---|---|---|
 | `/` | `app/orgs/[orgslug]/(withmenu)/page.tsx` | Домашняя страница организации | Просмотр лендинга, курсов, сообществ; переходы в каталоги | `home-client.tsx`, `HomeClient`, SEO `generateMetadata` | `GET /orgs/slug/{slug}`, `/courses`, `/communities` | P |
 | `/login` | `app/auth/login/page.tsx` + `login.tsx` | Вход для уже одобренных аккаунтов | E-mail + пароль; ссылка на регистрацию | `AuthLayout`, `useAuth`, `postAuthPathForSession` | `/api/auth/*`, `/users/session` | P |
-| `/register` | `app/auth/register/page.tsx` + `register.tsx` | Заявка на регистрацию (однократно) | Имя, gmail, пароль; отправка заявки | `AuthLayout` | `/api/v1/auth/access-request` | P |
-| `/pending` | `app/auth/pending/page.tsx` | Ожидание решения администратора | Автоопрос статуса каждые 5 с; переход ко входу | `access-status`, status-token в sessionStorage | `/api/v1/auth/access-status` | P (по status-token) |
+| `/register` | `app/auth/register/page.tsx` + `register.tsx` | Свободная регистрация | Имя, e-mail, пароль; создание аккаунта и автовход | `AuthLayout`, `useAuth` | `/api/v1/auth/register` | P |
 | `/signup` | `app/auth/signup/page.tsx` | Закрыт | Редирект на `/login` | `proxy.ts` | — | P → redirect |
 | `/forgot` | `app/auth/forgot/page.tsx` | Запрос сброса пароля | Ввод email | `forgot.tsx`, `sendResetLink` | `/users/reset_password/platform/send_reset_code` | P |
 | `/reset` | `app/auth/reset/page.tsx` | Смена пароля по коду | Новый пароль | `reset.tsx`, `resetPassword` | `/users/reset_password/platform/change_password` | P |
@@ -161,7 +160,6 @@ Web использует Next.js App Router и tenancy-прокси `apps/web/pr
 | `/dash/atlas` | Atlas | AI-дашборд | `AtlasPage` (`@ee`) | EE | EE |
 | `/dash/users/analytics/[userId]` | Аналитика пользователя | Аудит обучения | `UserAnalyticsPage` (`@ee`) | EE | EE |
 | `/dash/users/settings/users` | Пользователи | Список, поиск, роли, удаление, приглашения | `OrgUsers` | `/orgs/{id}/users`, `/orgs/{id}/users/{uid}/role/{role}` | ADM |
-| `/dash/users/settings/requests` | Заявки на доступ | Очередь pending, выбор роли, approve/reject | `OrgAccessRequests` | `/orgs/{id}/access-requests`, `.../{uid}/approve`, `.../{uid}/reject` | ADM |
 | `/dash/users/settings/signups` | Регистрация | Режим join, поля signup | `OrgAccess`, `OrgSignupFields` | `/orgs/{id}/signup`, `/orgs/{id}/signup-fields` | ADM |
 | `/dash/users/settings/add` | Добавить пользователя | Создание/инвайт | `OrgUsersAdd` | `/users/{org}`, `/orgs/{id}/invites` | ADM |
 | `/dash/users/settings/usergroups` | User groups | Группы, участники, ресурсы | `OrgUserGroups`, `ManageUsers`, `AddUserGroup` | `/usergroups`, `/usergroups/{id}/users`, `/usergroups/{id}/resources` | ADM |
@@ -218,9 +216,9 @@ Web использует Next.js App Router и tenancy-прокси `apps/web/pr
 
 | Домен | Основные группы endpoints |
 |---|---|
-| Auth/Users | `/auth/{login,refresh,logout,oauth,magic-link,verify-email,login/mfa}`, `/auth/access-request`, `/auth/access-status`, `/users/session`, `/users/profile`, `/users/{id}`, `/users/reset_password/*` |
+| Auth/Users | `/auth/{login,refresh,logout,oauth,magic-link,verify-email,login/mfa}`, `/auth/register`, `/users/session`, `/users/profile`, `/users/{id}`, `/users/reset_password/*` |
 | MFA | `/auth/mfa/{setup,confirm,disable,backup-codes,...}`, `/auth/mfa/org-policy`, `/auth/mfa/compliance` |
-| Organizations | `/orgs`, `/orgs/slug/{slug}`, `/orgs/{id}/users`, `/orgs/{id}/access-requests`, `/orgs/{id}/access-requests/{uid}/{approve,reject}`, `/orgs/{id}/usage`, `/orgs/{id}/signup-fields`, `/orgs/{id}/invites`, `/orgs/{id}/logo|favicon|thumbnail|auth-background`, `/orgs/custom-domains` |
+| Organizations | `/orgs`, `/orgs/slug/{slug}`, `/orgs/{id}/users`, `/orgs/{id}/usage`, `/orgs/{id}/signup-fields`, `/orgs/{id}/invites`, `/orgs/{id}/logo|favicon|thumbnail|auth-background`, `/orgs/custom-domains` |
 | Roles/User groups | `/roles`, `/usergroups`, `/usergroups/{id}/users`, `/usergroups/{id}/resources` |
 | Courses | `/courses`, `/courses/{uuid}`, `/courses/{uuid}/meta`, `/courses/org_slug/{slug}`, `/courses/{uuid}/clone`, `/courses/{uuid}/contributors`, `/courses/{uuid}/drip`, `/courses/{uuid}/updates`, `/courses/export`, `/courses/import` |
 | Chapters/Activities/Blocks | `/chapters`, `/activities`, `/activities/{uuid}/versions`, `/activities/{uuid}/state`, `/blocks` |
