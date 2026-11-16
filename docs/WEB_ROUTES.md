@@ -12,7 +12,7 @@ Web использует Next.js App Router и tenancy-прокси `apps/web/pr
 - Прямой запрос `/orgs/default/dash` снаружи даёт 404: прокси повторно добавляет префикс (`/orgs/default/orgs/default/dash`). Для ручного обзора используйте URL без `/orgs/{slug}`.
 - Параметр `?chrome=none` отключает публичную шапку, подвал и watermark на страницах организации (используется для встраивания).
 - `/embed/...`, `/board/...`, `/editor/...` и служебные `/api/...` обходятся прокси по отдельным правилам.
-- **Глобальный auth-gate (Phase 2):** без cookie `LH_access`/`LH_refresh` любой путь, кроме `/login`, `/pending`, `/auth/*` и health, редиректит на `/login`. `/signup` всегда редиректит на `/login`; самостоятельная регистрация закрыта.
+- **Глобальный auth-gate (Phase 2):** без cookie `LH_access`/`LH_refresh` любой путь, кроме `/login`, `/register`, `/pending`, `/auth/*` и health, редиректит на `/login`. `/signup` всегда редиректит на `/login`; самостоятельная регистрация закрыта, заявка отправляется только на `/register`.
 
 Легенда доступа:
 
@@ -30,7 +30,8 @@ Web использует Next.js App Router и tenancy-прокси `apps/web/pr
 | URL | Файл | Назначение | Действия | Ключевые компоненты/сервисы | Backend API | Доступ |
 |---|---|---|---|---|---|---|
 | `/` | `app/orgs/[orgslug]/(withmenu)/page.tsx` | Домашняя страница организации | Просмотр лендинга, курсов, сообществ; переходы в каталоги | `home-client.tsx`, `HomeClient`, SEO `generateMetadata` | `GET /orgs/slug/{slug}`, `/courses`, `/communities` | P |
-| `/login` | `app/auth/login/page.tsx` + `login.tsx` | Единственный публичный экран: вход и заявка на доступ (только gmail + пароль) | Вход; «Запросить доступ»; переход к статусу заявки | `AuthLayout`, `useAuth`, `postAuthPathForSession` | `/api/auth/*`, `/api/v1/auth/access-request`, `/users/session` | P |
+| `/login` | `app/auth/login/page.tsx` + `login.tsx` | Вход для уже одобренных аккаунтов | E-mail + пароль; ссылка на регистрацию | `AuthLayout`, `useAuth`, `postAuthPathForSession` | `/api/auth/*`, `/users/session` | P |
+| `/register` | `app/auth/register/page.tsx` + `register.tsx` | Заявка на регистрацию (однократно) | Имя, gmail, пароль; отправка заявки | `AuthLayout` | `/api/v1/auth/access-request` | P |
 | `/pending` | `app/auth/pending/page.tsx` | Ожидание решения администратора | Автоопрос статуса каждые 5 с; переход ко входу | `access-status`, status-token в sessionStorage | `/api/v1/auth/access-status` | P (по status-token) |
 | `/signup` | `app/auth/signup/page.tsx` | Закрыт | Редирект на `/login` | `proxy.ts` | — | P → redirect |
 | `/forgot` | `app/auth/forgot/page.tsx` | Запрос сброса пароля | Ввод email | `forgot.tsx`, `sendResetLink` | `/users/reset_password/platform/send_reset_code` | P |

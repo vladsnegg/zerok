@@ -193,7 +193,7 @@ app/
 - `lib/auth/server.ts` — server-side сессия без расхода refresh-токена; при отсутствии access-токена возвращает `unresolved`.
 - `proxy.ts` — tenancy, cookie-контекст, рерайты, canonical URL, embed/board/editor обходы, health, sitemap/robots/feeds, open-redirect защита.
 - **Phase 2 access gate:** `proxy.ts` редиректит любой запрос без `LH_access`/`LH_refresh` на `/login` (кроме `/login`, `/pending`, `/auth/*`, health). `/signup` → `/login`.
-- **Access request UI:** `app/auth/login/login.tsx` (вход + заявка, gmail-only), `app/auth/pending/page.tsx` (опрос статуса), `components/Dashboard/Pages/Users/OrgAccessRequests/OrgAccessRequests.tsx` (очередь одобрения).
+- **Access request UI:** `app/auth/login/login.tsx` (только вход), `app/auth/register/*` (заявка, gmail-only), `app/auth/pending/page.tsx` (опрос статуса), `components/Dashboard/Pages/Users/OrgAccessRequests/OrgAccessRequests.tsx` (очередь одобрения).
 - **Student cabinet:** `app/orgs/[orgslug]/(withmenu)/cabinet/page.tsx` — агрегирует `/trail` и `/calendar`; ссылка «My learning» в `HeaderProfileBox`.
 
 ## 7. Сквозные зависимости

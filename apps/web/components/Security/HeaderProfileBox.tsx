@@ -183,7 +183,7 @@ export const HeaderProfileBox = ({ primaryColor = '' }: { primaryColor?: string 
                 href={getUriWithOrg(org?.slug, '/login')} >{t('auth.login')}</Link>
             </li>
             <li className={`rounded-lg shadow-sm transition-colors px-4 py-2 text-xs sm:text-sm font-bold ms-1 sm:ms-2 ${colors.signUpBtn}`}>
-              <Link href={getUriWithOrg(org?.slug, '/login')}>{t('auth.request_access_link', { defaultValue: 'Request access' })}</Link>
+              <Link href="/register">{t('auth.sign_up', { defaultValue: 'Register' })}</Link>
             </li>
           </ul>
         </div>
