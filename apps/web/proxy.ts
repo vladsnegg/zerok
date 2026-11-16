@@ -306,8 +306,37 @@ export default async function proxy(req: NextRequest) {
     return NextResponse.next({ request: { headers: withoutCredentialHeaders(req.headers) } })
   }
 
-  const instance = await getInstanceInfo()
   const { pathname, search } = req.nextUrl
+
+  // Sign-in is the only public page. Everything else — catalogs, courses,
+  // embeds, boards, dashboards — requires a session cookie. Signature and
+  // expiry are verified by the API; this gate only decides whether the browser
+  // may see the application shell at all.
+  const hasSessionCookie = Boolean(
+    req.cookies.get('LH_access')?.value || req.cookies.get('LH_refresh')?.value,
+  )
+  const isAuthEntry =
+    pathname === '/login' ||
+    pathname === '/pending' ||
+    pathname === '/health' ||
+    pathname.startsWith('/auth/') ||
+    pathname.startsWith('/api/')
+
+  if (!hasSessionCookie && !isAuthEntry) {
+    return NextResponse.redirect(new URL('/login', req.url))
+  }
+
+  // Self-service signup is replaced by the access-request form on /login.
+  if (pathname === '/signup') {
+    return NextResponse.redirect(new URL('/login', req.url))
+  }
+
+  // The pending-approval screen is a top-level auth page, not org content.
+  if (pathname === '/pending') {
+    return NextResponse.rewrite(new URL(`/auth/pending${search}`, req.url))
+  }
+
+  const instance = await getInstanceInfo()
   const fullhost = req.headers.get('host')
 
   // SEO: canonicalize mixed-case top-level route names (/Login → /login). Scoped

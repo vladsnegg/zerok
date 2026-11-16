@@ -54,6 +54,10 @@ afterAll(() => {
 
 const { POST } = await import("../app/api/signup/route.ts");
 
+// The public signup gateway is closed by default; this suite exercises the
+// legacy handler that remains behind the rollback flag.
+process.env.LEGACY_SIGNUP = "true";
+
 function signup(body, headers = {}) {
   return POST(
     new Request("https://example.test/api/signup", {
@@ -73,6 +77,18 @@ beforeEach(() => {
   customDomainOrgId = null;
   turnstileCalls.length = 0;
   backendCalls.length = 0;
+});
+
+test("signup gateway is closed unless LEGACY_SIGNUP=true", async () => {
+  const previous = process.env.LEGACY_SIGNUP;
+  delete process.env.LEGACY_SIGNUP;
+  try {
+    const res = await signup({});
+    expect(res.status).toBe(410);
+    expect(backendCalls).toHaveLength(0);
+  } finally {
+    process.env.LEGACY_SIGNUP = previous;
+  }
 });
 
 describe("client IP relay", () => {

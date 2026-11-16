@@ -922,6 +922,7 @@ export function SessionProvider({
                 message: errorData?.message || i18n.t('auth.errors.login_failed'),
                 email: errorData?.email,
                 retry_after: errorData?.retry_after,
+                status_token: errorData?.status_token,
               }),
               url: null,
               status: response.status,

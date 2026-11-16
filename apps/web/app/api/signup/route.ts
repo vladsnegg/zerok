@@ -34,6 +34,19 @@ interface SignupBody {
 }
 
 export async function POST(request: NextRequest) {
+  // Self-service registration is closed. Accounts are created only through
+  // /api/v1/auth/access-request and activated by an organization admin. The
+  // legacy handler below stays behind an env flag for emergency rollback.
+  if (process.env.LEGACY_SIGNUP !== 'true') {
+    return NextResponse.json(
+      {
+        detail:
+          'Registration is closed. Request access from the sign-in page; an administrator will review it.',
+      },
+      { status: 410 },
+    )
+  }
+
   let body: SignupBody
   try {
     body = await request.json()

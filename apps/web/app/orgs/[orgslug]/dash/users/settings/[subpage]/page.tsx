@@ -2,7 +2,7 @@
 import React, { useEffect, use } from 'react';
 import { motion } from 'motion/react'
 import { getUriWithOrg } from '@services/config/config'
-import { KeyRound, ScanEye, ShieldCheck, SquareUserRound, UserPlus, Users, Shield } from 'lucide-react'
+import { KeyRound, ScanEye, ShieldCheck, SquareUserRound, UserPlus, Users, Shield, ClipboardCheck } from 'lucide-react'
 import { Breadcrumbs } from '@components/Objects/Breadcrumbs/Breadcrumbs'
 import { ShieldAlert } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
@@ -11,6 +11,7 @@ import dynamic from 'next/dynamic'
 
 // One chunk per tab: only the open tab's code is loaded.
 const OrgUsers = dynamic(() => import('@components/Dashboard/Pages/Users/OrgUsers/OrgUsers'))
+const OrgAccessRequests = dynamic(() => import('@components/Dashboard/Pages/Users/OrgAccessRequests/OrgAccessRequests'))
 const OrgAccess = dynamic(() => import('@components/Dashboard/Pages/Users/OrgAccess/OrgAccess'))
 const OrgUsersAdd = dynamic(() => import('@components/Dashboard/Pages/Users/OrgUsersAdd/OrgUsersAdd'))
 const OrgUserGroups = dynamic(() => import('@components/Dashboard/Pages/Users/OrgUserGroups/OrgUserGroups'))
@@ -42,6 +43,10 @@ function UsersSettingsPage(props: { params: Promise<SettingsParams> }) {
     if (params.subpage == 'add') {
       setH1Label(t('dashboard.users.settings.pages.add.title'))
       setH2Label(t('dashboard.users.settings.pages.add.subtitle'))
+    }
+    if (params.subpage == 'requests') {
+      setH1Label(t('dashboard.users.settings.pages.requests.title', { defaultValue: 'Access requests' }))
+      setH2Label(t('dashboard.users.settings.pages.requests.subtitle', { defaultValue: 'Review new accounts and assign their role' }))
     }
     if (params.subpage == 'usergroups') {
       setH1Label(t('dashboard.users.settings.pages.usergroups.title'))
@@ -80,6 +85,13 @@ function UsersSettingsPage(props: { params: Promise<SettingsParams> }) {
       icon: <Users size={16} />,
       href: getUriWithOrg(params.orgslug, '') + `/dash/users/settings/users`,
       active: params.subpage === 'users',
+    },
+    {
+      key: 'requests',
+      label: t('dashboard.users.settings.tabs.requests', { defaultValue: 'Requests' }),
+      icon: <ClipboardCheck size={16} />,
+      href: getUriWithOrg(params.orgslug, '') + `/dash/users/settings/requests`,
+      active: params.subpage === 'requests',
     },
     {
       key: 'usergroups',
@@ -163,6 +175,7 @@ function UsersSettingsPage(props: { params: Promise<SettingsParams> }) {
         className="min-w-0 overflow-y-auto overflow-x-hidden"
       >
         {params.subpage == 'users' ? <OrgUsers /> : ''}
+        {params.subpage == 'requests' ? <OrgAccessRequests /> : ''}
         {params.subpage == 'signups' ? <OrgAccess /> : ''}
         {params.subpage == 'add' ? <OrgUsersAdd /> : ''}
         {params.subpage == 'usergroups' ? <><div className="h-6"></div><OrgUserGroups /></> : ''}

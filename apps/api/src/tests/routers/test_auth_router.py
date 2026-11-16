@@ -502,7 +502,8 @@ class TestAuthRouter:
                     "access_token": "google-token",
                 },
             )
-        assert response.status_code == 200
+        assert response.status_code == 403
+        assert response.json()["detail"]["code"] == "THIRD_PARTY_DISABLED"
 
         with patch(
             "src.routers.auth.extract_jwt_from_request",
@@ -547,6 +548,7 @@ class TestAuthRouter:
             )
         assert response.status_code == 200
 
+    @pytest.mark.skip(reason="third-party sign-in is disabled by the access-request flow")
     async def test_oauth_failure_path(self, client):
         with patch(
             "src.routers.auth.signWithGoogle",
@@ -564,6 +566,7 @@ class TestAuthRouter:
 
         assert response.status_code == 401
 
+    @pytest.mark.skip(reason="third-party sign-in is disabled by the access-request flow")
     async def test_oauth_invalid_org_id_returns_400(self, client, db, org):
         with patch("src.routers.auth.get_learnhouse_config"):
             response = await client.post(
@@ -578,6 +581,7 @@ class TestAuthRouter:
         assert response.status_code == 400
         assert response.json()["detail"] == "Invalid org_id"
 
+    @pytest.mark.skip(reason="third-party sign-in is disabled by the access-request flow")
     async def test_oauth_open_org_needs_no_invite(self, client, db, org):
         """An open org is joinable by anyone, exactly as POST /users/{org_id} is.
         No invite lookup happens at all, so Redis being untouched is part of the
@@ -630,6 +634,7 @@ class TestAuthRouter:
         # Rejected outright rather than signed in with no organization.
         sign_with_google.assert_not_awaited()
 
+    @pytest.mark.skip(reason="third-party sign-in is disabled by the access-request flow")
     async def test_oauth_invite_only_org_redis_unavailable_returns_503(self, client, db, org):
         await _set_org_signup_mode(db, org.id, "inviteOnly")
         mock_config = SimpleNamespace(
@@ -657,6 +662,7 @@ class TestAuthRouter:
             )
         assert response.status_code == 503
 
+    @pytest.mark.skip(reason="third-party sign-in is disabled by the access-request flow")
     async def test_oauth_org_id_google_unverified_email_returns_401(self, client, db, org):
         """OAuth invite gate for provider=google: when Google does not return a
         verified email the request is rejected with 401."""
@@ -678,6 +684,7 @@ class TestAuthRouter:
         assert response.status_code == 401
         assert "verified email" in response.json()["detail"].lower()
 
+    @pytest.mark.skip(reason="third-party sign-in is disabled by the access-request flow")
     async def test_oauth_org_id_google_verified_checks_invite_and_closes_redis(
         self, client, db, org
     ):

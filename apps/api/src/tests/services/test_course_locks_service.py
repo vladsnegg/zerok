@@ -90,7 +90,7 @@ class TestIsOrgAdmin:
         assert await is_org_admin(999, org.id, db) is False
 
     async def test_maintainer_role_returns_true(self, db, org):
-        # role_id=2 is MAINTAINER_ROLE_ID; create a user+UO with that role
+        # role_id=2 is the retired Maintainer role: it no longer grants admin.
         from src.db.users import User
         from src.db.user_organizations import UserOrganization
 
@@ -118,7 +118,7 @@ class TestIsOrgAdmin:
         db.add(uo)
         await db.commit()
 
-        assert await is_org_admin(u.id, org.id, db) is True
+        assert await is_org_admin(u.id, org.id, db) is False
 
 
 # ---------------------------------------------------------------------------

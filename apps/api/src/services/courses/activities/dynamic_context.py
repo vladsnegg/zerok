@@ -34,7 +34,7 @@ from src.db.user_organizations import UserOrganization
 from src.db.usergroup_user import UserGroupUser
 from src.db.usergroups import UserGroup
 from src.db.users import PublicUser, User
-from src.security.rbac.constants import ADMIN_ROLE_ID, MAINTAINER_ROLE_ID
+from src.security.rbac.constants import ADMIN_ROLE_ID
 from src.services.courses.activities.dynamic_content import (
     RenderContext,
     referenced_custom_variables,
@@ -62,8 +62,8 @@ def request_locale(request: Optional[Request]) -> str:
 def _role_name(role_id: Optional[int]) -> str:
     if role_id == ADMIN_ROLE_ID:
         return "admin"
-    if role_id == MAINTAINER_ROLE_ID:
-        return "maintainer"
+    if role_id == 3:
+        return "teacher"
     return "member" if role_id is not None else "anonymous"
 
 

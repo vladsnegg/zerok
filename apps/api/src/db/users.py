@@ -3,7 +3,7 @@ from typing import Optional, TYPE_CHECKING
 from datetime import datetime
 from pydantic import BaseModel, EmailStr, field_validator
 from sqlmodel import Field, SQLModel
-from sqlalchemy import JSON, Column, Index
+from sqlalchemy import JSON, Column, ForeignKey, Index, Integer
 from sqlalchemy.dialects.postgresql import JSONB
 from src.db.roles import RoleRead
 
@@ -95,6 +95,13 @@ class UserRead(UserBase):
     id: int
     user_uuid: str
     email_verified: bool = False
+    # Access gate: only "approved" users may receive a session. Accounts
+    # created by the bootstrap installer are approved; public sign-ups start
+    # as "pending" and wait for an organization admin.
+    access_status: str = "approved"
+    access_requested_at: Optional[str] = None
+    access_decided_at: Optional[str] = None
+    access_decided_by: Optional[int] = None
     last_login_at: Optional[str] = None
     signup_method: Optional[str] = None
     is_superadmin: bool = False
@@ -239,6 +246,13 @@ class User(UserBase, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     password: str = ""
     user_uuid: str = Field(default="", index=True)
+    access_status: str = Field(default="approved", index=True)
+    access_requested_at: Optional[str] = None
+    access_decided_at: Optional[str] = None
+    access_decided_by: Optional[int] = Field(
+        default=None,
+        sa_column=Column(Integer, ForeignKey("user.id", ondelete="SET NULL"), nullable=True),
+    )
     email_verified: bool = False
     email_verified_at: Optional[str] = None
     failed_login_attempts: int = 0

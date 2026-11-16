@@ -52,6 +52,11 @@ from src.services.users.email_verification import (
     resend_verification_email,
 )
 from src.services.auth.session import issue_session_or_challenge
+from src.services.auth.access import (
+    create_access_request,
+    get_access_status,
+    normalize_gmail,
+)
 from src.security.session_context import (
     AUTH_METHOD_GOOGLE,
     AUTH_METHOD_PASSWORD,
@@ -594,6 +599,9 @@ async def login(
     org_slug: Optional[str] = Form(None),
     db_session: AsyncSession = Depends(get_db_session),
 ):
+    # Gmail ignores dots and +suffix. Normalize before the lookup so an address
+    # registered as john.doe+x@gmail.com is found when typed as johndoe@gmail.com.
+    username = normalize_gmail(username)
     # Step 1: Check rate limit (IP-based)
     is_allowed, retry_after = check_login_rate_limit(request)
     if not is_allowed:
@@ -723,6 +731,78 @@ async def login(
     return result
 
 
+class AccessRequestBody(BaseModel):
+    email: EmailStr
+    password: str
+    first_name: str = ""
+    last_name: str = ""
+
+
+@router.post(
+    "/access-request",
+    summary="Request access to the platform",
+    description=(
+        "Create a pending account. Only @gmail.com addresses are accepted. "
+        "The account cannot sign in until an organization administrator approves "
+        "the request and assigns a role. The response is deliberately generic so "
+        "the endpoint cannot be used to enumerate registered addresses."
+    ),
+    responses={
+        200: {"description": "Request received (generic response)."},
+        400: {"description": "Non-Gmail address, weak password, or invalid profile fields"},
+        429: {"description": "Too many access requests from this IP"},
+    },
+)
+async def api_access_request(
+    request: Request,
+    body: AccessRequestBody,
+    db_session: AsyncSession = Depends(get_db_session),
+):
+    ip = get_client_ip(request)
+    is_allowed, _count, retry_after = check_rate_limit(
+        f"access_request:{ip}", 5, 3600
+    )
+    if not is_allowed:
+        raise HTTPException(
+            status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+            detail={
+                "code": "RATE_LIMITED",
+                "message": "Too many access requests. Please try again later.",
+                "retry_after": retry_after,
+            },
+        )
+    return await create_access_request(
+        request,
+        db_session,
+        email=str(body.email),
+        password=body.password,
+        first_name=body.first_name,
+        last_name=body.last_name,
+    )
+
+
+@router.get(
+    "/access-status",
+    summary="Check an access request",
+    description=(
+        "Read the status of a pending request using the short-lived status token "
+        "returned by a rejected login (detail.status_token). The token only proves "
+        "the e-mail; it cannot access any other endpoint."
+    ),
+)
+async def api_access_status(
+    request: Request,
+    db_session: AsyncSession = Depends(get_db_session),
+):
+    authorization = request.headers.get("authorization", "")
+    if not authorization.lower().startswith("bearer "):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail={"code": "MISSING_STATUS_TOKEN", "message": "Status token required"},
+        )
+    return await get_access_status(db_session, authorization[7:].strip())
+
+
 class ThirdPartyLogin(BaseModel):
     email: EmailStr
     provider: Literal["google"]
@@ -760,6 +840,18 @@ async def third_party_login(
     current_user: AnonymousUser = Depends(get_current_user),
     db_session: AsyncSession = Depends(get_db_session),
 ):
+    # Google sign-in bypassed the access-request review: a fresh Google
+    # account was created with the default (approved) status. Until the flow
+    # supports creating a pending request, the endpoint is closed. The Web
+    # login page no longer offers Google as a method.
+    raise HTTPException(
+        status_code=status.HTTP_403_FORBIDDEN,
+        detail={
+            "code": "THIRD_PARTY_DISABLED",
+            "message": "Sign-in with a third-party provider is disabled. Request access instead.",
+        },
+    )
+
     import logging
     import redis as _redis
     _logger = logging.getLogger(__name__)

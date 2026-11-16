@@ -61,3 +61,22 @@ export function safeRedirectUrl(target: string | null | undefined, fallback = '/
 export function defaultPostAuthPath(org: unknown): string {
   return org ? '/' : '/home'
 }
+
+/**
+ * Landing page after a successful sign-in, by role.
+ *
+ * Admin and Instructor both work from the dashboard; a learner gets the
+ * lightweight cabinet. The role list comes from GET /users/session, whose
+ * entries look like `{ role: { role_uuid, ... } }`.
+ */
+export function postAuthPathForSession(session: any): string {
+  const roles: any[] = Array.isArray(session?.roles) ? session.roles : []
+  const uuids = roles
+    .map((entry) => entry?.role?.role_uuid ?? entry?.role_uuid ?? entry?.role?.id)
+    .filter(Boolean)
+
+  if (uuids.includes('role_global_admin') || uuids.includes('role_global_instructor')) {
+    return '/dash'
+  }
+  return '/cabinet'
+}

@@ -68,7 +68,7 @@ from src.security.features_utils.usage import (
     increase_feature_usage,
 )
 from src.security.security import security_hash_password
-from src.security.rbac.constants import ADMIN_ROLE_ID, MAINTAINER_ROLE_ID
+from src.security.rbac.constants import ADMIN_ROLE_ID
 from src.services.security.password_validation import validate_password_complexity
 from src.services.security.profile_validation import validate_profile_fields
 
@@ -159,7 +159,6 @@ async def _get_user_in_org(user_id: int, org_id: int, db_session: AsyncSession) 
 
 _ROLE_PRIORITY = {
     ADMIN_ROLE_ID: 0,
-    MAINTAINER_ROLE_ID: 1,
     3: 2,
     4: 3,
 }
@@ -238,10 +237,10 @@ async def _check_token_can_impersonate(
             UserOrganization.org_id == org_id,
         )
     )).scalars().first()
-    if membership is not None and membership.role_id in {ADMIN_ROLE_ID, MAINTAINER_ROLE_ID}:
+    if membership is not None and membership.role_id == ADMIN_ROLE_ID:
         raise HTTPException(
             status_code=403,
-            detail="API tokens cannot issue tokens for Admin or Maintainer accounts",
+            detail="API tokens cannot issue tokens for Admin accounts",
         )
 
     # The session carries the target's role, so the target may hold no write
@@ -279,17 +278,17 @@ async def _check_token_can_manage_membership(
     org_id: int,
     db_session: AsyncSession,
 ) -> None:
-    """Role changes and removals never touch an Admin/Maintainer via a token."""
+    """Role changes and removals never touch an Admin via a token."""
     membership = (await db_session.execute(
         select(UserOrganization).where(
             UserOrganization.user_id == user_id,
             UserOrganization.org_id == org_id,
         )
     )).scalars().first()
-    if membership is not None and membership.role_id in {ADMIN_ROLE_ID, MAINTAINER_ROLE_ID}:
+    if membership is not None and membership.role_id == ADMIN_ROLE_ID:
         raise HTTPException(
             status_code=403,
-            detail="API tokens cannot modify Admin or Maintainer accounts",
+            detail="API tokens cannot modify Admin accounts",
         )
 
 
@@ -322,18 +321,17 @@ async def _check_token_can_assign_role(
 ) -> None:
     """Defense-in-depth guard for role assignment via API tokens.
 
-    Layer 3: API tokens never grant Admin or Maintainer. Elevated roles must
-    be assigned through interactive admin flows so a leaked token cannot mint
-    org admins.
+    Layer 3: API tokens never grant Admin. Elevated roles must be assigned
+    through interactive admin flows so a leaked token cannot mint org admins.
 
     Layer 2: The token's creator must still be a member of the org and must
     hold privilege at least as high as the role being granted. Stops a
     demoted/removed user's still-valid token from being used to escalate.
     """
-    if role.id in {ADMIN_ROLE_ID, MAINTAINER_ROLE_ID}:
+    if role.id == ADMIN_ROLE_ID:
         raise HTTPException(
             status_code=403,
-            detail="API tokens cannot grant Admin or Maintainer roles",
+            detail="API tokens cannot grant the Admin role",
         )
 
     # Nor any custom role carrying rights the token does not hold itself.

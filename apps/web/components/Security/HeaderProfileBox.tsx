@@ -2,7 +2,7 @@
 import React, { useMemo } from 'react'
 
 import Link from 'next/link'
-import { Crown, Shield, User, Users, SignOut, CaretDown, Globe, Check, ShoppingBag, House, Buildings, Plus, CreditCard } from '@phosphor-icons/react'
+import { Crown, Shield, User, Users, SignOut, CaretDown, Globe, Check, ShoppingBag, House, Buildings, Plus, CreditCard, BookOpen } from '@phosphor-icons/react'
 import UserAvatar from '@components/Objects/UserAvatar'
 import useAdminStatus, { seesPlatformHubFromSession } from '@components/Hooks/useAdminStatus'
 import { useLHSession } from '@components/Contexts/LHSessionContext'
@@ -183,7 +183,7 @@ export const HeaderProfileBox = ({ primaryColor = '' }: { primaryColor?: string 
                 href={getUriWithOrg(org?.slug, '/login')} >{t('auth.login')}</Link>
             </li>
             <li className={`rounded-lg shadow-sm transition-colors px-4 py-2 text-xs sm:text-sm font-bold ms-1 sm:ms-2 ${colors.signUpBtn}`}>
-              <Link href={getUriWithOrg(org?.slug, '/signup')}>{t('auth.sign_up')}</Link>
+              <Link href={getUriWithOrg(org?.slug, '/login')}>{t('auth.request_access_link', { defaultValue: 'Request access' })}</Link>
             </li>
           </ul>
         </div>
@@ -248,6 +248,14 @@ export const HeaderProfileBox = ({ primaryColor = '' }: { primaryColor?: string 
                     <Link href="/dash" className="flex items-center space-x-2">
                       <Shield size={16} weight="fill" />
                       <span>{t('common.dashboard')}</span>
+                    </Link>
+                  </DropdownMenuItem>
+                )}
+                {!rights?.dashboard?.action_access && (
+                  <DropdownMenuItem asChild>
+                    <Link href="/cabinet" className="flex items-center space-x-2">
+                      <BookOpen size={16} weight="fill" />
+                      <span>{t('cabinet.title', { defaultValue: 'My learning' })}</span>
                     </Link>
                   </DropdownMenuItem>
                 )}
