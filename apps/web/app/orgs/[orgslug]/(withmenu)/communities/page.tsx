@@ -1,11 +1,13 @@
 import { getOrganizationContextInfo } from '@services/organizations/orgs'
 import { Metadata } from 'next'
+import { notFound } from 'next/navigation'
 import { getServerSession } from '@/lib/auth/server'
 import { getCommunities } from '@services/communities/communities'
 import { getOrgThumbnailMediaDirectory, getOrgOgImageMediaDirectory } from '@services/media/media'
 import { getOrgSeoConfig, buildPageTitle, buildBreadcrumbJsonLd } from '@/lib/seo/utils'
 import { getServerCanonicalUrl } from '@/lib/seo/utils.server'
 import { JsonLd } from '@components/SEO/JsonLd'
+import { isOrgFeatureEnabled } from '@/lib/org/features'
 import CommunitiesClient from './communities'
 
 type MetadataProps = {
@@ -78,6 +80,8 @@ const CommunitiesPage = async (params: any) => {
       tags: ['organizations'],
     }),
   ])
+  if (!isOrgFeatureEnabled(org, 'communities')) notFound()
+
   const access_token = session?.tokens?.access_token
   const org_id = org.id
 

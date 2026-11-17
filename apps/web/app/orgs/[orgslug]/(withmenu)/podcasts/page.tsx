@@ -1,4 +1,5 @@
 import { Metadata } from 'next'
+import { notFound } from 'next/navigation'
 import { getOrgPodcasts } from '@services/podcasts/podcasts'
 import { getOrganizationContextInfo } from '@services/organizations/orgs'
 import { getOrgThumbnailMediaDirectory, getOrgOgImageMediaDirectory } from '@services/media/media'
@@ -6,6 +7,7 @@ import { getServerSession } from '@/lib/auth/server'
 import { getOrgSeoConfig, buildPageTitle, buildBreadcrumbJsonLd } from '@/lib/seo/utils'
 import { getServerCanonicalUrl } from '@/lib/seo/utils.server'
 import { JsonLd } from '@components/SEO/JsonLd'
+import { isOrgFeatureEnabled } from '@/lib/org/features'
 import PodcastsClient from './podcasts'
 
 type PageParams = Promise<{
@@ -84,6 +86,10 @@ export default async function PodcastsPage({ params }: { params: PageParams }) {
       tags: ['organizations'],
     }),
   ])
+  // Hidden from navigation when the org turns the feature off; a direct link
+  // must not bypass that choice.
+  if (!isOrgFeatureEnabled(org, 'podcasts')) notFound()
+
   const access_token = session?.tokens?.access_token
 
   let initialPodcasts = []
