@@ -35,6 +35,7 @@ import { isFeatureAvailable } from '@services/plans/plans'
 import { changeLanguage } from '@/lib/i18n'
 import { AVAILABLE_LANGUAGES } from '@/lib/languages'
 import { DASHBOARD_MENU_ITEMS, DashboardMenuItem } from '@/lib/dashboard-menu-items'
+import { orgHomePathForSession } from '@/lib/auth/home'
 import { useLHAnalytics, AnalyticsEvent } from '@services/analytics'
 import { useOrgMenuItems } from './OrgMenuLinks'
 
@@ -114,9 +115,10 @@ export function MobileTabBar({ orgslug, primaryColor = '' }: { orgslug: string; 
   if (hidden) return sheet
 
   const accent = primaryColor || '#0a0a0a'
+  const homePath = isAuthenticated ? orgHomePathForSession(session?.data) : '/'
 
   const tabs: { key: string; label: string; Icon: any; href?: string; onClick?: () => void; active: boolean }[] = [
-    { key: 'home', label: t('common.home'), Icon: House, href: getUriWithOrg(orgslug, '/'), active: path === '/' },
+    { key: 'home', label: t('common.home'), Icon: House, href: getUriWithOrg(orgslug, homePath), active: path === homePath },
     ...(primary
       ? [{ key: primary.key, label: primary.label, Icon: primary.Icon ?? Books, href: primary.href, active: isActive(path, primary.href) }]
       : []),

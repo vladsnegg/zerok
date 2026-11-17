@@ -10,6 +10,7 @@ import { MobileTabBar, OPEN_MOBILE_MORE_EVENT } from './MobileNav'
 import UserAvatar from '@components/Objects/UserAvatar'
 import { getOrgLogoMediaDirectory } from '@services/media/media'
 import { useLHSession } from '@components/Contexts/LHSessionContext'
+import { orgHomePathForSession } from '@/lib/auth/home'
 import { useOrg } from '@components/Contexts/OrgContext'
 import { SearchTrigger } from '@components/Objects/Search/SearchTrigger'
 import { usePathname } from 'next/navigation'
@@ -62,6 +63,9 @@ export const OrgMenu = (props: any) => {
   const orgslug = props.orgslug
   const session = useLHSession() as any;
   const _access_token = session?.data?.tokens?.access_token;
+  // Learners' home is the cabinet; staff keep the org catalog as their home.
+  const homePath =
+    session?.status === 'authenticated' ? orgHomePathForSession(session.data) : '/'
   const org = useOrg() as any;
   const [isFocusMode, setIsFocusMode] = useState(false)
   const isPhone = useMediaQuery('(max-width: 767px)')
@@ -149,7 +153,7 @@ export const OrgMenu = (props: any) => {
         <div className="flex items-center justify-between w-full max-w-(--breakpoint-2xl) mx-auto px-4 sm:px-6 lg:px-8 h-full">
           <div className="flex items-center space-x-5 max-lg:min-w-0">
             <div className="logo flex shrink-0">
-              <Link href={getUriWithOrg(orgslug, '/')} className="shrink-0">
+              <Link href={getUriWithOrg(orgslug, homePath)} className="shrink-0">
                 <div className="flex w-auto h-9 rounded-md items-center m-auto py-1 justify-center">
                   {org?.logo_image ? (
                     <img

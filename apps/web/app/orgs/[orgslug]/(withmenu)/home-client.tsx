@@ -1,7 +1,9 @@
 'use client'
-import React from 'react'
+import React, { useEffect } from 'react'
 import dynamic from 'next/dynamic'
+import { useRouter } from 'next/navigation'
 import { useOrg } from '@components/Contexts/OrgContext'
+import { useLHSession } from '@components/Contexts/LHSessionContext'
 import { useCourses } from '@/hooks/queries/useCourses'
 import LandingClassic from '@components/Landings/LandingClassic'
 import { JsonLd } from '@components/SEO/JsonLd'
@@ -9,6 +11,7 @@ import { getUriWithOrg } from '@services/config/config'
 import { getOrgLogoMediaDirectory } from '@services/media/media'
 import GeneralWrapperStyled from '@components/Objects/StyledElements/Wrappers/GeneralWrapper'
 import ListShortcuts from '@components/Objects/Shortcuts/ListShortcuts'
+import { isLearnerSession } from '@/lib/auth/home'
 
 // Only orgs with a custom landing need it (and its markdown/payments code).
 // Still server-rendered, so the HTML is unchanged.
@@ -16,7 +19,17 @@ const LandingCustom = dynamic(() => import('@components/Landings/LandingCustom')
 
 export default function HomeClient({ orgslug }: { orgslug: string }) {
   const org = useOrg() as any
+  const session = useLHSession() as any
+  const router = useRouter()
   const { data: courses, isLoading: coursesLoading } = useCourses(orgslug)
+
+  // Server-side redirect covers the normal case; this catches a session that
+  // was still unresolved on the server and only hydrated here.
+  useEffect(() => {
+    if (session?.status === 'authenticated' && isLearnerSession(session.data)) {
+      router.replace(getUriWithOrg(orgslug, '/cabinet'))
+    }
+  }, [session?.status, session?.data, orgslug, router])
 
   const landingConfig = org?.config?.config?.customization?.landing || org?.config?.config?.landing
   const hasCustomLanding = landingConfig?.enabled

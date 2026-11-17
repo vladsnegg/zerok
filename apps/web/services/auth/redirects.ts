@@ -1,6 +1,7 @@
 'use client'
 import { getConfig } from '@services/config/config'
 import { safeHref, safeInternalPath } from '@services/security/url'
+import { homePathForSession } from '@/lib/auth/home'
 
 function readCookie(name: string): string | null {
   if (typeof document === 'undefined') return null
@@ -70,13 +71,5 @@ export function defaultPostAuthPath(org: unknown): string {
  * entries look like `{ role: { role_uuid, ... } }`.
  */
 export function postAuthPathForSession(session: any): string {
-  const roles: any[] = Array.isArray(session?.roles) ? session.roles : []
-  const uuids = roles
-    .map((entry) => entry?.role?.role_uuid ?? entry?.role_uuid ?? entry?.role?.id)
-    .filter(Boolean)
-
-  if (uuids.includes('role_global_admin') || uuids.includes('role_global_instructor')) {
-    return '/dash'
-  }
-  return '/cabinet'
+  return homePathForSession(session)
 }
