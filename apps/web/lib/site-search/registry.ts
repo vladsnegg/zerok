@@ -10,6 +10,7 @@ import { sitePage as communities } from '@/app/orgs/[orgslug]/(withmenu)/communi
 import { sitePage as playgrounds } from '@/app/orgs/[orgslug]/(withmenu)/playgrounds/page.search'
 import { sitePage as store } from '@/app/orgs/[orgslug]/(withmenu)/store/page.search'
 import { sitePage as trail } from '@/app/orgs/[orgslug]/(withmenu)/trail/page.search'
+import { sitePage as notifications } from '@/app/orgs/[orgslug]/(withmenu)/notifications/page.search'
 import { sitePage as calendar } from '@/app/orgs/[orgslug]/(withmenu)/calendar/page.search'
 import { sitePage as boards } from '@/app/orgs/[orgslug]/(withmenu)/boards/page.search'
 import { sitePage as search } from '@/app/orgs/[orgslug]/(withmenu)/search/page.search'
@@ -45,6 +46,7 @@ export const sitePages: SitePageMeta[] = [
   playgrounds,
   store,
   trail,
+  notifications,
   calendar,
   boards,
   search,

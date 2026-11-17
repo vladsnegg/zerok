@@ -11,7 +11,7 @@ import {
   DotsNine,
   SignIn,
   CalendarDots,
-  ChalkboardSimple,
+  Bell,
   ChatsCircle,
   User,
   ShoppingBag,
@@ -334,9 +334,11 @@ function MobileMoreSheet({
                 />
               )}
               <SheetRow href={getUriWithOrg(orgslug, '/calendar')} Icon={CalendarDots} label={t('calendar.title')} />
-              {rf?.boards?.enabled && (
-                <SheetRow href={getUriWithOrg(orgslug, '/boards')} Icon={ChalkboardSimple} label={t('common.boards')} />
-              )}
+              <SheetRow
+                href={getUriWithOrg(orgslug, '/notifications')}
+                Icon={Bell}
+                label={t('notifications.title', { defaultValue: 'Notifications' })}
+              />
               <SheetRow href={getUriWithOrg(orgslug, '/account/purchases')} Icon={ShoppingBag} label={t('account.purchases')} />
               <SheetRow href={getUriWithOrg(orgslug, '/account/general')} Icon={User} label={t('user.user_settings')} />
             </SheetGroup>

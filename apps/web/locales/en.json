@@ -2429,6 +2429,10 @@
           "description": "Your progress across courses",
           "keywords": "trail, progress, my courses, continue, history, enrolled"
         },
+        "notifications": {
+          "description": "Deadlines, grades and course updates",
+          "keywords": "notifications, alerts, deadlines, grades, updates, inbox"
+        },
         "boards": {
           "description": "Your boards",
           "keywords": "boards, kanban, tasks, planning, notes"
@@ -11995,6 +11999,10 @@
     "sign_in_title": "Sign in to see your calendar",
     "title": "Calendar",
     "more_events": "+{{count}} more"
+  },
+  "notifications": {
+    "title": "Notifications",
+    "empty": "Nothing here yet. Deadlines, graded work and course updates will appear here."
   },
   "mobile_nav": {
     "tabs": "Main",

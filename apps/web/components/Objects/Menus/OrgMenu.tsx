@@ -23,10 +23,9 @@ import {
   Globe,
   ChatCircleDots,
   SquaresFour,
-  ChalkboardSimple,
-  Signpost,
   ChatsCircle,
   CalendarDots,
+  Bell,
 } from '@phosphor-icons/react'
 import { DiscordIcon } from '@components/Objects/Icons/DiscordIcon'
 import {
@@ -183,23 +182,22 @@ export const OrgMenu = (props: any) => {
           </div>
 
           <div className="flex items-center space-x-2">
-            {/* Progress / Trail */}
+            {/* Notifications */}
             <AuthenticatedClientElement checkMethod="authentication">
               <div className="hidden lg:flex">
                 <TooltipProvider delayDuration={0}>
                   <Tooltip>
                     <TooltipTrigger asChild>
                       <Link
-                        href={getUriWithOrg(orgslug, '/trail')}
+                        href={getUriWithOrg(orgslug, '/notifications')}
                         className={`p-2 rounded-lg transition-colors ${colors.iconBtn}`}
-                        aria-label={t('courses.progress')}
+                        aria-label={t('notifications.title', { defaultValue: 'Notifications' })}
                       >
-                        <Signpost size={20} weight="fill" />
+                        <Bell size={20} weight="fill" />
                       </Link>
                     </TooltipTrigger>
-                    <TooltipContent side="bottom" className="flex items-center gap-2 text-xs">
-                      {t('courses.progress')}
-                      <Keys keys="g t" />
+                    <TooltipContent side="bottom" className="text-xs">
+                      {t('notifications.title', { defaultValue: 'Notifications' })}
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>
@@ -227,30 +225,6 @@ export const OrgMenu = (props: any) => {
                 </TooltipProvider>
               </div>
             </AuthenticatedClientElement>
-            {/* Boards */}
-            {rf?.boards?.enabled && (
-              <AuthenticatedClientElement checkMethod="authentication">
-                <div className="hidden lg:flex">
-                  <TooltipProvider delayDuration={0}>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <Link
-                          href={getUriWithOrg(orgslug, '/boards')}
-                          className={`p-2 rounded-lg transition-colors ${colors.iconBtn}`}
-                          aria-label={t('common.boards')}
-                        >
-                          <ChalkboardSimple size={20} weight="fill" />
-                        </Link>
-                      </TooltipTrigger>
-                      <TooltipContent side="bottom" className="flex items-center gap-2 text-xs">
-                        {t('common.boards')}
-                        <Keys keys="g b" />
-                      </TooltipContent>
-                    </Tooltip>
-                  </TooltipProvider>
-                </div>
-              </AuthenticatedClientElement>
-            )}
             {/* Messages */}
             {messagingEnabled && (
               <AuthenticatedClientElement checkMethod="authentication">
