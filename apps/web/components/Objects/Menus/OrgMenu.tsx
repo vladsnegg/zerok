@@ -150,7 +150,7 @@ export const OrgMenu = (props: any) => {
         }}
       >
         <div className="flex items-center justify-between w-full max-w-(--breakpoint-2xl) mx-auto px-4 sm:px-6 lg:px-8 h-full">
-          <div className="flex items-center space-x-5 max-lg:min-w-0 lg:flex-1">
+          <div className="flex items-center space-x-5 max-lg:min-w-0 lg:grow">
             <div className="logo flex shrink-0">
               <Link href={getUriWithOrg(orgslug, homePath)} className="shrink-0">
                 <div className="flex w-auto h-9 rounded-md items-center m-auto py-1 justify-center">
@@ -178,11 +178,11 @@ export const OrgMenu = (props: any) => {
           {/* The header never fit a full search next to labelled links and
               the profile name inside 1536px: below 1780px the search gives
               way (icon-only from 1280 to 1535) so nothing is pushed off-screen. */}
-          <div className="lh-header-search hidden lg:flex flex-1 min-w-0 min-[1780px]:min-w-auto justify-center max-w-lg px-4">
+          <div className="lh-header-search hidden lg:flex basis-[32rem] grow-0 min-w-0 max-w-lg justify-center px-4">
             <SearchTrigger className="w-full" primaryColor={primaryColor} />
           </div>
 
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-2 lg:grow lg:justify-end">
             {/* Notifications */}
             <AuthenticatedClientElement checkMethod="authentication">
               <div className="hidden lg:flex">
