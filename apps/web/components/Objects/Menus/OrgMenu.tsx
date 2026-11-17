@@ -150,7 +150,7 @@ export const OrgMenu = (props: any) => {
         }}
       >
         <div className="flex items-center justify-between w-full max-w-(--breakpoint-2xl) mx-auto px-4 sm:px-6 lg:px-8 h-full">
-          <div className="flex items-center space-x-5 max-lg:min-w-0">
+          <div className="flex items-center space-x-5 max-lg:min-w-0 lg:flex-1">
             <div className="logo flex shrink-0">
               <Link href={getUriWithOrg(orgslug, homePath)} className="shrink-0">
                 <div className="flex w-auto h-9 rounded-md items-center m-auto py-1 justify-center">
@@ -168,7 +168,8 @@ export const OrgMenu = (props: any) => {
                 </div>
               </Link>
             </div>
-            <div className="hidden lg:flex">
+            {/* Centered in the gap between the logo and the search field. */}
+            <div className="hidden lg:flex flex-1 min-w-0 justify-center">
               <MenuLinks orgslug={orgslug} primaryColor={primaryColor} />
             </div>
           </div>
