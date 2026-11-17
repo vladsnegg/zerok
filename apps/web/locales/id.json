@@ -48,11 +48,11 @@
     "help": "Bantuan",
     "help_menu": {
       "documentation": "Dokumentasi",
-      "website": "Situs Web LearnHouse",
+      "website": "Situs Web zerok",
       "discord": "Discord",
       "report_feedback": "Laporkan Masalah atau Umpan Balik",
       "feedback_title": "Kirim Umpan Balik",
-      "feedback_description": "Bantu kami meningkatkan LearnHouse dengan berbagi pemikiran Anda, melaporkan bug, atau menyarankan fitur baru.",
+      "feedback_description": "Bantu kami meningkatkan zerok dengan berbagi pemikiran Anda, melaporkan bug, atau menyarankan fitur baru.",
       "feedback_placeholder": "Beritahu kami apa yang Anda pikirkan...",
       "feedback_success": "Terima kasih atas umpan balik Anda!",
       "send_feedback": "Kirim Umpan Balik",
@@ -236,7 +236,7 @@
     "billing": "Tagihan",
     "create_organization": "Buat organisasi",
     "start_your_own_organization": "Buat organisasi Anda sendiri",
-    "copyright": "© {{year}} LearnHouse, Inc.",
+    "copyright": "© {{year}} zerok, Inc.",
     "delete_organization_error": "Tidak dapat menghapus organisasi ini. Silakan coba lagi.",
     "org_actions": "Tindakan organisasi",
     "manage_upgrade": "Kelola / Tingkatkan",
@@ -393,11 +393,11 @@
     "privacy_policy": "Kebijakan Privasi",
     "image_title_forgot": "Atur ulang kata sandi Anda.",
     "image_subtitle_forgot": "Kami akan membantu Anda kembali ke akun Anda dalam sekejap.",
-    "image_title_login": "Selamat datang kembali di LearnHouse.",
+    "image_title_login": "Selamat datang kembali di zerok.",
     "image_subtitle_login": "Lanjutkan dari tempat Anda berhenti: kursus, siswa, dan alat Anda sudah menanti.",
     "image_title_reset": "Hampir selesai.",
     "image_subtitle_reset": "Buat kata sandi yang kuat untuk menjaga keamanan akun Anda.",
-    "image_title_signup": "Mulai mengajar dengan LearnHouse.",
+    "image_title_signup": "Mulai mengajar dengan zerok.",
     "image_subtitle_signup": "Buat akun Anda dan luncurkan kursus pertama Anda dalam hitungan menit.",
     "image_title_verify": "Verifikasi email Anda.",
     "image_subtitle_verify": "Satu langkah cepat untuk mengamankan akun Anda dan memulai.",
@@ -719,14 +719,14 @@
     "import": {
       "scorm_package": "Paket SCORM",
       "scorm_description": "Impor paket SCORM 1.2 atau SCORM 2004",
-      "learnhouse_courses": "Kursus LearnHouse",
-      "learnhouse_description": "Impor kursus yang diekspor dari LearnHouse",
+      "zerok_courses": "Kursus zerok",
+      "zerok_description": "Impor kursus yang diekspor dari zerok",
       "upload_package": "Unggah Paket",
       "configure": "Konfigurasi",
       "complete": "Selesai",
       "click_to_upload": "Klik untuk mengunggah atau seret dan lepas",
-      "learnhouse_format": "Ekspor kursus LearnHouse (.zip)",
-      "learnhouse_info": "Unggah paket ekspor kursus LearnHouse (.zip). Anda dapat memilih kursus mana yang akan diimpor dan mengkonfigurasi opsi impor.",
+      "zerok_format": "Ekspor kursus zerok (.zip)",
+      "zerok_info": "Unggah paket ekspor kursus zerok (.zip). Anda dapat memilih kursus mana yang akan diimpor dan mengkonfigurasi opsi impor.",
       "analyze_package": "Analisis Paket",
       "ready_to_analyze": "Siap untuk dianalisis",
       "invalid_file_format": "Silakan unggah file .zip",
@@ -777,7 +777,7 @@
       "lms_ready_to_convert": "Siap dikonversi",
       "lms_invalid_file_format": "Silakan unggah file .mbz, .imscc, .zip, atau .tar.gz",
       "lms_file_too_large": "Ekspor melebihi batas unggah {{size}} MB",
-      "lms_info": "Ekspor dikonversi menjadi konten LearnHouse di server. Kursus besar dapat memakan waktu beberapa menit, jadi biarkan jendela ini tetap terbuka hingga selesai.",
+      "lms_info": "Ekspor dikonversi menjadi konten zerok di server. Kursus besar dapat memakan waktu beberapa menit, jadi biarkan jendela ini tetap terbuka hingga selesai.",
       "lms_start": "Unggah dan Konversi",
       "lms_uploading": "Mengunggah... {{progress}}%",
       "lms_upload_finishing": "Menyelesaikan unggahan...",
@@ -2128,7 +2128,7 @@
     "not_supported_title": "Aktivitas ini tidak didukung",
     "not_supported_description": "Tipe aktivitas ini memerlukan autentikasi dan tidak dapat disematkan.",
     "visit_activity": "Kunjungi Halaman Aktivitas",
-    "powered_by": "Didukung oleh LearnHouse"
+    "powered_by": "Didukung oleh zerok"
   },
   "assignments": {
     "submit_assignment": "Kirim Tugas",
@@ -2536,7 +2536,7 @@
     "stripe_wait": "Harap tunggu sementara kami selesai mengatur integrasi Stripe Anda...",
     "stripe_return": "Anda sekarang dapat kembali ke dasbor untuk mulai menggunakan pembayaran.",
     "stripe_retry": "Silakan coba lagi atau hubungi dukungan jika masalah berlanjut.",
-    "stripe_login_required": "Anda belum masuk ke LearnHouse di browser ini. Masuklah, lalu mulai koneksi lagi dari pengaturan pembayaran Anda.",
+    "stripe_login_required": "Anda belum masuk ke zerok di browser ini. Masuklah, lalu mulai koneksi lagi dari pengaturan pembayaran Anda.",
     "subscription": "Langganan",
     "benefits": "Manfaat:",
     "min_price": "Harga minimum:",
@@ -2900,7 +2900,7 @@
           "rate_limited": "Terlalu banyak percobaan. Harap tunggu sebentar lalu coba lagi.",
           "status_error": "Tidak dapat memuat pengaturan dua faktor Anda.",
           "copy_failed": "Tidak dapat menyalin. Silakan pilih teks dan salin secara manual.",
-          "codes_file_header": "Kode cadangan dua faktor LearnHouse. Setiap kode hanya dapat digunakan sekali.",
+          "codes_file_header": "Kode cadangan dua faktor zerok. Setiap kode hanya dapat digunakan sekali.",
           "already_enabled": "Autentikasi dua faktor sudah diaktifkan pada akun ini.",
           "setup_failed": "Tidak dapat memulai penyiapan dua faktor. Silakan coba lagi.",
           "enabled_toast": "Autentikasi dua faktor kini diaktifkan.",
@@ -3040,7 +3040,7 @@
           "description": "Konfigurasikan pengaturan pribadi, kata sandi, email Anda"
         }
       },
-      "learnhouse_university": "Universitas LearnHouse",
+      "zerok_university": "Universitas zerok",
       "welcome_back": "Selamat datang kembali",
       "plan": "paket",
       "create_course": "Buat Kursus",
@@ -3095,8 +3095,8 @@
       "import_course": "Impor kursus",
       "import_scorm": "Impor SCORM",
       "import_scorm_description": "Impor paket SCORM untuk membuat kursus baru",
-      "import_learnhouse": "Impor Kursus LearnHouse",
-      "import_learnhouse_description": "Impor kursus yang diekspor dari LearnHouse",
+      "import_zerok": "Impor Kursus zerok",
+      "import_zerok_description": "Impor kursus yang diekspor dari zerok",
       "import_select_type": "Pilih jenis kursus yang akan diimpor",
       "import_lms": "Impor dari LMS Lain",
       "import_lms_description": "Konversi kursus yang diekspor dari platform pembelajaran lain",
@@ -4110,8 +4110,8 @@
         "email_sender_name_desc": "Nama yang dilihat penerima pada email yang dikirim untuk organisasi ini: tautan login, reset kata sandi, undangan, email verifikasi, dan email selamat datang. Email tersebut juga membawa logo Anda, warna merek pada tombol, dan pengaturan watermark Anda. Hanya namanya yang berubah di sini; alamat pengirim tetap milik platform, yang menjaga email ini lolos pemeriksaan SPF dan DKIM. Biarkan kosong untuk menggunakan default platform.",
         "default_language": "Bahasa default",
         "default_language_desc": "Bahasa yang dilihat pengunjung baru secara default dan bahasa yang digunakan untuk email yang dikirim atas nama organisasi ini. Anggota tetap dapat mengganti bahasa antarmuka mereka.",
-        "watermark_label": "Watermark \"Made with LearnHouse\"",
-        "watermark_desc": "Tampilkan watermark branding LearnHouse di halaman organisasi Anda",
+        "watermark_label": "Watermark \"Made with zerok\"",
+        "watermark_desc": "Tampilkan watermark branding zerok di halaman organisasi Anda",
         "watermark_free_plan": "Watermark selalu ditampilkan pada paket gratis",
         "watermark_ee": "Disembunyikan oleh lisensi Enterprise Edition Anda"
       },
@@ -4261,7 +4261,7 @@
         },
         "previews": {
           "thumbnail_title": "Thumbnail",
-          "thumbnail_desc": "Gambar sampul organisasi Anda saat dicantumkan atau dibagikan: di halaman jelajah LearnHouse dan pada pratinjau tautan.",
+          "thumbnail_desc": "Gambar sampul organisasi Anda saat dicantumkan atau dibagikan: di halaman jelajah zerok dan pada pratinjau tautan.",
           "thumbnail_add": "Tambah thumbnail",
           "thumbnail_replace": "Ganti thumbnail",
           "gallery_title": "Galeri pratinjau",
@@ -5110,7 +5110,7 @@
         },
         "beta": "Beta",
         "active_zaps_other": "{{count}} Zap aktif",
-        "zapier_description": "Hubungkan LearnHouse ke ribuan aplikasi tanpa menulis kode.",
+        "zapier_description": "Hubungkan zerok ke ribuan aplikasi tanpa menulis kode.",
         "manage_zaps": "Kelola Zap",
         "connect": "Hubungkan",
         "add_endpoint": "Tambah Endpoint",
@@ -5205,7 +5205,7 @@
           "regenerate_failed": "Gagal membuat ulang token"
         },
         "docs_subtitle": "Jelajahi dan uji endpoint API menggunakan token API Anda",
-        "contact_support": "Hubungi dukungan LearnHouse",
+        "contact_support": "Hubungi dukungan zerok",
         "name": "Nama",
         "token_prefix": "Awalan Token",
         "last_used": "Terakhir Digunakan",
@@ -5399,8 +5399,8 @@
         "methods_description": "Pilih cara anggota diizinkan masuk ke organisasi ini. Biarkan semua metode tercentang agar proses masuk tidak dibatasi.",
         "methods_empty_warning": "Tanpa metode yang dipilih, tidak ada yang dapat masuk ke organisasi ini. Pilih setidaknya satu.",
         "methods_effect": "Metode yang tidak dicentang akan hilang dari halaman login organisasi ini, dan anggota yang sudah masuk dengan metode tersebut akan diminta masuk lagi dengan metode yang diizinkan.",
-        "session_sharing_label": "Izinkan berbagi sesi dengan learnhouse.io",
-        "session_sharing_hint": "Jika nonaktif, masuk di learnhouse.io tidak akan memberi anggota akses ke organisasi ini; mereka harus masuk lagi dari halaman login organisasi ini dengan metode yang diizinkan.",
+        "session_sharing_label": "Izinkan berbagi sesi dengan zerok.io",
+        "session_sharing_hint": "Jika nonaktif, masuk di zerok.io tidak akan memberi anggota akses ke organisasi ini; mereka harus masuk lagi dari halaman login organisasi ini dengan metode yang diizinkan.",
         "saving_short": "Menyimpan…",
         "save": "Simpan perubahan",
         "cancel": "Batal",
@@ -7138,7 +7138,7 @@
           "keywords": "jalur belajar, jalur, trek, program, kurikulum, urutan, sertifikat, paths, learning paths"
         },
         "live_sessions": {
-          "keywords": "sesi langsung kelas webinar rapat video kehadiran rekaman polling learnhouse meet zoom meet teams live sessions attendance recordings polls",
+          "keywords": "sesi langsung kelas webinar rapat video kehadiran rekaman polling zerok meet zoom meet teams live sessions attendance recordings polls",
           "description": "Jadwalkan sesi langsung, pantau kehadiran, dan kelola rekaman"
         }
       }
@@ -8793,10 +8793,10 @@
       },
       "teach_the_world": {
         "title": "Belajar & berkembang",
-        "description": "Sumber daya untuk membantu Anda memaksimalkan LearnHouse.",
+        "description": "Sumber daya untuk membantu Anda memaksimalkan zerok.",
         "classroom": "Kelas",
         "classroom_desc": "Pelajari cara mengembangkan dan mengelola kursus Anda",
-        "university": "Universitas LearnHouse",
+        "university": "Universitas zerok",
         "university_desc": "Panduan, tips, dan praktik terbaik"
       },
       "add_content": {
@@ -8826,7 +8826,7 @@
       }
     },
     "welcome": {
-      "title": "Selamat datang di LearnHouse",
+      "title": "Selamat datang di zerok",
       "subtitle": "Buat kursus, undang pembelajar, dan bagikan pengetahuan dengan dunia.",
       "get_started": "Mulai",
       "features_title": "Semua yang Anda butuhkan",
@@ -8939,7 +8939,7 @@
     "launch_plan": "Rencana peluncuran",
     "subtitle": "Enam langkah singkat menuju akademi yang aktif. Setiap langkah dilengkapi video.",
     "watch_tour": "Tonton tur",
-    "tour_title": "Selamat datang di LearnHouse",
+    "tour_title": "Selamat datang di zerok",
     "steps_title": "Langkah",
     "step_number": "Langkah {{n}}",
     "progress_count": "{{done}} dari {{total}} selesai",
@@ -9560,7 +9560,7 @@
         "title": "Ingin mencoba?",
         "body": "Kunjungi",
         "link": "halaman Pengembang",
-        "suffix": "untuk mencoba LearnHouse."
+        "suffix": "untuk mencoba zerok."
       },
       "validation": {
         "required": "Wajib diisi",
@@ -9983,7 +9983,7 @@
       "stripe_title": "Pembayaran kartu dengan Stripe",
       "stripe_body": "Hubungkan akun Stripe untuk berjualan dengan Stripe Checkout, langganan, uji coba, dan kode promo.",
       "any_tool_title": "Jual dengan alat apa pun",
-      "any_tool_body": "Sudah berjualan di Gumroad, Paddle, Lemon Squeezy, Shopify, atau lewat faktur? Lanjutkan saja. LearnHouse hanya perlu tahu siapa yang sudah membayar.",
+      "any_tool_body": "Sudah berjualan di Gumroad, Paddle, Lemon Squeezy, Shopify, atau lewat faktur? Lanjutkan saja. zerok hanya perlu tahu siapa yang sudah membayar.",
       "step1_title": "Buat produk",
       "step1_body": "Pilih <strong>Halaman pembayaran sendiri</strong> lalu tempel tautan pembayaran Anda, atau pilih <strong>Hanya undangan</strong>.",
       "step2_title": "Buat token API",
@@ -10139,25 +10139,25 @@
       "missing_code": "Tautan ini tidak memiliki kode masuk. Buka aktivitas dari LMS Anda lagi.",
       "failed": "Kami tidak dapat memasukkan Anda. Buka aktivitas dari LMS Anda lagi.",
       "error_title": "Kami tidak dapat membuka halaman ini",
-      "new_tab_title": "Buka di LearnHouse",
-      "new_tab_description": "LearnHouse terbuka di tabnya sendiri agar pekerjaan Anda tersimpan.",
+      "new_tab_title": "Buka di zerok",
+      "new_tab_description": "zerok terbuka di tabnya sendiri agar pekerjaan Anda tersimpan.",
       "open_course": "Lanjutkan di tab baru",
-      "signing_in": "Membuka LearnHouse…",
-      "please_wait": "Memasukkan Anda ke LearnHouse.",
+      "signing_in": "Membuka zerok…",
+      "please_wait": "Memasukkan Anda ke zerok.",
       "confirm_title": "Lanjutkan sebagai {{name}}?",
-      "confirm_description": "{{platform}} memasukkan Anda ke LearnHouse sebagai {{name}}. Lanjutkan hanya jika Anda baru saja membukanya dari kursus Anda.",
+      "confirm_description": "{{platform}} memasukkan Anda ke zerok sebagai {{name}}. Lanjutkan hanya jika Anda baru saja membukanya dari kursus Anda.",
       "confirm_button": "Lanjutkan sebagai {{name}}",
       "confirm_platform_fallback": "LMS Anda"
     },
     "link": {
       "error_title": "Kami tidak dapat menautkan akun Anda",
       "loading": "Memuat…",
-      "title": "Tautkan akun LearnHouse Anda",
-      "description": "{{platform}} menyatakan Anda adalah {{email}}, dan akun LearnHouse dengan email tersebut sudah ada. Masuk sekali untuk menautkannya ke LMS Anda.",
+      "title": "Tautkan akun zerok Anda",
+      "description": "{{platform}} menyatakan Anda adalah {{email}}, dan akun zerok dengan email tersebut sudah ada. Masuk sekali untuk menautkannya ke LMS Anda.",
       "signed_in_as": "Masuk sebagai {{email}}",
       "confirm": "Tautkan akun dan lanjutkan",
       "sign_in": "Masuk untuk melanjutkan",
-      "password_label": "Kata sandi LearnHouse Anda, untuk memastikan ini Anda"
+      "password_label": "Kata sandi zerok Anda, untuk memastikan ini Anda"
     },
     "select": {
       "draft": "Draf",
@@ -10165,7 +10165,7 @@
       "show_activities": "Tampilkan aktivitas",
       "error_title": "Terjadi kesalahan",
       "loading": "Memuat kursus…",
-      "deeplink_title": "Tambah konten LearnHouse",
+      "deeplink_title": "Tambah konten zerok",
       "bind_title": "Pilih kursus untuk tautan ini",
       "deeplink_subtitle": "Pilih kursus, aktivitas atau tugas tunggal, komunitas, podcast, papan, playground, atau folder pustaka. Hasil kursus dan tugas dikirim ke buku nilai Anda.",
       "single_item": "LMS ini menambahkan satu item sekali. Jalankan lagi untuk menambah lebih banyak.",
@@ -10209,8 +10209,8 @@
       "connected": "Terhubung",
       "disabled": "Nonaktif",
       "incomplete": "Tidak lengkap",
-      "tool_details": "Detail LearnHouse untuk LMS Anda",
-      "tool_details_help": "Masukkan ini di LMS Anda saat mendaftarkan LearnHouse sebagai alat eksternal.",
+      "tool_details": "Detail zerok untuk LMS Anda",
+      "tool_details_help": "Masukkan ini di LMS Anda saat mendaftarkan zerok sebagai alat eksternal.",
       "login_url": "URL inisiasi login",
       "launch_url": "URL peluncuran / pengalihan",
       "deep_linking_url": "URL deep linking",
@@ -10227,7 +10227,7 @@
       "enabled": "Diaktifkan",
       "grade_sync_toggle": "Kirim progres ke buku nilai",
       "roster_sync_toggle": "Sinkronkan daftar kelas setiap hari",
-      "instructor_toggle": "Instruktur LMS dapat menilai di LearnHouse",
+      "instructor_toggle": "Instruktur LMS dapat menilai di zerok",
       "assignment_columns_toggle": "Satu kolom buku nilai untuk setiap tugas",
       "cohort_groups_toggle": "Satu grup pengguna untuk setiap kursus LMS",
       "revoke_on_drop_toggle": "Hapus akses saat seseorang keluar dari kursus LMS",
@@ -10240,9 +10240,9 @@
       "save": "Simpan",
       "saved": "Tersimpan",
       "placements": "Penempatan",
-      "no_links": "Belum ada peluncuran. Tambahkan LearnHouse ke kursus di LMS Anda dan buka sekali.",
+      "no_links": "Belum ada peluncuran. Tambahkan zerok ke kursus di LMS Anda dan buka sekali.",
       "lms_course": "Kursus LMS",
-      "learnhouse_course": "Konten LearnHouse",
+      "zerok_course": "Konten zerok",
       "learners": "Pelajar",
       "grade_sync": "Buku nilai",
       "not_bound": "Belum terhubung",
@@ -10251,10 +10251,10 @@
       "no_grade_service": "Tidak dibagikan oleh LMS",
       "changed_in_lms": "{{count}} diubah di LMS",
       "column_errors": "{{count}} dengan kesalahan kolom",
-      "column_errors_hint": "LMS menolak nilai di beberapa kolom per tugas. Pastikan LMS menerima skor untuk kolom yang dibuat LearnHouse.",
-      "changed_in_lms_hint": "Guru mengubah nilai ini di buku nilai LMS, sehingga LearnHouse tidak lagi memperbaruinya. Klik untuk menimpanya dengan nilai LearnHouse.",
-      "overwrite_confirm": "Ganti nilai yang diubah guru di LMS dengan nilai LearnHouse?",
-      "kept_by_lms_other": "LMS masih menampilkan nilai dari guru untuk {{count}} pelajar. Hapus penimpaan nilai di buku nilai LMS agar nilai LearnHouse dapat tampil.",
+      "column_errors_hint": "LMS menolak nilai di beberapa kolom per tugas. Pastikan LMS menerima skor untuk kolom yang dibuat zerok.",
+      "changed_in_lms_hint": "Guru mengubah nilai ini di buku nilai LMS, sehingga zerok tidak lagi memperbaruinya. Klik untuk menimpanya dengan nilai zerok.",
+      "overwrite_confirm": "Ganti nilai yang diubah guru di LMS dengan nilai zerok?",
+      "kept_by_lms_other": "LMS masih menampilkan nilai dari guru untuk {{count}} pelajar. Hapus penimpaan nilai di buku nilai LMS agar nilai zerok dapat tampil.",
       "not_graded": "Belum dinilai",
       "sync_roster": "Sinkronkan daftar peserta",
       "sync_grades": "Sinkronkan nilai",
@@ -10645,13 +10645,13 @@
     },
     "ee_error": {
       "required_title": "Lisensi Enterprise Edition diperlukan",
-      "required_desc": "Endpoint ini bagian dari LearnHouse Enterprise Edition dan tidak tersedia pada deployment ini.",
+      "required_desc": "Endpoint ini bagian dari zerok Enterprise Edition dan tidak tersedia pada deployment ini.",
       "inactive_title": "Fitur Enterprise saat ini tidak tersedia",
       "inactive_desc": "Pemeriksaan lisensi EE gagal (<code>{{reason}}</code>). Setiap endpoint <code>/ee/*</code> mengembalikan 503, sehingga halaman ini tidak dapat memuat datanya.",
       "what_to_check": "Yang perlu diperiksa",
       "check_diagnostics": "Buka <code>{{path}}</code>. Endpoint ini menjawab bahkan saat lisensi tidak aktif, dan kolom <code>hint</code>-nya menyebutkan perbaikannya.",
-      "check_saas": "Untuk deployment SaaS: pastikan <code>LEARNHOUSE_SAAS=true</code> diatur di lingkungan API. SaaS melewati pemeriksaan lisensi.",
-      "check_self_hosted": "Untuk EE self-hosted: pastikan <code>LEARNHOUSE_LICENSE_KEY</code> diatur dan server lisensi (atau masa tenggang) dapat dijangkau.",
+      "check_saas": "Untuk deployment SaaS: pastikan <code>zerok_SAAS=true</code> diatur di lingkungan API. SaaS melewati pemeriksaan lisensi.",
+      "check_self_hosted": "Untuk EE self-hosted: pastikan <code>zerok_LICENSE_KEY</code> diatur dan server lisensi (atau masa tenggang) dapat dijangkau.",
       "check_logs": "Jika Anda memiliki akses shell, log API memuat alasan yang sama dengan detail lengkap: <code>[EE] license inactive …</code>",
       "failed_to_load": "Gagal memuat"
     },
@@ -10824,7 +10824,7 @@
     },
     "ee_required": {
       "title": "Lisensi Enterprise Edition diperlukan",
-      "description": "Dasbor superadmin adalah bagian dari LearnHouse Enterprise Edition dan tidak tersedia pada deployment ini."
+      "description": "Dasbor superadmin adalah bagian dari zerok Enterprise Edition dan tidak tersedia pada deployment ini."
     },
     "access_denied": {
       "title": "Akses Ditolak",
@@ -10878,7 +10878,7 @@
   "error_catalog": {
     "version_mismatch": {
       "title": "Aplikasi baru saja diperbarui",
-      "description": "Versi baru LearnHouse dirilis saat halaman ini terbuka, sehingga sempat tidak sinkron. Memuat ulang akan mengambil versi terbaru."
+      "description": "Versi baru zerok dirilis saat halaman ini terbuka, sehingga sempat tidak sinkron. Memuat ulang akan mengambil versi terbaru."
     },
     "chunk_load": {
       "title": "Sebagian halaman tidak termuat",
@@ -10992,7 +10992,7 @@
         "url": "Tautan rekaman",
         "action_items": "Tindak lanjut",
         "transcribed": "Transkrip siap",
-        "empty_description": "Unggah rekaman atau tempel tautan. Tambahkan transkrip dan LearnHouse akan menulis ringkasannya.",
+        "empty_description": "Unggah rekaman atau tempel tautan. Tambahkan transkrip dan zerok akan menulis ringkasannya.",
         "empty_title": "Belum ada rekaman",
         "in_course": "Di kursus",
         "transcript_optional": "Transkrip (opsional)",
@@ -11107,7 +11107,7 @@
         "make_default": "Jadikan default",
         "use_own_app": "Gunakan aplikasi Anda sendiri",
         "client_id": "Client ID",
-        "meet_description": "Bawaan, dihosting oleh LearnHouse",
+        "meet_description": "Bawaan, dihosting oleh zerok",
         "default": "Default",
         "defaults_title": "Default",
         "reminders_description": "Email dikirim ke orang yang mengonfirmasi kehadiran dan ke host."
@@ -11257,9 +11257,9 @@
       "where": "Di mana",
       "repeat_monthly": "Setiap bulan",
       "provider": "Alat rapat",
-      "provider_connected_hint": "LearnHouse membuat rapat {{provider}} dengan {{account}}.",
+      "provider_connected_hint": "zerok membuat rapat {{provider}} dengan {{account}}.",
       "attendance_completion_hint": "Menandai aktivitas kursus selesai setelah pelajar hadir cukup lama",
-      "provider_embedded_hint": "Berjalan di dalam LearnHouse. Tidak perlu akun lain.",
+      "provider_embedded_hint": "Berjalan di dalam zerok. Tidak perlu akun lain.",
       "waiting_room": "Ruang tunggu",
       "no_board": "Tanpa papan",
       "provider_link_hint": "Tempel tautan {{provider}} Anda. Obrolan, tanya jawab, polling, dan kehadiran tetap berjalan di sini.",
@@ -11416,7 +11416,7 @@
       "recording_started": "Sedang merekam. Semua orang di panggilan dapat melihatnya.",
       "stop_recording": "Hentikan rekaman",
       "remove": "Keluarkan dari panggilan",
-      "unavailable_body": "Obrolan, tanya jawab, dan polling berfungsi seperti biasa. Minta administrator Anda menyiapkan LearnHouse Meet.",
+      "unavailable_body": "Obrolan, tanya jawab, dan polling berfungsi seperti biasa. Minta administrator Anda menyiapkan zerok Meet.",
       "no_devices": "Perangkat tidak ditemukan",
       "pick_microphone": "Pilih mikrofon",
       "device_failed": "Tidak dapat menggunakan kamera atau mikrofon Anda",
@@ -11448,7 +11448,7 @@
       "recordings": "Rekaman",
       "cancelled_body": "Sesi ini dibatalkan oleh host.",
       "who": "Siapa yang dapat bergabung",
-      "in_learnhouse": "{{provider}}, di dalam LearnHouse",
+      "in_zerok": "{{provider}}, di dalam zerok",
       "sign_in_to_join": "Masuk untuk konfirmasi kehadiran dan bergabung.",
       "in_the_room": "Di dalam ruang",
       "waiting_body": "Sudah waktunya. Host belum memulai; masuklah ke ruang tunggu dan Anda akan dimasukkan.",
@@ -11493,7 +11493,7 @@
         "submit_series": "Jadwalkan {{count}} sesi",
         "title": "Jadwalkan sesi langsung",
         "submit": "Jadwalkan sesi",
-        "description": "Selenggarakan kelas, jam konsultasi, atau acara secara langsung di dalam LearnHouse."
+        "description": "Selenggarakan kelas, jam konsultasi, atau acara secara langsung di dalam zerok."
       }
     },
     "course_modal": {

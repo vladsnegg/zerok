@@ -43,6 +43,11 @@ export const viewport: Viewport = {
 
 // Saved to the home screen, the app opens without browser chrome.
 export const metadata: Metadata = {
+  title: {
+    default: 'zerok',
+    template: '%s | zerok',
+  },
+  description: 'zerok — платформа для обучения и преподавания.',
   appleWebApp: { capable: true, statusBarStyle: 'default' },
   formatDetection: { telephone: false },
 }

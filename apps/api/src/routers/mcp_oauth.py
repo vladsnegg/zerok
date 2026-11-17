@@ -120,7 +120,7 @@ def _error_page(message: str) -> HTMLResponse:
     from html import escape
 
     return HTMLResponse(
-        "<!doctype html><meta charset=utf-8><title>LearnHouse</title>"
+        "<!doctype html><meta charset=utf-8><title>zerok</title>"
         "<body style=\"font-family:system-ui;max-width:32rem;margin:4rem auto;padding:0 1rem\">"
         f"<h1 style=\"font-size:1.25rem\">This sign-in link can't be used</h1><p>{escape(message)}</p>"
         "<p>Go back to the app you were connecting and start again.</p></body>",

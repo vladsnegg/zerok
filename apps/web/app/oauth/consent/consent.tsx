@@ -2,7 +2,6 @@
 
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
-import Image from 'next/image'
 import { useTranslation } from 'react-i18next'
 import { AlertTriangle, Check, Eye, Loader2, PencilLine, ShieldCheck, UserCog } from 'lucide-react'
 import { useLHSession } from '@components/Contexts/LHSessionContext'
@@ -16,7 +15,6 @@ import {
   submitConsent,
 } from '@services/mcp/mcp'
 import { cn } from '@/lib/utils'
-import lrnLogo from 'public/lrn.svg'
 
 type Access = 'admin' | 'write' | 'read'
 
@@ -292,7 +290,9 @@ function AccessOption({
 function Shell({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen bg-[#f8f8f8] flex flex-col items-center justify-center px-4 py-10">
-      <Image src={lrnLogo} alt="LearnHouse" width={36} height={36} className="mb-6 opacity-90" />
+      <span className="mb-6 text-[24px] font-black lowercase tracking-[-0.04em] text-black">
+        zerok<span className="text-[#6366f1]">.</span>
+      </span>
       <div className="w-full max-w-md rounded-2xl bg-white nice-shadow p-6">{children}</div>
     </div>
   )

@@ -161,7 +161,7 @@ def refuse_lms_session() -> None:
             status_code=403,
             detail={
                 "code": "LMS_SESSION_NOT_ALLOWED",
-                "message": "Sign in to LearnHouse directly to change your account settings.",
+                "message": "Sign in to zerok directly to change your account settings.",
             },
         )
 
@@ -195,4 +195,3 @@ def refuse_outside_held_org(org_id: int) -> None:
                 "message": "This session only works in the organization it was started for.",
             },
         )
-

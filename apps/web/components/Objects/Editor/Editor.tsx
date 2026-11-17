@@ -802,13 +802,7 @@ const EditorLearnHouseLogo = () => {
         animate={animation.animate}
         transition={animation.transition}
       >
-        <Image
-          src="/lrn.svg"
-          alt="LearnHouse"
-          width={14}
-          height={14}
-          className="invert"
-        />
+        <span className="text-[15px] font-black leading-none lowercase text-white">z</span>
       </motion.div>
     </div>
   )

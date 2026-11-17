@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from 'react'
 import dynamic from 'next/dynamic'
 import { useMessaging, useMessagingEnabled } from '@components/Messaging/MessagingProvider'
-import Image from 'next/image'
 import Link from 'next/link'
 import { getUriWithOrg } from '@services/config/config'
 import { HeaderProfileBox } from '@components/Security/HeaderProfileBox'
@@ -159,7 +158,7 @@ export const OrgMenu = (props: any) => {
                       className="h-full w-auto max-w-[150px] lg:max-w-[180px] shrink-0 object-contain rounded-md"
                     />
                   ) : showBranding ? (
-                    <LearnHouseLogo logoFilter={colors.logoFilter} />
+                    <ZeroBrand className={colors.text} />
                   ) : (
                     <span className={`text-lg font-bold truncate max-w-[200px] ${colors.text}`}>{org?.name}</span>
                   )}
@@ -460,14 +459,10 @@ export const OrgMenu = (props: any) => {
   )
 }
 
-const LearnHouseLogo = ({ logoFilter }: { logoFilter: string }) => {
+const ZeroBrand = ({ className = '' }: { className?: string }) => {
   return (
-    <Image
-      src="/lrn-text.svg"
-      alt="LearnHouse logo"
-      width={133}
-      height={40}
-      style={{ height: 'auto', filter: logoFilter }}
-    />
+    <span className={`text-[22px] font-black lowercase tracking-[-0.04em] ${className}`}>
+      zerok<span className="text-[#6366f1]">.</span>
+    </span>
   )
 }

@@ -1,263 +1,100 @@
 'use client'
+
 import React from 'react'
-import { useTranslation, Trans } from 'react-i18next'
-import Image from 'next/image'
 import Link from 'next/link'
-import learnhouseIcon from 'public/learnhouse_bigicon_1.png'
-import { getOrgAuthBackgroundMediaDirectory } from '@services/media/media'
-import OrgSquareLogo from '@components/Objects/Org/OrgSquareLogo'
-import { getUriWithOrg } from '@services/config/config'
-import { cn } from '@/lib/utils'
-import { usePlan } from '@components/Hooks/usePlan'
-import { isWhiteLabelPlan } from '@components/Hooks/useLearnHouseBranding'
+import { useTranslation } from 'react-i18next'
 
 interface AuthBrandingPanelProps {
-  org: any
+  // Accepted for compatibility with the auth pages; the panel is intentionally
+  // platform-branded ("zerok") and ignores organization theming.
+  org?: any
   welcomeText?: string
-  // No-org (apex) panel copy: platform-style title + subtitle shown at the top
-  // of the illustration. Falls back to the login wording when omitted.
   title?: string
   subtitle?: string
 }
 
-export default function AuthBrandingPanel({ org, welcomeText, title, subtitle }: AuthBrandingPanelProps) {
+/**
+ * Right-hand auth panel.
+ *
+ * Deliberately platform-branded: the product name is always "zerok" on the
+ * sign-in screen, regardless of which organization the visitor belongs to.
+ */
+export default function AuthBrandingPanel(_props: AuthBrandingPanelProps) {
   const { t } = useTranslation()
-  const authBranding = org?.config?.config?.customization?.auth_branding || org?.config?.config?.general?.auth_branding || {}
-  const {
-    welcome_message = '',
-    background_type = 'gradient',
-    background_image = '',
-    text_color = 'light',
-    unsplash_photographer_name = '',
-    unsplash_photographer_url = '',
-    unsplash_photo_url = '',
-  } = authBranding
-  const UNSPLASH_UTM = '?utm_source=LearnHouse&utm_medium=referral'
-  const withUtm = (url: string) => (url ? `${url}${UNSPLASH_UTM}` : '')
-
-  // Pro+ and EE are white-labelled; OSS keeps the LearnHouse mark
-  const plan = usePlan()
-  const isWhiteLabel = isWhiteLabelPlan(plan)
-
-  // No org context (the generic apex login) → use the platform's auth
-  // illustration instead of the flat gradient.
-  const noOrg = !org
-
-  const getBackgroundStyle = (): React.CSSProperties => {
-    if (noOrg) {
-      return {
-        backgroundImage: 'url(/auth-default.webp)',
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-      }
-    }
-    if (background_type === 'gradient' || !background_image) {
-      // Keep the original black gradient
-      return {
-        background: 'linear-gradient(041.61deg, #202020 7.15%, #000000 90.96%)',
-      }
-    }
-    if (background_type === 'custom' && background_image) {
-      return {
-        backgroundImage: `url(${getOrgAuthBackgroundMediaDirectory(org?.org_uuid, background_image)})`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-      }
-    }
-    if (background_type === 'unsplash' && background_image) {
-      return {
-        backgroundImage: `url(${background_image})`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-      }
-    }
-    return {
-      background: 'linear-gradient(041.61deg, #202020 7.15%, #000000 90.96%)',
-    }
-  }
-
-  const displayMessage = welcome_message || welcomeText || ''
-  // No-org platform copy (defaults mirror the platform login illustration).
-  const noOrgTitle = title || t('auth.image_title_login')
-  const noOrgSubtitle =
-    subtitle || t('auth.image_subtitle_login')
-  // Treat the no-org illustration like a photo background: dark scrim, no
-  // blueprint-grid overlay.
-  const hasCustomBackground = noOrg || (background_type !== 'gradient' && background_image)
 
   return (
-    <div className="relative h-full w-full">
-      {/* Inset rounded card (platform-style) */}
-      <div className="absolute inset-16 rounded-2xl overflow-hidden">
-        {/* Base layer: org's chosen background (gradient | custom | unsplash) */}
-        <div className="absolute inset-0" style={getBackgroundStyle()} />
+    <div className="relative h-full w-full p-6">
+      <div className="relative flex h-full flex-col overflow-hidden rounded-3xl bg-[#08090a] text-white">
+        {/* Ambient light */}
+        <div
+          className="pointer-events-none absolute inset-0"
+          style={{
+            background:
+              'radial-gradient(900px 520px at 18% 12%, rgba(198,255,74,0.16), transparent 62%), radial-gradient(700px 520px at 88% 88%, rgba(99,102,241,0.28), transparent 60%)',
+          }}
+        />
+        {/* Fine grid */}
+        <div
+          className="pointer-events-none absolute inset-0 opacity-[0.16]"
+          style={{
+            backgroundImage:
+              'linear-gradient(rgba(255,255,255,0.28) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.28) 1px, transparent 1px)',
+            backgroundSize: '72px 72px',
+            maskImage: 'linear-gradient(to bottom, black 0%, transparent 78%)',
+            WebkitMaskImage: 'linear-gradient(to bottom, black 0%, transparent 78%)',
+          }}
+        />
 
-        {/* Blueprint + dot overlays, ONLY for gradient fallback (no photo) */}
-        {!hasCustomBackground && (
-          <>
-            <div
-              className="absolute inset-0 opacity-[0.14]"
-              style={{
-                backgroundImage: `linear-gradient(rgba(120,165,255,0.6) 1px, transparent 1px),
-                  linear-gradient(90deg, rgba(120,165,255,0.6) 1px, transparent 1px),
-                  linear-gradient(rgba(120,165,255,0.3) 0.5px, transparent 0.5px),
-                  linear-gradient(90deg, rgba(120,165,255,0.3) 0.5px, transparent 0.5px)`,
-                backgroundSize: '120px 120px, 120px 120px, 24px 24px, 24px 24px',
-              }}
-            />
-            <div
-              className="absolute inset-0 opacity-[0.18]"
-              style={{
-                backgroundImage: 'radial-gradient(circle, rgba(120,165,255,0.9) 1.5px, transparent 1.5px)',
-                backgroundSize: '120px 120px',
-              }}
-            />
-          </>
-        )}
+        <div className="relative z-10 flex h-full flex-col p-10 xl:p-14">
+          <Link href="/" className="w-fit">
+            <span className="text-[26px] font-black lowercase tracking-[-0.04em] text-white">
+              zerok<span className="text-[#c6ff4a]">.</span>
+            </span>
+          </Link>
 
-        {/* Dark scrim for org photo backgrounds (centered text needs it).
-            The no-org illustration stays vivid; it's darkened only at the top. */}
-        {hasCustomBackground && !noOrg && (
-          <div className="absolute inset-0 bg-black/30" />
-        )}
+          <div className="flex flex-1 flex-col justify-center">
+            <p className="mb-5 inline-flex w-fit items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-white/55">
+              <span className="h-1.5 w-1.5 rounded-full bg-[#c6ff4a]" />
+              {t('auth.branding_eyebrow', { defaultValue: 'Learning platform' })}
+            </p>
+            <h2 className="max-w-md text-[40px] font-black leading-[1.05] tracking-[-0.03em] xl:text-[46px]">
+              {t('auth.branding_headline_1', { defaultValue: 'Learn.' })}
+              <br />
+              {t('auth.branding_headline_2', { defaultValue: 'Teach.' })}
+              <br />
+              <span className="text-[#c6ff4a]">
+                {t('auth.branding_headline_3', { defaultValue: 'Grow.' })}
+              </span>
+            </h2>
+            <p className="mt-6 max-w-sm text-[15px] font-medium leading-relaxed text-white/50">
+              {t('auth.branding_subtitle', {
+                defaultValue:
+                  'Courses, assignments, community and collaboration — in one calm space.',
+              })}
+            </p>
+          </div>
 
-        {/* No-org: top blur + darken so the platform-style heading reads over
-            the illustration (mirrors the platform login panel). */}
-        {noOrg && (
-          <>
-            <div
-              className="absolute top-0 start-0 end-0 h-[38%] z-[5] backdrop-blur-sm"
-              style={{
-                maskImage: 'linear-gradient(to bottom, black 10%, transparent 100%)',
-                WebkitMaskImage: 'linear-gradient(to bottom, black 10%, transparent 100%)',
-              }}
-            />
-            <div
-              className="absolute top-0 start-0 end-0 h-[38%] z-[5] bg-black/35"
-              style={{
-                maskImage: 'linear-gradient(to bottom, black 10%, transparent 100%)',
-                WebkitMaskImage: 'linear-gradient(to bottom, black 10%, transparent 100%)',
-              }}
-            />
-          </>
-        )}
-
-        {/* Content */}
-        <div className="relative z-10 flex flex-col h-full p-10">
-          {/* Top bar with LearnHouse lrn.svg logo - hidden for white-label plans
-              and for the no-org apex panel (platform shows no logo on the image). */}
-          {!isWhiteLabel && !noOrg && (
-            <div className="login-topbar">
-              <Link prefetch href="https://learnhouse.app" target="_blank">
-                <img
-                  src="/lrn.svg"
-                  alt="LearnHouse"
-                  width={30}
-                  height={30}
-                  className={cn(
-                    "transition-opacity hover:opacity-100",
-                    text_color === 'light' ? "opacity-60 invert" : "opacity-40"
-                  )}
-                />
-              </Link>
-            </div>
-          )}
-
-          {noOrg ? (
-            /* No-org apex panel, platform layout: heading at the TOP, no logo
-               box, platform copy. */
-            <div className="max-w-md text-white">
-              <h1 className="font-black text-[28px] leading-tight tracking-tight">
-                {noOrgTitle}
-              </h1>
-              <p className="mt-3 text-white/55 text-base font-medium leading-relaxed">
-                {noOrgSubtitle}
+          <div className="flex items-end justify-between gap-6 border-t border-white/10 pt-6">
+            <div className="space-y-1">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-white/35">
+                zerok
+              </p>
+              <p className="text-sm font-medium text-white/50">
+                {t('auth.branding_footer', { defaultValue: 'Learning without the noise.' })}
               </p>
             </div>
-          ) : (
-            /* Org panel: centered logo + name (unchanged). */
-            <>
-              <div className="flex-1 flex items-center justify-center">
-                <div className={cn(
-                  "flex flex-col items-center text-center gap-6",
-                  text_color === 'light' ? "text-white" : "text-gray-900"
-                )}>
-                  {/* Organization logo */}
-                  <Link prefetch href={getUriWithOrg(org?.slug, '/')}>
-                    <div className="w-24 h-24 rounded-2xl ring-1 ring-inset ring-white/10 bg-white flex items-center justify-center overflow-hidden">
-                      <OrgSquareLogo
-                        org={org}
-                        wideInsetClassName="p-3"
-                        fallback={
-                          isWhiteLabel ? (
-                            <span className="text-4xl font-black text-gray-800">
-                              {(org?.name || '?').charAt(0).toUpperCase()}
-                            </span>
-                          ) : (
-                            <Image
-                              quality={100}
-                              width={96}
-                              height={96}
-                              src={learnhouseIcon}
-                              alt="LearnHouse"
-                              className="object-contain"
-                            />
-                          )
-                        }
-                      />
-                    </div>
-                  </Link>
-
-                  {/* Text content */}
-                  <div className="space-y-1">
-                    <h1 className="font-black text-3xl tracking-tight">{org?.name || 'LearnHouse'}</h1>
-                    {displayMessage && (
-                      <p className={cn(
-                        "text-lg max-w-sm leading-relaxed",
-                        text_color === 'light' ? "text-white/70" : "text-gray-600"
-                      )}>
-                        {displayMessage}
-                      </p>
-                    )}
-                  </div>
-                </div>
-              </div>
-
-              {/* Bottom spacer for visual balance */}
-              <div className="h-10" />
-            </>
-          )}
-
-          {/* Unsplash attribution (required by Unsplash API guidelines) */}
-          {background_type === 'unsplash' && background_image && unsplash_photographer_name && (
-            <div className={cn(
-              "absolute bottom-3 start-4 end-4 z-10 text-[11px] leading-tight",
-              text_color === 'light' ? "text-white/70" : "text-gray-700"
-            )}>
-              <Trans
-                i18nKey="auth.photo_credit"
-                values={{ name: unsplash_photographer_name }}
-                components={{
-                  photographer: (
-                    <a
-                      href={withUtm(unsplash_photographer_url) || withUtm(unsplash_photo_url)}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="underline hover:opacity-100 opacity-90"
-                    />
-                  ),
-                  unsplash: (
-                    <a
-                      href={`https://unsplash.com/${UNSPLASH_UTM}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="underline hover:opacity-100 opacity-90"
-                    />
-                  ),
-                }}
-              />
+            <div className="hidden gap-2 sm:flex">
+              <span className="rounded-full border border-white/10 px-3 py-1 text-[11px] font-medium text-white/40">
+                {t('auth.branding_tag_courses', { defaultValue: 'Courses' })}
+              </span>
+              <span className="rounded-full border border-white/10 px-3 py-1 text-[11px] font-medium text-white/40">
+                {t('auth.branding_tag_assignments', { defaultValue: 'Assignments' })}
+              </span>
+              <span className="rounded-full border border-white/10 px-3 py-1 text-[11px] font-medium text-white/40">
+                {t('auth.branding_tag_community', { defaultValue: 'Community' })}
+              </span>
             </div>
-          )}
+          </div>
         </div>
       </div>
     </div>

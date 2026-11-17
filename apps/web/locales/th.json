@@ -48,11 +48,11 @@
     "help": "ความช่วยเหลือ",
     "help_menu": {
       "documentation": "เอกสาร",
-      "website": "เว็บไซต์ LearnHouse",
+      "website": "เว็บไซต์ zerok",
       "discord": "Discord",
       "report_feedback": "รายงานปัญหาหรือความคิดเห็น",
       "feedback_title": "ส่งความคิดเห็น",
-      "feedback_description": "ช่วยเราปรับปรุง LearnHouse โดยแบ่งปันความคิด รายงานข้อบกพร่อง หรือแนะนำฟีเจอร์ใหม่",
+      "feedback_description": "ช่วยเราปรับปรุง zerok โดยแบ่งปันความคิด รายงานข้อบกพร่อง หรือแนะนำฟีเจอร์ใหม่",
       "feedback_placeholder": "บอกเราว่าคุณคิดอย่างไร...",
       "feedback_success": "ขอบคุณสำหรับความคิดเห็นของคุณ!",
       "send_feedback": "ส่งความคิดเห็น",
@@ -236,7 +236,7 @@
     "billing": "การเรียกเก็บเงิน",
     "create_organization": "สร้างองค์กร",
     "start_your_own_organization": "สร้างองค์กรของคุณเอง",
-    "copyright": "© {{year}} LearnHouse, Inc.",
+    "copyright": "© {{year}} zerok, Inc.",
     "delete_organization_error": "ไม่สามารถลบองค์กรนี้ได้ กรุณาลองอีกครั้ง",
     "org_actions": "การจัดการองค์กร",
     "manage_upgrade": "จัดการ / อัปเกรด",
@@ -393,11 +393,11 @@
     "privacy_policy": "นโยบายความเป็นส่วนตัว",
     "image_title_forgot": "รีเซ็ตรหัสผ่านของคุณ",
     "image_subtitle_forgot": "เราจะช่วยให้คุณกลับเข้าสู่บัญชีได้ในเวลาอันรวดเร็ว",
-    "image_title_login": "ยินดีต้อนรับกลับสู่ LearnHouse",
+    "image_title_login": "ยินดีต้อนรับกลับสู่ zerok",
     "image_subtitle_login": "ทำต่อจากที่ค้างไว้ คอร์ส นักเรียน และเครื่องมือของคุณรอคุณอยู่",
     "image_title_reset": "ใกล้เสร็จแล้ว",
     "image_subtitle_reset": "สร้างรหัสผ่านที่รัดกุมเพื่อรักษาความปลอดภัยของบัญชี",
-    "image_title_signup": "เริ่มต้นการสอนด้วย LearnHouse",
+    "image_title_signup": "เริ่มต้นการสอนด้วย zerok",
     "image_subtitle_signup": "สร้างบัญชีและเปิดตัวคอร์สแรกของคุณได้ในไม่กี่นาที",
     "image_title_verify": "ยืนยันอีเมลของคุณ",
     "image_subtitle_verify": "ขั้นตอนง่าย ๆ เพียงขั้นเดียวเพื่อรักษาความปลอดภัยของบัญชีและเริ่มต้นใช้งาน",
@@ -719,14 +719,14 @@
     "import": {
       "scorm_package": "แพ็คเกจ SCORM",
       "scorm_description": "นำเข้าแพ็คเกจ SCORM 1.2 หรือ SCORM 2004",
-      "learnhouse_courses": "คอร์ส LearnHouse",
-      "learnhouse_description": "นำเข้าคอร์สที่ส่งออกจาก LearnHouse",
+      "zerok_courses": "คอร์ส zerok",
+      "zerok_description": "นำเข้าคอร์สที่ส่งออกจาก zerok",
       "upload_package": "อัปโหลดแพ็คเกจ",
       "configure": "กำหนดค่า",
       "complete": "เสร็จสิ้น",
       "click_to_upload": "คลิกเพื่ออัปโหลดหรือลากและวาง",
-      "learnhouse_format": "ส่งออกคอร์ส LearnHouse (.zip)",
-      "learnhouse_info": "อัปโหลดแพ็คเกจส่งออกคอร์ส LearnHouse (.zip) คุณจะสามารถเลือกคอร์สที่จะนำเข้าและกำหนดค่าตัวเลือกการนำเข้าได้",
+      "zerok_format": "ส่งออกคอร์ส zerok (.zip)",
+      "zerok_info": "อัปโหลดแพ็คเกจส่งออกคอร์ส zerok (.zip) คุณจะสามารถเลือกคอร์สที่จะนำเข้าและกำหนดค่าตัวเลือกการนำเข้าได้",
       "analyze_package": "วิเคราะห์แพ็คเกจ",
       "ready_to_analyze": "พร้อมวิเคราะห์",
       "invalid_file_format": "กรุณาอัปโหลดไฟล์ .zip",
@@ -777,7 +777,7 @@
       "lms_ready_to_convert": "พร้อมแปลง",
       "lms_invalid_file_format": "โปรดอัปโหลดไฟล์ .mbz, .imscc, .zip หรือ .tar.gz",
       "lms_file_too_large": "ไฟล์ส่งออกมีขนาดใหญ่กว่าขีดจำกัดการอัปโหลด {{size}} MB",
-      "lms_info": "ไฟล์ส่งออกจะถูกแปลงเป็นเนื้อหา LearnHouse บนเซิร์ฟเวอร์ คอร์สขนาดใหญ่อาจใช้เวลาสองสามนาที โปรดเปิดหน้าต่างนี้ไว้จนกว่าจะเสร็จ",
+      "lms_info": "ไฟล์ส่งออกจะถูกแปลงเป็นเนื้อหา zerok บนเซิร์ฟเวอร์ คอร์สขนาดใหญ่อาจใช้เวลาสองสามนาที โปรดเปิดหน้าต่างนี้ไว้จนกว่าจะเสร็จ",
       "lms_start": "อัปโหลดและแปลง",
       "lms_uploading": "กำลังอัปโหลด... {{progress}}%",
       "lms_upload_finishing": "กำลังอัปโหลดให้เสร็จสิ้น...",
@@ -2128,7 +2128,7 @@
     "not_supported_title": "กิจกรรมนี้ไม่รองรับ",
     "not_supported_description": "กิจกรรมประเภทนี้ต้องการการยืนยันตัวตนและไม่สามารถฝังได้",
     "visit_activity": "ไปที่หน้ากิจกรรม",
-    "powered_by": "ขับเคลื่อนโดย LearnHouse"
+    "powered_by": "ขับเคลื่อนโดย zerok"
   },
   "assignments": {
     "submit_assignment": "ส่งงาน",
@@ -2536,7 +2536,7 @@
     "stripe_wait": "โปรดรอสักครู่ขณะที่เรากำลังตั้งค่าการเชื่อมต่อ Stripe ของคุณ...",
     "stripe_return": "คุณสามารถกลับไปยังแดชบอร์ดเพื่อเริ่มใช้งานการชำระเงินได้แล้ว",
     "stripe_retry": "โปรดลองอีกครั้งหรือติดต่อฝ่ายสนับสนุนหากปัญหายังคงอยู่",
-    "stripe_login_required": "คุณยังไม่ได้เข้าสู่ระบบ LearnHouse ในเบราว์เซอร์นี้ เข้าสู่ระบบ แล้วเริ่มการเชื่อมต่อใหม่จากการตั้งค่าการชำระเงินของคุณ",
+    "stripe_login_required": "คุณยังไม่ได้เข้าสู่ระบบ zerok ในเบราว์เซอร์นี้ เข้าสู่ระบบ แล้วเริ่มการเชื่อมต่อใหม่จากการตั้งค่าการชำระเงินของคุณ",
     "subscription": "การสมัครสมาชิก",
     "benefits": "สิทธิประโยชน์:",
     "min_price": "ราคาขั้นต่ำ:",
@@ -2900,7 +2900,7 @@
           "rate_limited": "ลองหลายครั้งเกินไป โปรดรอสักครู่แล้วลองอีกครั้ง",
           "status_error": "ไม่สามารถโหลดการตั้งค่าการยืนยันตัวตนสองขั้นตอนของคุณได้",
           "copy_failed": "คัดลอกไม่สำเร็จ โปรดเลือกข้อความแล้วคัดลอกด้วยตนเอง",
-          "codes_file_header": "รหัสสำรองการยืนยันตัวตนสองขั้นตอนของ LearnHouse แต่ละรหัสใช้ได้ครั้งเดียว",
+          "codes_file_header": "รหัสสำรองการยืนยันตัวตนสองขั้นตอนของ zerok แต่ละรหัสใช้ได้ครั้งเดียว",
           "already_enabled": "บัญชีนี้เปิดใช้การยืนยันตัวตนสองขั้นตอนแล้ว",
           "setup_failed": "ไม่สามารถเริ่มการตั้งค่าการยืนยันตัวตนสองขั้นตอนได้ โปรดลองอีกครั้ง",
           "enabled_toast": "เปิดใช้การยืนยันตัวตนสองขั้นตอนแล้ว",
@@ -3040,7 +3040,7 @@
           "description": "กำหนดค่าการตั้งค่าส่วนตัว รหัสผ่าน อีเมล"
         }
       },
-      "learnhouse_university": "มหาวิทยาลัย LearnHouse",
+      "zerok_university": "มหาวิทยาลัย zerok",
       "welcome_back": "ยินดีต้อนรับกลับ",
       "plan": "แผน",
       "create_course": "สร้างคอร์สเรียน",
@@ -3095,8 +3095,8 @@
       "import_course": "นำเข้าหลักสูตร",
       "import_scorm": "นำเข้า SCORM",
       "import_scorm_description": "นำเข้าแพ็คเกจ SCORM เพื่อสร้างหลักสูตรใหม่",
-      "import_learnhouse": "นำเข้าคอร์ส LearnHouse",
-      "import_learnhouse_description": "นำเข้าคอร์สที่ส่งออกจาก LearnHouse",
+      "import_zerok": "นำเข้าคอร์ส zerok",
+      "import_zerok_description": "นำเข้าคอร์สที่ส่งออกจาก zerok",
       "import_select_type": "เลือกประเภทของคอร์สที่จะนำเข้า",
       "import_lms": "นำเข้าจาก LMS อื่น",
       "import_lms_description": "แปลงคอร์สที่ส่งออกจากแพลตฟอร์มการเรียนรู้อื่น",
@@ -4110,8 +4110,8 @@
         "email_sender_name_desc": "ชื่อที่ผู้รับเห็นในอีเมลที่ส่งในนามองค์กรนี้ ได้แก่ ลิงก์เข้าสู่ระบบ การรีเซ็ตรหัสผ่าน คำเชิญ อีเมลยืนยัน และอีเมลต้อนรับ อีเมลเหล่านั้นยังมีโลโก้ สีแบรนด์บนปุ่ม และการตั้งค่าลายน้ำของคุณด้วย การตั้งค่านี้เปลี่ยนเฉพาะชื่อ ส่วนที่อยู่ผู้ส่งยังคงเป็นของแพลตฟอร์ม ซึ่งช่วยให้อีเมลเหล่านี้ผ่านการตรวจสอบ SPF และ DKIM เว้นว่างไว้เพื่อใช้ค่าเริ่มต้นของแพลตฟอร์ม",
         "default_language": "ภาษาเริ่มต้น",
         "default_language_desc": "ภาษาที่ผู้เยี่ยมชมใหม่เห็นโดยค่าเริ่มต้นและภาษาที่ใช้สำหรับอีเมลที่ส่งในนามขององค์กรนี้ สมาชิกยังคงสามารถเปลี่ยนภาษาของอินเทอร์เฟซของตนได้",
-        "watermark_label": "ลายน้ำ \"Made with LearnHouse\"",
-        "watermark_desc": "แสดงลายน้ำแบรนด์ LearnHouse บนหน้าองค์กรของคุณ",
+        "watermark_label": "ลายน้ำ \"Made with zerok\"",
+        "watermark_desc": "แสดงลายน้ำแบรนด์ zerok บนหน้าองค์กรของคุณ",
         "watermark_free_plan": "ลายน้ำจะแสดงตลอดเวลาบนแผนฟรี",
         "watermark_ee": "ซ่อนโดยใบอนุญาต Enterprise Edition ของคุณ"
       },
@@ -4261,7 +4261,7 @@
         },
         "previews": {
           "thumbnail_title": "ภาพขนาดย่อ",
-          "thumbnail_desc": "ภาพปกขององค์กรของคุณเมื่อมีการแสดงรายการหรือแชร์: ในหน้าสำรวจของ LearnHouse และในตัวอย่างลิงก์",
+          "thumbnail_desc": "ภาพปกขององค์กรของคุณเมื่อมีการแสดงรายการหรือแชร์: ในหน้าสำรวจของ zerok และในตัวอย่างลิงก์",
           "thumbnail_add": "เพิ่มภาพขนาดย่อ",
           "thumbnail_replace": "แทนที่ภาพขนาดย่อ",
           "gallery_title": "แกลเลอรีตัวอย่าง",
@@ -5110,7 +5110,7 @@
         },
         "beta": "เบต้า",
         "active_zaps_other": "{{count}} Zap ที่ใช้งานอยู่",
-        "zapier_description": "เชื่อมต่อ LearnHouse กับแอปนับพันได้โดยไม่ต้องเขียนโค้ด",
+        "zapier_description": "เชื่อมต่อ zerok กับแอปนับพันได้โดยไม่ต้องเขียนโค้ด",
         "manage_zaps": "จัดการ Zaps",
         "connect": "เชื่อมต่อ",
         "add_endpoint": "เพิ่มเอนด์พอยต์",
@@ -5205,7 +5205,7 @@
           "regenerate_failed": "สร้างโทเคนใหม่ไม่สำเร็จ"
         },
         "docs_subtitle": "สำรวจและทดสอบเอนด์พอยต์ API โดยใช้โทเคน API ของคุณ",
-        "contact_support": "ติดต่อฝ่ายสนับสนุน LearnHouse",
+        "contact_support": "ติดต่อฝ่ายสนับสนุน zerok",
         "name": "ชื่อ",
         "token_prefix": "คำนำหน้าโทเคน",
         "last_used": "ใช้ล่าสุด",
@@ -5399,8 +5399,8 @@
         "methods_description": "เลือกวิธีที่สมาชิกใช้เข้าสู่ระบบองค์กรนี้ได้ ติ๊กทุกวิธีไว้เพื่อไม่จำกัดการเข้าสู่ระบบ",
         "methods_empty_warning": "หากไม่เลือกวิธีใดเลย จะไม่มีใครเข้าสู่ระบบองค์กรนี้ได้ โปรดเลือกอย่างน้อยหนึ่งวิธี",
         "methods_effect": "วิธีที่ไม่ได้ติ๊กจะหายไปจากหน้าเข้าสู่ระบบขององค์กรนี้ และสมาชิกที่เข้าสู่ระบบด้วยวิธีนั้นอยู่แล้วจะถูกขอให้เข้าสู่ระบบอีกครั้งด้วยวิธีที่อนุญาต",
-        "session_sharing_label": "อนุญาตให้แชร์เซสชันกับ learnhouse.io",
-        "session_sharing_hint": "เมื่อปิด การเข้าสู่ระบบที่ learnhouse.io จะไม่ทำให้สมาชิกเข้าองค์กรนี้ได้ พวกเขาต้องเข้าสู่ระบบอีกครั้งจากหน้าเข้าสู่ระบบขององค์กรนี้ด้วยวิธีที่อนุญาต",
+        "session_sharing_label": "อนุญาตให้แชร์เซสชันกับ zerok.io",
+        "session_sharing_hint": "เมื่อปิด การเข้าสู่ระบบที่ zerok.io จะไม่ทำให้สมาชิกเข้าองค์กรนี้ได้ พวกเขาต้องเข้าสู่ระบบอีกครั้งจากหน้าเข้าสู่ระบบขององค์กรนี้ด้วยวิธีที่อนุญาต",
         "saving_short": "กำลังบันทึก…",
         "save": "บันทึกการเปลี่ยนแปลง",
         "cancel": "ยกเลิก",
@@ -7138,7 +7138,7 @@
           "keywords": "เส้นทางการเรียนรู้, เส้นทาง, แทร็ก, โปรแกรม, หลักสูตร, ลำดับ, ใบประกาศนียบัตร, paths, learning paths, tracks, programs, curriculum, sequence, certificate"
         },
         "live_sessions": {
-          "keywords": "เซสชันสด คลาส เว็บินาร์ ประชุม วิดีโอ การเข้าร่วม การบันทึก โพล learnhouse meet zoom meet teams live sessions",
+          "keywords": "เซสชันสด คลาส เว็บินาร์ ประชุม วิดีโอ การเข้าร่วม การบันทึก โพล zerok meet zoom meet teams live sessions",
           "description": "กำหนดเวลาเซสชันสด ติดตามการเข้าร่วม และจัดการการบันทึก"
         }
       }
@@ -8793,10 +8793,10 @@
       },
       "teach_the_world": {
         "title": "เรียนรู้และเติบโต",
-        "description": "แหล่งข้อมูลเพื่อช่วยให้คุณใช้ LearnHouse ได้อย่างเต็มที่",
+        "description": "แหล่งข้อมูลเพื่อช่วยให้คุณใช้ zerok ได้อย่างเต็มที่",
         "classroom": "ห้องเรียน",
         "classroom_desc": "เรียนรู้วิธีเติบโตและจัดการคอร์สของคุณ",
-        "university": "มหาวิทยาลัย LearnHouse",
+        "university": "มหาวิทยาลัย zerok",
         "university_desc": "คู่มือ เคล็ดลับ และแนวปฏิบัติที่ดี"
       },
       "add_content": {
@@ -8826,7 +8826,7 @@
       }
     },
     "welcome": {
-      "title": "ยินดีต้อนรับสู่ LearnHouse",
+      "title": "ยินดีต้อนรับสู่ zerok",
       "subtitle": "สร้างคอร์ส เชิญผู้เรียน และแบ่งปันความรู้กับโลก",
       "get_started": "เริ่มต้น",
       "features_title": "ทุกอย่างที่คุณต้องการ",
@@ -8939,7 +8939,7 @@
     "launch_plan": "แผนเปิดตัว",
     "subtitle": "หกขั้นตอนสั้นๆ สู่อะคาเดมีที่พร้อมใช้งาน ทุกขั้นตอนมีวิดีโอประกอบ",
     "watch_tour": "ดูทัวร์แนะนำ",
-    "tour_title": "ยินดีต้อนรับสู่ LearnHouse",
+    "tour_title": "ยินดีต้อนรับสู่ zerok",
     "steps_title": "ขั้นตอน",
     "step_number": "ขั้นตอนที่ {{n}}",
     "progress_count": "เสร็จแล้ว {{done}} จาก {{total}}",
@@ -9560,7 +9560,7 @@
         "title": "ต้องการทดลองใช้?",
         "body": "ไปที่",
         "link": "หน้านักพัฒนา",
-        "suffix": "เพื่อทดลองใช้ LearnHouse แทน"
+        "suffix": "เพื่อทดลองใช้ zerok แทน"
       },
       "validation": {
         "required": "จำเป็นต้องกรอก",
@@ -9983,7 +9983,7 @@
       "stripe_title": "ชำระด้วยบัตรผ่าน Stripe",
       "stripe_body": "เชื่อมต่อบัญชี Stripe เพื่อขายด้วย Stripe Checkout การสมัครสมาชิก การทดลองใช้ และโค้ดโปรโมชัน",
       "any_tool_title": "ขายด้วยเครื่องมือใดก็ได้",
-      "any_tool_body": "ขายบน Gumroad, Paddle, Lemon Squeezy, Shopify หรือผ่านใบแจ้งหนี้อยู่แล้วใช่ไหม? ใช้ต่อได้เลย LearnHouse แค่ต้องรู้ว่าใครชำระเงินแล้ว",
+      "any_tool_body": "ขายบน Gumroad, Paddle, Lemon Squeezy, Shopify หรือผ่านใบแจ้งหนี้อยู่แล้วใช่ไหม? ใช้ต่อได้เลย zerok แค่ต้องรู้ว่าใครชำระเงินแล้ว",
       "step1_title": "สร้างสินค้า",
       "step1_body": "เลือก <strong>หน้าชำระเงินของคุณเอง</strong> แล้ววางลิงก์ชำระเงินของคุณ หรือเลือก <strong>เฉพาะผู้ได้รับเชิญ</strong>",
       "step2_title": "สร้าง API token",
@@ -10139,25 +10139,25 @@
       "missing_code": "ลิงก์นี้ไม่มีรหัสเข้าสู่ระบบ เปิดกิจกรรมจาก LMS ของคุณอีกครั้ง",
       "failed": "เราไม่สามารถเข้าสู่ระบบให้คุณได้ เปิดกิจกรรมจาก LMS ของคุณอีกครั้ง",
       "error_title": "เราไม่สามารถเปิดหน้านี้ได้",
-      "new_tab_title": "เปิดใน LearnHouse",
-      "new_tab_description": "LearnHouse เปิดในแท็บของตัวเองเพื่อให้งานของคุณถูกบันทึก",
+      "new_tab_title": "เปิดใน zerok",
+      "new_tab_description": "zerok เปิดในแท็บของตัวเองเพื่อให้งานของคุณถูกบันทึก",
       "open_course": "ดำเนินการต่อในแท็บใหม่",
-      "signing_in": "กำลังเปิด LearnHouse…",
-      "please_wait": "กำลังเข้าสู่ระบบ LearnHouse ให้คุณ",
+      "signing_in": "กำลังเปิด zerok…",
+      "please_wait": "กำลังเข้าสู่ระบบ zerok ให้คุณ",
       "confirm_title": "ดำเนินการต่อเป็น {{name}} หรือไม่?",
-      "confirm_description": "{{platform}} กำลังเข้าสู่ระบบ LearnHouse ให้คุณในชื่อ {{name}} ดำเนินการต่อเฉพาะเมื่อคุณเพิ่งเปิดจากคอร์สของคุณ",
+      "confirm_description": "{{platform}} กำลังเข้าสู่ระบบ zerok ให้คุณในชื่อ {{name}} ดำเนินการต่อเฉพาะเมื่อคุณเพิ่งเปิดจากคอร์สของคุณ",
       "confirm_button": "ดำเนินการต่อเป็น {{name}}",
       "confirm_platform_fallback": "LMS ของคุณ"
     },
     "link": {
       "error_title": "เราไม่สามารถเชื่อมโยงบัญชีของคุณได้",
       "loading": "กำลังโหลด…",
-      "title": "เชื่อมโยงบัญชี LearnHouse ของคุณ",
-      "description": "{{platform}} ระบุว่าคุณคือ {{email}} และมีบัญชี LearnHouse ที่ใช้อีเมลนี้อยู่แล้ว เข้าสู่ระบบบัญชีนั้นหนึ่งครั้งเพื่อเชื่อมโยงกับ LMS ของคุณ",
+      "title": "เชื่อมโยงบัญชี zerok ของคุณ",
+      "description": "{{platform}} ระบุว่าคุณคือ {{email}} และมีบัญชี zerok ที่ใช้อีเมลนี้อยู่แล้ว เข้าสู่ระบบบัญชีนั้นหนึ่งครั้งเพื่อเชื่อมโยงกับ LMS ของคุณ",
       "signed_in_as": "เข้าสู่ระบบเป็น {{email}}",
       "confirm": "เชื่อมโยงบัญชีและดำเนินการต่อ",
       "sign_in": "เข้าสู่ระบบเพื่อดำเนินการต่อ",
-      "password_label": "รหัสผ่าน LearnHouse ของคุณ เพื่อยืนยันว่าเป็นคุณ"
+      "password_label": "รหัสผ่าน zerok ของคุณ เพื่อยืนยันว่าเป็นคุณ"
     },
     "select": {
       "draft": "ฉบับร่าง",
@@ -10165,7 +10165,7 @@
       "show_activities": "แสดงกิจกรรม",
       "error_title": "เกิดข้อผิดพลาด",
       "loading": "กำลังโหลดคอร์ส…",
-      "deeplink_title": "เพิ่มเนื้อหา LearnHouse",
+      "deeplink_title": "เพิ่มเนื้อหา zerok",
       "bind_title": "เลือกคอร์สสำหรับลิงก์นี้",
       "deeplink_subtitle": "เลือกคอร์ส กิจกรรมหรืองานที่มอบหมายรายการเดียว ชุมชน พอดแคสต์ บอร์ด Playground หรือโฟลเดอร์ในคลัง ผลลัพธ์ของคอร์สและงานที่มอบหมายจะถูกส่งไปยังสมุดเกรดของคุณ",
       "single_item": "LMS นี้เพิ่มได้ครั้งละหนึ่งรายการ รันอีกครั้งเพื่อเพิ่มเพิ่มเติม",
@@ -10209,8 +10209,8 @@
       "connected": "เชื่อมต่อแล้ว",
       "disabled": "ปิดใช้งาน",
       "incomplete": "ไม่สมบูรณ์",
-      "tool_details": "รายละเอียด LearnHouse สำหรับ LMS ของคุณ",
-      "tool_details_help": "ป้อนข้อมูลเหล่านี้ใน LMS ของคุณเมื่อลงทะเบียน LearnHouse เป็นเครื่องมือภายนอก",
+      "tool_details": "รายละเอียด zerok สำหรับ LMS ของคุณ",
+      "tool_details_help": "ป้อนข้อมูลเหล่านี้ใน LMS ของคุณเมื่อลงทะเบียน zerok เป็นเครื่องมือภายนอก",
       "login_url": "Initiate login URL",
       "launch_url": "Launch / redirect URL",
       "deep_linking_url": "Deep linking URL",
@@ -10227,7 +10227,7 @@
       "enabled": "เปิดใช้งาน",
       "grade_sync_toggle": "ส่งความคืบหน้าไปยังสมุดเกรด",
       "roster_sync_toggle": "ซิงก์รายชื่อชั้นเรียนทุกวัน",
-      "instructor_toggle": "ผู้สอนใน LMS ให้คะแนนใน LearnHouse ได้",
+      "instructor_toggle": "ผู้สอนใน LMS ให้คะแนนใน zerok ได้",
       "assignment_columns_toggle": "คอลัมน์สมุดเกรดสำหรับงานที่มอบหมายแต่ละงาน",
       "cohort_groups_toggle": "กลุ่มผู้ใช้สำหรับแต่ละคอร์ส LMS",
       "revoke_on_drop_toggle": "ยกเลิกสิทธิ์เข้าถึงเมื่อมีคนออกจากคอร์ส LMS",
@@ -10240,9 +10240,9 @@
       "save": "บันทึก",
       "saved": "บันทึกแล้ว",
       "placements": "ตำแหน่งที่วาง",
-      "no_links": "ยังไม่มีการเปิดใช้ เพิ่ม LearnHouse ในคอร์สใน LMS ของคุณแล้วเปิดหนึ่งครั้ง",
+      "no_links": "ยังไม่มีการเปิดใช้ เพิ่ม zerok ในคอร์สใน LMS ของคุณแล้วเปิดหนึ่งครั้ง",
       "lms_course": "คอร์ส LMS",
-      "learnhouse_course": "เนื้อหา LearnHouse",
+      "zerok_course": "เนื้อหา zerok",
       "learners": "ผู้เรียน",
       "grade_sync": "สมุดเกรด",
       "not_bound": "ยังไม่ได้เชื่อมต่อ",
@@ -10251,10 +10251,10 @@
       "no_grade_service": "LMS ไม่ได้แชร์",
       "changed_in_lms": "เปลี่ยนใน LMS {{count}}",
       "column_errors": "คอลัมน์ผิดพลาด {{count}}",
-      "column_errors_hint": "LMS ปฏิเสธเกรดในบางคอลัมน์ของแต่ละงานที่มอบหมาย ตรวจสอบว่า LMS รับคะแนนสำหรับคอลัมน์ที่ LearnHouse สร้างขึ้น",
-      "changed_in_lms_hint": "ครูเปลี่ยนเกรดเหล่านี้ในสมุดเกรดของ LMS LearnHouse จึงไม่อัปเดตเกรดเหล่านี้อีก คลิกเพื่อเขียนทับด้วยเกรดของ LearnHouse",
-      "overwrite_confirm": "แทนที่เกรดที่ครูเปลี่ยนใน LMS ด้วยเกรดของ LearnHouse หรือไม่?",
-      "kept_by_lms_other": "LMS ยังแสดงเกรดของครูสำหรับผู้เรียน {{count}} คน ลบการแทนที่เกรดในสมุดเกรดของ LMS เพื่อให้แสดงเกรดของ LearnHouse",
+      "column_errors_hint": "LMS ปฏิเสธเกรดในบางคอลัมน์ของแต่ละงานที่มอบหมาย ตรวจสอบว่า LMS รับคะแนนสำหรับคอลัมน์ที่ zerok สร้างขึ้น",
+      "changed_in_lms_hint": "ครูเปลี่ยนเกรดเหล่านี้ในสมุดเกรดของ LMS zerok จึงไม่อัปเดตเกรดเหล่านี้อีก คลิกเพื่อเขียนทับด้วยเกรดของ zerok",
+      "overwrite_confirm": "แทนที่เกรดที่ครูเปลี่ยนใน LMS ด้วยเกรดของ zerok หรือไม่?",
+      "kept_by_lms_other": "LMS ยังแสดงเกรดของครูสำหรับผู้เรียน {{count}} คน ลบการแทนที่เกรดในสมุดเกรดของ LMS เพื่อให้แสดงเกรดของ zerok",
       "not_graded": "ไม่ได้ให้คะแนน",
       "sync_roster": "ซิงก์รายชื่อ",
       "sync_grades": "ซิงก์เกรด",
@@ -10645,13 +10645,13 @@
     },
     "ee_error": {
       "required_title": "ต้องมีใบอนุญาต Enterprise Edition",
-      "required_desc": "เอนด์พอยต์นี้เป็นส่วนหนึ่งของ LearnHouse Enterprise Edition และไม่พร้อมใช้งานในการติดตั้งนี้",
+      "required_desc": "เอนด์พอยต์นี้เป็นส่วนหนึ่งของ zerok Enterprise Edition และไม่พร้อมใช้งานในการติดตั้งนี้",
       "inactive_title": "ฟีเจอร์ Enterprise ไม่พร้อมใช้งานในขณะนี้",
       "inactive_desc": "การตรวจสอบใบอนุญาต EE ล้มเหลว (<code>{{reason}}</code>) เอนด์พอยต์ <code>/ee/*</code> ทุกตัวส่งกลับ 503 หน้านี้จึงโหลดข้อมูลไม่ได้",
       "what_to_check": "สิ่งที่ควรตรวจสอบ",
       "check_diagnostics": "เปิด <code>{{path}}</code> ซึ่งตอบได้แม้ใบอนุญาตไม่ทำงาน และฟิลด์ <code>hint</code> ของมันระบุวิธีแก้ไข",
-      "check_saas": "สำหรับการติดตั้งแบบ SaaS: ยืนยันว่าตั้งค่า <code>LEARNHOUSE_SAAS=true</code> ในสภาพแวดล้อมของ API แล้ว SaaS จะข้ามการตรวจสอบใบอนุญาต",
-      "check_self_hosted": "สำหรับ EE ที่โฮสต์เอง: ยืนยันว่าตั้งค่า <code>LEARNHOUSE_LICENSE_KEY</code> แล้ว และเชื่อมต่อเซิร์ฟเวอร์ใบอนุญาต (หรือช่วงผ่อนผัน) ได้",
+      "check_saas": "สำหรับการติดตั้งแบบ SaaS: ยืนยันว่าตั้งค่า <code>zerok_SAAS=true</code> ในสภาพแวดล้อมของ API แล้ว SaaS จะข้ามการตรวจสอบใบอนุญาต",
+      "check_self_hosted": "สำหรับ EE ที่โฮสต์เอง: ยืนยันว่าตั้งค่า <code>zerok_LICENSE_KEY</code> แล้ว และเชื่อมต่อเซิร์ฟเวอร์ใบอนุญาต (หรือช่วงผ่อนผัน) ได้",
       "check_logs": "หากคุณเข้าถึงเชลล์ได้ บันทึกของ API จะมีสาเหตุเดียวกันพร้อมรายละเอียดครบถ้วน: <code>[EE] license inactive …</code>",
       "failed_to_load": "โหลดไม่สำเร็จ"
     },
@@ -10824,7 +10824,7 @@
     },
     "ee_required": {
       "title": "ต้องมีใบอนุญาต Enterprise Edition",
-      "description": "แดชบอร์ดซูเปอร์แอดมินเป็นส่วนหนึ่งของ LearnHouse Enterprise Edition และไม่พร้อมใช้งานในการติดตั้งนี้"
+      "description": "แดชบอร์ดซูเปอร์แอดมินเป็นส่วนหนึ่งของ zerok Enterprise Edition และไม่พร้อมใช้งานในการติดตั้งนี้"
     },
     "access_denied": {
       "title": "ปฏิเสธการเข้าถึง",
@@ -10878,7 +10878,7 @@
   "error_catalog": {
     "version_mismatch": {
       "title": "แอปเพิ่งอัปเดต",
-      "description": "LearnHouse ออกเวอร์ชันใหม่ขณะที่หน้านี้เปิดอยู่ ทำให้ไม่ตรงกันชั่วขณะ การโหลดใหม่จะดึงเวอร์ชันล่าสุด"
+      "description": "zerok ออกเวอร์ชันใหม่ขณะที่หน้านี้เปิดอยู่ ทำให้ไม่ตรงกันชั่วขณะ การโหลดใหม่จะดึงเวอร์ชันล่าสุด"
     },
     "chunk_load": {
       "title": "บางส่วนของหน้าไม่โหลด",
@@ -10992,7 +10992,7 @@
         "url": "ลิงก์การบันทึก",
         "action_items": "รายการที่ต้องดำเนินการ",
         "transcribed": "ข้อความถอดเสียงพร้อมแล้ว",
-        "empty_description": "อัปโหลดการบันทึกหรือวางลิงก์ เพิ่มข้อความถอดเสียง แล้ว LearnHouse จะเขียนสรุปให้",
+        "empty_description": "อัปโหลดการบันทึกหรือวางลิงก์ เพิ่มข้อความถอดเสียง แล้ว zerok จะเขียนสรุปให้",
         "empty_title": "ยังไม่มีการบันทึก",
         "in_course": "อยู่ในคอร์ส",
         "transcript_optional": "ข้อความถอดเสียง (ไม่บังคับ)",
@@ -11107,7 +11107,7 @@
         "make_default": "ตั้งเป็นค่าเริ่มต้น",
         "use_own_app": "ใช้แอปของคุณเอง",
         "client_id": "Client ID",
-        "meet_description": "มีในตัว โฮสต์โดย LearnHouse",
+        "meet_description": "มีในตัว โฮสต์โดย zerok",
         "default": "ค่าเริ่มต้น",
         "defaults_title": "ค่าเริ่มต้น",
         "reminders_description": "อีเมลจะส่งถึงผู้ที่ตอบรับและผู้จัด"
@@ -11257,9 +11257,9 @@
       "where": "ที่ไหน",
       "repeat_monthly": "ทุกเดือน",
       "provider": "เครื่องมือประชุม",
-      "provider_connected_hint": "LearnHouse สร้างการประชุม {{provider}} ด้วยบัญชี {{account}}",
+      "provider_connected_hint": "zerok สร้างการประชุม {{provider}} ด้วยบัญชี {{account}}",
       "attendance_completion_hint": "ทำเครื่องหมายว่ากิจกรรมในคอร์สเสร็จสิ้นเมื่อผู้เรียนอยู่ร่วมนานพอ",
-      "provider_embedded_hint": "ทำงานภายใน LearnHouse ไม่ต้องมีบัญชีอื่นเพิ่ม",
+      "provider_embedded_hint": "ทำงานภายใน zerok ไม่ต้องมีบัญชีอื่นเพิ่ม",
       "waiting_room": "ห้องรอ",
       "no_board": "ไม่มีบอร์ด",
       "provider_link_hint": "วางลิงก์ {{provider}} ของคุณ แชต ถาม-ตอบ โพล และการเข้าร่วมยังทำงานที่นี่เหมือนเดิม",
@@ -11416,7 +11416,7 @@
       "recording_started": "กำลังบันทึก ทุกคนในการโทรมองเห็นได้",
       "stop_recording": "หยุดบันทึก",
       "remove": "นำออกจากการโทร",
-      "unavailable_body": "แชต ถาม-ตอบ และโพลใช้งานได้ตามปกติ โปรดขอให้ผู้ดูแลระบบตั้งค่า LearnHouse Meet",
+      "unavailable_body": "แชต ถาม-ตอบ และโพลใช้งานได้ตามปกติ โปรดขอให้ผู้ดูแลระบบตั้งค่า zerok Meet",
       "no_devices": "ไม่พบอุปกรณ์",
       "pick_microphone": "เลือกไมโครโฟน",
       "device_failed": "ใช้กล้องหรือไมโครโฟนของคุณไม่ได้",
@@ -11448,7 +11448,7 @@
       "recordings": "การบันทึก",
       "cancelled_body": "เซสชันนี้ถูกผู้จัดยกเลิก",
       "who": "ใครเข้าร่วมได้",
-      "in_learnhouse": "{{provider}} ภายใน LearnHouse",
+      "in_zerok": "{{provider}} ภายใน zerok",
       "sign_in_to_join": "เข้าสู่ระบบเพื่อตอบรับและเข้าร่วม",
       "in_the_room": "ในห้อง",
       "waiting_body": "ถึงเวลาแล้ว ผู้จัดยังไม่ได้เริ่ม เข้าห้องรอไว้แล้วคุณจะได้เข้าห้อง",
@@ -11493,7 +11493,7 @@
         "submit_series": "กำหนดเวลา {{count}} เซสชัน",
         "title": "กำหนดเวลาเซสชันสด",
         "submit": "กำหนดเวลาเซสชัน",
-        "description": "จัดคลาส ชั่วโมงให้คำปรึกษา หรือกิจกรรมแบบสดภายใน LearnHouse"
+        "description": "จัดคลาส ชั่วโมงให้คำปรึกษา หรือกิจกรรมแบบสดภายใน zerok"
       }
     },
     "course_modal": {

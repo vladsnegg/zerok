@@ -78,7 +78,7 @@ export default function LoginClient({ org }: LoginClientProps) {
     <AuthLayout
       org={org}
       welcomeText={t('auth.login_to', { defaultValue: 'Sign in to your organization' })}
-      title={t('auth.image_title_login', { defaultValue: 'Welcome back to LearnHouse.' })}
+      title={t('auth.image_title_login', { defaultValue: 'Welcome back to zerok.' })}
       subtitle={t('auth.image_subtitle_login', {
         defaultValue: 'Your courses, students, and tools are waiting.',
       })}

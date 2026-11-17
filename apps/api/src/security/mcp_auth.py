@@ -157,7 +157,7 @@ class MCPAuthMiddleware:
         headers = {k.decode().lower(): v.decode() for k, v in scope.get("headers") or []}
         authorization = headers.get("authorization", "")
         if not authorization.lower().startswith("bearer "):
-            await _reject(scope, send, 401, None, "Sign in to connect to LearnHouse")
+            await _reject(scope, send, 401, None, "Sign in to connect to zerok")
             return
 
         token = authorization[7:].strip()

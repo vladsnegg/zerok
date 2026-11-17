@@ -92,7 +92,7 @@ export default function RegisterClient({ org }: RegisterClientProps) {
       <AuthLayout
         org={org}
         welcomeText={t('auth.request_access_title', { defaultValue: 'Request access' })}
-        title={t('auth.image_title_login', { defaultValue: 'Welcome back to LearnHouse.' })}
+        title={t('auth.image_title_login', { defaultValue: 'Welcome back to zerok.' })}
         subtitle={t('auth.image_subtitle_login', {
           defaultValue: 'Your courses, students, and tools are waiting.',
         })}
@@ -125,7 +125,7 @@ export default function RegisterClient({ org }: RegisterClientProps) {
     <AuthLayout
       org={org}
       welcomeText={t('auth.request_access_title', { defaultValue: 'Request access' })}
-      title={t('auth.image_title_login', { defaultValue: 'Welcome back to LearnHouse.' })}
+      title={t('auth.image_title_login', { defaultValue: 'Welcome back to zerok.' })}
       subtitle={t('auth.image_subtitle_login', {
         defaultValue: 'Your courses, students, and tools are waiting.',
       })}

@@ -4,7 +4,7 @@ import RegisterClient from './register'
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Create account | LearnHouse',
+  title: { absolute: 'Create account | zerok' },
   robots: { index: false, follow: false },
 }
 

@@ -4,7 +4,6 @@ import React, { useState, useEffect, useRef, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSearchParams } from 'next/navigation'
 import { getLEARNHOUSE_DOMAIN_VAL, getLEARNHOUSE_HTTP_PROTOCOL_VAL } from '@services/config/config'
-import Image from 'next/image'
 import { useActivity } from '@/hooks/queries/useActivity'
 import { useCourseMeta } from '@/hooks/queries/useCourses'
 import { useShowLearnHouseBranding } from '@components/Hooks/useLearnHouseBranding'
@@ -151,13 +150,9 @@ function EmbedActivityClient({ activityId, courseuuid, orgslug }: EmbedActivityC
         <div className="bg-white rounded-2xl nice-shadow p-8 max-w-md w-full text-center">
           {showBranding && (
             <div className="mb-6">
-              <Image
-                src="/learnhouse_bigicon.png"
-                alt="LearnHouse"
-                width={64}
-                height={64}
-                className="mx-auto"
-              />
+              <span className="text-[26px] font-black lowercase tracking-[-0.04em] text-black">
+                zerok<span className="text-[#6366f1]">.</span>
+              </span>
             </div>
           )}
           <h1 className="text-xl font-bold text-gray-900 mb-2">
@@ -222,12 +217,9 @@ function PoweredByBadge({ activityUrl }: { activityUrl: string }) {
         onClick={handleClick}
         className="bg-white/80 backdrop-blur-lg rounded-2xl p-2 light-shadow block cursor-pointer"
       >
-        <Image
-          src="/lrn.svg"
-          alt="LearnHouse"
-          width={20}
-          height={20}
-        />
+        <span className="flex items-center gap-1 px-1 text-[13px] font-black lowercase tracking-[-0.03em] text-black">
+          zerok<span className="text-[#6366f1]">.</span>
+        </span>
       </button>
     </div>
   )

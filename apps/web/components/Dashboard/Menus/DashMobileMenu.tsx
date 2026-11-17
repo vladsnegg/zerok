@@ -166,7 +166,7 @@ function DashMobileMenu() {
                 </div>
               ) : (
                 <div className="h-10 w-10 flex items-center justify-center bg-white/[0.06] rounded-xl shrink-0">
-                  <img src="/lrn-dash.svg" alt="LearnHouse" className="h-5 w-5" style={{ filter: 'brightness(0) invert(1)' }} />
+                  <span className="text-xl font-black leading-none lowercase text-white">z</span>
                 </div>
               )}
               <div className="flex-1 min-w-0">

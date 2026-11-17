@@ -10,7 +10,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const orgslug = await getAuthOrgSlug()
 
   if (!orgslug) {
-    return { title: 'Reset Password | LearnHouse' }
+    return { title: { absolute: 'Reset Password | zerok' } }
   }
 
   let org: any = null
@@ -24,7 +24,7 @@ export async function generateMetadata(): Promise<Metadata> {
   }
 
   return {
-    title: 'Reset Password' + ` | ${org?.name || 'LearnHouse'}`,
+    title: { absolute: 'Reset Password | zerok' },
     robots: { index: false, follow: false },
   }
 }

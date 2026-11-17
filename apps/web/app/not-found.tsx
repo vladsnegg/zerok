@@ -17,8 +17,10 @@ export default function NotFound() {
       />
 
       <header className="relative z-10 flex items-center px-6 py-5 sm:px-10">
-        <a href="/" aria-label="Home" className="opacity-80 transition-opacity hover:opacity-100">
-          <img src="/lrn-text.svg" alt="LearnHouse" width={120} height={18} className="h-[18px] w-auto" />
+        <a href="/" aria-label="Home" className="transition-opacity hover:opacity-100">
+          <span className="text-[22px] font-black lowercase tracking-[-0.04em] text-black">
+            zerok<span className="text-[#6366f1]">.</span>
+          </span>
         </a>
       </header>
 

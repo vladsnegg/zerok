@@ -48,11 +48,11 @@
     "help": "Help",
     "help_menu": {
       "documentation": "Documentation",
-      "website": "LearnHouse Website",
+      "website": "zerok Website",
       "discord": "Discord",
       "report_feedback": "Report Issue or Feedback",
       "feedback_title": "Send Feedback",
-      "feedback_description": "Help us improve LearnHouse by sharing your thoughts, reporting bugs, or suggesting new features.",
+      "feedback_description": "Help us improve zerok by sharing your thoughts, reporting bugs, or suggesting new features.",
       "feedback_placeholder": "Tell us what's on your mind...",
       "feedback_success": "Thank you for your feedback!",
       "send_feedback": "Send Feedback",
@@ -240,7 +240,7 @@
     "billing": "Billing",
     "create_organization": "Create organization",
     "start_your_own_organization": "Start your own organization",
-    "copyright": "© {{year}} LearnHouse, Inc.",
+    "copyright": "© {{year}} zerok, Inc.",
     "delete_organization_error": "Could not delete this organization. Please try again.",
     "org_actions": "Organization actions",
     "manage_upgrade": "Manage / Upgrade",
@@ -329,6 +329,23 @@
     "enter_credentials": "Enter your credentials to access your account",
     "no_account": "Don't have an account?",
     "already_have_account": "Already have an account?",
+    "registration_open_note": "Registration is open; new accounts start with the student role.",
+    "register_title": "Create an account",
+    "register_subtitle": "New accounts start with the student role and are active immediately.",
+    "register_submit": "Create account",
+    "register_success_title": "Account created",
+    "register_success_body": "Your account is active with the student role. Sign in with your e-mail and password.",
+    "branding_eyebrow": "Learning platform",
+    "branding_headline_1": "Learn.",
+    "branding_headline_2": "Teach.",
+    "branding_headline_3": "Grow.",
+    "branding_subtitle": "Courses, assignments, community and collaboration — in one calm space.",
+    "branding_footer": "Learning without the noise.",
+    "branding_tag_courses": "Courses",
+    "branding_tag_assignments": "Assignments",
+    "branding_tag_community": "Community",
+    "branding_headline_short": "Learn. Teach. Grow.",
+    "branding_subtitle_short": "Courses, assignments and community in one place.",
     "create_your_account": "Create your account",
     "fill_in_details": "Fill in your details to get started",
     "reset_your_password": "Reset your password",
@@ -391,17 +408,17 @@
     "invite_required_desc": "An invite code is required to join {{org}}",
     "invite_code": "Invite Code",
     "validate_invite": "Validate Invite",
-    "terms_text": "By continuing, you agree to LearnHouse's",
+    "terms_text": "By continuing, you agree to zerok's",
     "terms_of_service": "Terms of Service",
     "and": "and",
     "privacy_policy": "Privacy Policy",
     "image_title_forgot": "Reset your password.",
     "image_subtitle_forgot": "We'll help you get back into your account in no time.",
-    "image_title_login": "Welcome back to LearnHouse.",
+    "image_title_login": "Welcome back to zerok.",
     "image_subtitle_login": "Pick up where you left off. Your courses, students, and tools are waiting.",
     "image_title_reset": "Almost there.",
     "image_subtitle_reset": "Create a strong password to keep your account secure.",
-    "image_title_signup": "Start teaching with LearnHouse.",
+    "image_title_signup": "Start teaching with zerok.",
     "image_subtitle_signup": "Create your account and launch your first course in minutes.",
     "image_title_verify": "Verify your email.",
     "image_subtitle_verify": "One quick step to secure your account and get started.",
@@ -732,14 +749,14 @@
     "import": {
       "scorm_package": "SCORM Package",
       "scorm_description": "Import SCORM 1.2 or SCORM 2004 packages",
-      "learnhouse_courses": "LearnHouse Courses",
-      "learnhouse_description": "Import courses exported from LearnHouse",
+      "zerok_courses": "zerok Courses",
+      "zerok_description": "Import courses exported from zerok",
       "upload_package": "Upload Package",
       "configure": "Configure",
       "complete": "Complete",
       "click_to_upload": "Click to upload or drag and drop",
-      "learnhouse_format": "LearnHouse course export (.zip)",
-      "learnhouse_info": "Upload a LearnHouse course export package (.zip). You'll be able to select which courses to import and configure import options.",
+      "zerok_format": "zerok course export (.zip)",
+      "zerok_info": "Upload a zerok course export package (.zip). You'll be able to select which courses to import and configure import options.",
       "analyze_package": "Analyze Package",
       "ready_to_analyze": "Ready to analyze",
       "invalid_file_format": "Please upload a .zip file",
@@ -790,7 +807,7 @@
       "lms_ready_to_convert": "Ready to convert",
       "lms_invalid_file_format": "Please upload a .mbz, .imscc, .zip or .tar.gz file",
       "lms_file_too_large": "The export is larger than the {{size}} MB upload limit",
-      "lms_info": "The export is converted into LearnHouse content on the server. Large courses can take a few minutes, keep this window open until it finishes.",
+      "lms_info": "The export is converted into zerok content on the server. Large courses can take a few minutes, keep this window open until it finishes.",
       "lms_start": "Upload and Convert",
       "lms_uploading": "Uploading... {{progress}}%",
       "lms_upload_finishing": "Finishing upload...",
@@ -2150,7 +2167,7 @@
     "not_supported_title": "This activity is not supported",
     "not_supported_description": "This type of activity requires authentication and cannot be embedded.",
     "visit_activity": "Visit Activity Page",
-    "powered_by": "Powered by LearnHouse"
+    "powered_by": "Powered by zerok"
   },
   "assignments": {
     "submit_assignment": "Submit Assignment",
@@ -2562,7 +2579,7 @@
     "stripe_wait": "Please wait while we finish setting up your Stripe integration...",
     "stripe_return": "You can now return to the dashboard to start using payments.",
     "stripe_retry": "Please try again or contact support if the problem persists.",
-    "stripe_login_required": "You are not signed in to LearnHouse in this browser. Sign in, then start the connection again from your payments settings.",
+    "stripe_login_required": "You are not signed in to zerok in this browser. Sign in, then start the connection again from your payments settings.",
     "subscription": "Subscription",
     "benefits": "Benefits:",
     "min_price": "Minimum Price:",
@@ -2927,7 +2944,7 @@
           "rate_limited": "Too many attempts. Please wait a moment and try again.",
           "status_error": "Could not load your two-factor settings.",
           "copy_failed": "Could not copy. Please select the text and copy it manually.",
-          "codes_file_header": "LearnHouse two-factor backup codes. Each code can be used once.",
+          "codes_file_header": "zerok two-factor backup codes. Each code can be used once.",
           "already_enabled": "Two-factor authentication is already enabled on this account.",
           "setup_failed": "Could not start two-factor setup. Please try again.",
           "enabled_toast": "Two-factor authentication is now enabled.",
@@ -3067,7 +3084,7 @@
           "description": "Configure your personal settings, passwords, email"
         }
       },
-      "learnhouse_university": "LearnHouse University",
+      "zerok_university": "zerok University",
       "welcome_back": "Welcome back",
       "plan": "plan",
       "create_course": "Create Course",
@@ -3122,8 +3139,8 @@
       "import_course": "Import Course",
       "import_scorm": "Import SCORM",
       "import_scorm_description": "Import a SCORM package to create a new course",
-      "import_learnhouse": "Import LearnHouse Course",
-      "import_learnhouse_description": "Import a course exported from LearnHouse",
+      "import_zerok": "Import zerok Course",
+      "import_zerok_description": "Import a course exported from zerok",
       "import_select_type": "Select the type of course to import",
       "import_lms": "Import from Another LMS",
       "import_lms_description": "Convert a course exported from another learning platform",
@@ -4142,8 +4159,8 @@
         "email_sender_name_desc": "The name recipients see on emails sent for this organization: login links, password resets, invitations, verification and welcome emails. Those emails also carry your logo, your brand color on buttons and your watermark setting. Only the name changes here; the sending address stays the platform's, which is what keeps these emails passing SPF and DKIM checks. Leave empty to use the platform default.",
         "default_language": "Default Language",
         "default_language_desc": "The language new visitors see by default and the language used for emails sent on behalf of this organization. Members can still switch their own UI language.",
-        "watermark_label": "\"Made with LearnHouse\" watermark",
-        "watermark_desc": "Show the LearnHouse branding watermark on your organization pages",
+        "watermark_label": "\"Made with zerok\" watermark",
+        "watermark_desc": "Show the zerok branding watermark on your organization pages",
         "watermark_free_plan": "Watermark is always shown on the free plan",
         "watermark_ee": "Hidden by your Enterprise Edition license"
       },
@@ -4293,7 +4310,7 @@
         },
         "previews": {
           "thumbnail_title": "Thumbnail",
-          "thumbnail_desc": "The cover image for your organization when it is listed or shared: on the LearnHouse explore page and in link previews.",
+          "thumbnail_desc": "The cover image for your organization when it is listed or shared: on the zerok explore page and in link previews.",
           "thumbnail_add": "Add thumbnail",
           "thumbnail_replace": "Replace thumbnail",
           "gallery_title": "Preview gallery",
@@ -5145,7 +5162,7 @@
         "beta": "Beta",
         "active_zaps_one": "{{count}} active Zap",
         "active_zaps_other": "{{count}} active Zaps",
-        "zapier_description": "Connect LearnHouse to thousands of apps without writing code.",
+        "zapier_description": "Connect zerok to thousands of apps without writing code.",
         "manage_zaps": "Manage Zaps",
         "connect": "Connect",
         "add_endpoint": "Add Endpoint",
@@ -5241,7 +5258,7 @@
           "regenerate_failed": "Failed to regenerate token"
         },
         "docs_subtitle": "Explore and test API endpoints using your API tokens",
-        "contact_support": "Contact LearnHouse support",
+        "contact_support": "Contact zerok support",
         "name": "Name",
         "token_prefix": "Token Prefix",
         "last_used": "Last Used",
@@ -5436,8 +5453,8 @@
         "methods_description": "Choose how members are allowed to sign in to this organization. Leave every method checked to keep sign-in unrestricted.",
         "methods_empty_warning": "With no method selected, no one could sign in to this organization. Pick at least one.",
         "methods_effect": "Unchecked methods disappear from this organization’s login page, and members already signed in with one are asked to sign in again with an allowed method.",
-        "session_sharing_label": "Allow sharing sessions with learnhouse.io",
-        "session_sharing_hint": "When off, signing in at learnhouse.io won’t let members into this org; they must sign in again from this org’s login page using an allowed method.",
+        "session_sharing_label": "Allow sharing sessions with zerok.io",
+        "session_sharing_hint": "When off, signing in at zerok.io won’t let members into this org; they must sign in again from this org’s login page using an allowed method.",
         "saving_short": "Saving…",
         "save": "Save changes",
         "cancel": "Cancel",
@@ -7186,7 +7203,7 @@
           "keywords": "paths, learning paths, tracks, programs, curriculum, sequence, certificate"
         },
         "live_sessions": {
-          "keywords": "live sessions classes webinar meeting video attendance recordings polls learnhouse meet zoom meet teams",
+          "keywords": "live sessions classes webinar meeting video attendance recordings polls zerok meet zoom meet teams",
           "description": "Schedule live sessions, track attendance and manage recordings"
         }
       }
@@ -7372,11 +7389,11 @@
     },
     "mcp": {
       "title": "Connect AI apps",
-      "description": "Let members use LearnHouse from Claude, ChatGPT, Cursor and other AI apps that support MCP. Each member signs in with their own account, picks this organization and chooses read-only or read and edit access. Apps can never do more than the member's role allows.",
+      "description": "Let members use zerok from Claude, ChatGPT, Cursor and other AI apps that support MCP. Each member signs in with their own account, picks this organization and chooses read-only or read and edit access. Apps can never do more than the member's role allows.",
       "toggle": "Allow AI app connections",
       "on": "On",
       "off": "Off",
-      "server_disabled": "MCP is turned off on this server (LEARNHOUSE_MCP_ENABLED=false).",
+      "server_disabled": "MCP is turned off on this server (zerok_MCP_ENABLED=false).",
       "server_url": "Server URL",
       "copy": "Copy",
       "copied": "Copied",
@@ -7386,26 +7403,26 @@
         "claude": [
           "Open Claude and go to Settings > Connectors.",
           "Choose Add custom connector and paste {{url}}.",
-          "Click Connect, sign in to LearnHouse and pick this organization."
+          "Click Connect, sign in to zerok and pick this organization."
         ],
         "chatgpt": [
           "Open ChatGPT and go to Settings > Apps and connectors.",
           "Add a custom connector (developer mode may need to be on) and paste {{url}}.",
-          "Sign in to LearnHouse when asked and pick this organization."
+          "Sign in to zerok when asked and pick this organization."
         ],
         "cursor": [
           "Open Cursor Settings > MCP and add a new server.",
           "Use the URL {{url}} as a streamable HTTP server.",
-          "Cursor opens LearnHouse to sign you in."
+          "Cursor opens zerok to sign you in."
         ],
         "vscode": [
           "Run the command MCP: Add Server and choose HTTP.",
           "Paste {{url}} and give it a name.",
-          "Start the server and sign in to LearnHouse when prompted."
+          "Start the server and sign in to zerok when prompted."
         ],
         "claude_code": [
-          "Run: claude mcp add --transport http learnhouse {{url}}",
-          "Inside Claude Code run /mcp and choose learnhouse to sign in."
+          "Run: claude mcp add --transport http zerok {{url}}",
+          "Inside Claude Code run /mcp and choose zerok to sign in."
         ]
       },
       "connections_title": "Connected apps",
@@ -7424,7 +7441,7 @@
         "error": "Something went wrong",
         "copy_failed": "Could not copy the URL"
       },
-      "description_member": "Use LearnHouse from Claude, ChatGPT, Cursor and other AI apps that support MCP. You sign in with this account, choose the organization and pick read-only or read and edit access. The app can never do more than your role allows.",
+      "description_member": "Use zerok from Claude, ChatGPT, Cursor and other AI apps that support MCP. You sign in with this account, choose the organization and pick read-only or read and edit access. The app can never do more than your role allows.",
       "org_disabled": "An admin turned off AI app connections for this organization.",
       "connections_description_member": "Apps you connected to this organization. Disconnecting signs the app out right away.",
       "plans_note_member": "Available on every plan. Tools for features your plan or role doesn't include stay hidden.",
@@ -9106,10 +9123,10 @@
       },
       "teach_the_world": {
         "title": "Learn & grow",
-        "description": "Resources to help you get the most out of LearnHouse.",
+        "description": "Resources to help you get the most out of zerok.",
         "classroom": "The Classroom",
         "classroom_desc": "Learn how to grow and manage your courses",
-        "university": "LearnHouse University",
+        "university": "zerok University",
         "university_desc": "Guides, tips and best practices"
       },
       "add_content": {
@@ -9139,7 +9156,7 @@
       }
     },
     "welcome": {
-      "title": "Welcome to LearnHouse",
+      "title": "Welcome to zerok",
       "subtitle": "Create courses, invite learners and share knowledge with the world.",
       "get_started": "Get Started",
       "features_title": "Everything you need",
@@ -9252,7 +9269,7 @@
     "launch_plan": "Launch plan",
     "subtitle": "Six short steps to a live academy. Each one has a video.",
     "watch_tour": "Watch the tour",
-    "tour_title": "Welcome to LearnHouse",
+    "tour_title": "Welcome to zerok",
     "steps_title": "Steps",
     "step_number": "Step {{n}}",
     "progress_count": "{{done}} of {{total}} done",
@@ -9878,7 +9895,7 @@
         "title": "Looking to test?",
         "body": "Head to the",
         "link": "Developers page",
-        "suffix": "to try LearnHouse instead."
+        "suffix": "to try zerok instead."
       },
       "validation": {
         "required": "Required",
@@ -9993,10 +10010,10 @@
     }
   },
   "oauth_consent": {
-    "title": "{{client}} wants to connect to LearnHouse",
+    "title": "{{client}} wants to connect to zerok",
     "signed_in_as": "Signed in as {{user}}",
     "redirects_to": "You will be sent back to {{host}}",
-    "unverified": "LearnHouse has not verified this app. Continue only if you started this connection yourself.",
+    "unverified": "zerok has not verified this app. Continue only if you started this connection yourself.",
     "pick_org": "Organization",
     "no_orgs": "You are not a member of any organization yet.",
     "org_disabled": "An admin turned off AI app connections here",
@@ -10347,7 +10364,7 @@
       "stripe_title": "Card payments with Stripe",
       "stripe_body": "Connect a Stripe account to sell with Stripe Checkout, subscriptions, trials and promotion codes.",
       "any_tool_title": "Sell with any tool",
-      "any_tool_body": "Already selling on Gumroad, Paddle, Lemon Squeezy, Shopify, or by invoice? Keep it. LearnHouse only needs to know who paid.",
+      "any_tool_body": "Already selling on Gumroad, Paddle, Lemon Squeezy, Shopify, or by invoice? Keep it. zerok only needs to know who paid.",
       "step1_title": "Create a product",
       "step1_body": "Choose <strong>Your own checkout</strong> and paste your checkout link, or <strong>Invite only</strong>.",
       "step2_title": "Make an API token",
@@ -10503,25 +10520,25 @@
       "missing_code": "This link is missing its sign-in code. Open the activity from your LMS again.",
       "failed": "We couldn't sign you in. Open the activity from your LMS again.",
       "error_title": "We couldn't open this page",
-      "new_tab_title": "Open in LearnHouse",
-      "new_tab_description": "LearnHouse opens in its own tab so your work is saved.",
+      "new_tab_title": "Open in zerok",
+      "new_tab_description": "zerok opens in its own tab so your work is saved.",
       "open_course": "Continue in a new tab",
-      "signing_in": "Opening LearnHouse…",
-      "please_wait": "Signing you in to LearnHouse.",
+      "signing_in": "Opening zerok…",
+      "please_wait": "Signing you in to zerok.",
       "confirm_title": "Continue as {{name}}?",
-      "confirm_description": "{{platform}} is signing you in to LearnHouse as {{name}}. Only continue if you just opened this from your course.",
+      "confirm_description": "{{platform}} is signing you in to zerok as {{name}}. Only continue if you just opened this from your course.",
       "confirm_button": "Continue as {{name}}",
       "confirm_platform_fallback": "Your LMS"
     },
     "link": {
       "error_title": "We couldn't link your account",
       "loading": "Loading…",
-      "title": "Link your LearnHouse account",
-      "description": "{{platform}} says you are {{email}}, and a LearnHouse account with that email already exists. Sign in to it once to link it to your LMS.",
+      "title": "Link your zerok account",
+      "description": "{{platform}} says you are {{email}}, and a zerok account with that email already exists. Sign in to it once to link it to your LMS.",
       "signed_in_as": "Signed in as {{email}}",
       "confirm": "Link account and continue",
       "sign_in": "Sign in to continue",
-      "password_label": "Your LearnHouse password, to confirm it's you"
+      "password_label": "Your zerok password, to confirm it's you"
     },
     "select": {
       "draft": "Draft",
@@ -10529,7 +10546,7 @@
       "show_activities": "Show activities",
       "error_title": "Something went wrong",
       "loading": "Loading courses…",
-      "deeplink_title": "Add LearnHouse content",
+      "deeplink_title": "Add zerok content",
       "bind_title": "Choose a course for this link",
       "deeplink_subtitle": "Pick courses, single activities or assignments, communities, podcasts, boards, playgrounds or library folders. Course and assignment results are sent to your gradebook.",
       "single_item": "This LMS adds one item at a time. Run it again to add more.",
@@ -10573,8 +10590,8 @@
       "connected": "Connected",
       "disabled": "Disabled",
       "incomplete": "Incomplete",
-      "tool_details": "LearnHouse details for your LMS",
-      "tool_details_help": "Enter these in your LMS when you register LearnHouse as an external tool.",
+      "tool_details": "zerok details for your LMS",
+      "tool_details_help": "Enter these in your LMS when you register zerok as an external tool.",
       "login_url": "Initiate login URL",
       "launch_url": "Launch / redirect URL",
       "deep_linking_url": "Deep linking URL",
@@ -10591,7 +10608,7 @@
       "enabled": "Enabled",
       "grade_sync_toggle": "Send progress to the gradebook",
       "roster_sync_toggle": "Sync class lists daily",
-      "instructor_toggle": "LMS instructors can grade in LearnHouse",
+      "instructor_toggle": "LMS instructors can grade in zerok",
       "assignment_columns_toggle": "A gradebook column for each assignment",
       "cohort_groups_toggle": "A user group for each LMS course",
       "revoke_on_drop_toggle": "Remove access when someone leaves the LMS course",
@@ -10604,9 +10621,9 @@
       "save": "Save",
       "saved": "Saved",
       "placements": "Placements",
-      "no_links": "No launches yet. Add LearnHouse to a course in your LMS and open it once.",
+      "no_links": "No launches yet. Add zerok to a course in your LMS and open it once.",
       "lms_course": "LMS course",
-      "learnhouse_course": "LearnHouse content",
+      "zerok_course": "zerok content",
       "learners": "Learners",
       "grade_sync": "Gradebook",
       "not_bound": "Not connected yet",
@@ -10615,11 +10632,11 @@
       "no_grade_service": "Not shared by the LMS",
       "changed_in_lms": "{{count}} changed in the LMS",
       "column_errors": "{{count}} with column errors",
-      "column_errors_hint": "The LMS refused the grade in some per-assignment columns. Check that it accepts scores for columns LearnHouse creates.",
-      "changed_in_lms_hint": "A teacher changed these grades in the LMS gradebook, so LearnHouse no longer updates them. Click to overwrite them with LearnHouse grades.",
-      "overwrite_confirm": "Replace the grades teachers changed in the LMS with the LearnHouse grades?",
-      "kept_by_lms_one": "The LMS still shows the teacher's grade for {{count}} learner. Remove the grade override in the LMS gradebook to let LearnHouse grades show.",
-      "kept_by_lms_other": "The LMS still shows the teacher's grade for {{count}} learners. Remove the grade override in the LMS gradebook to let LearnHouse grades show.",
+      "column_errors_hint": "The LMS refused the grade in some per-assignment columns. Check that it accepts scores for columns zerok creates.",
+      "changed_in_lms_hint": "A teacher changed these grades in the LMS gradebook, so zerok no longer updates them. Click to overwrite them with zerok grades.",
+      "overwrite_confirm": "Replace the grades teachers changed in the LMS with the zerok grades?",
+      "kept_by_lms_one": "The LMS still shows the teacher's grade for {{count}} learner. Remove the grade override in the LMS gradebook to let zerok grades show.",
+      "kept_by_lms_other": "The LMS still shows the teacher's grade for {{count}} learners. Remove the grade override in the LMS gradebook to let zerok grades show.",
       "not_graded": "Not graded",
       "sync_roster": "Sync roster",
       "sync_grades": "Sync grades",
@@ -11015,13 +11032,13 @@
     },
     "ee_error": {
       "required_title": "Enterprise Edition license required",
-      "required_desc": "This endpoint is part of LearnHouse Enterprise Edition and is not available on this deployment.",
+      "required_desc": "This endpoint is part of zerok Enterprise Edition and is not available on this deployment.",
       "inactive_title": "Enterprise features are currently unavailable",
       "inactive_desc": "The EE license check failed (<code>{{reason}}</code>). Every <code>/ee/*</code> endpoint is returning 503, so this page can't load its data.",
       "what_to_check": "What to check",
       "check_diagnostics": "Open <code>{{path}}</code>. It answers even while the license is inactive, and its <code>hint</code> field names the fix.",
-      "check_saas": "For SaaS deployments: confirm <code>LEARNHOUSE_SAAS=true</code> is set in the API environment. SaaS short-circuits the license check.",
-      "check_self_hosted": "For self-hosted EE: confirm <code>LEARNHOUSE_LICENSE_KEY</code> is set and the license server (or grace window) is reachable.",
+      "check_saas": "For SaaS deployments: confirm <code>zerok_SAAS=true</code> is set in the API environment. SaaS short-circuits the license check.",
+      "check_self_hosted": "For self-hosted EE: confirm <code>zerok_LICENSE_KEY</code> is set and the license server (or grace window) is reachable.",
       "check_logs": "If you have shell access, the API logs carry the same reason with full detail: <code>[EE] license inactive …</code>",
       "failed_to_load": "Failed to load"
     },
@@ -11199,7 +11216,7 @@
     },
     "ee_required": {
       "title": "Enterprise Edition license required",
-      "description": "The superadmin dashboard is part of LearnHouse Enterprise Edition and is not available on this deployment."
+      "description": "The superadmin dashboard is part of zerok Enterprise Edition and is not available on this deployment."
     },
     "access_denied": {
       "title": "Access Denied",
@@ -11253,7 +11270,7 @@
   "error_catalog": {
     "version_mismatch": {
       "title": "The app just updated",
-      "description": "A new version of LearnHouse was released while this page was open, so it briefly fell out of sync. Reloading will pick up the latest version."
+      "description": "A new version of zerok was released while this page was open, so it briefly fell out of sync. Reloading will pick up the latest version."
     },
     "chunk_load": {
       "title": "Part of the page didn't load",
@@ -11368,7 +11385,7 @@
         "action_items": "Action items",
         "transcribed": "Transcript ready",
         "imported_other": "{{count}} recordings imported",
-        "empty_description": "Upload the recording or paste a link. Add a transcript and LearnHouse writes the summary.",
+        "empty_description": "Upload the recording or paste a link. Add a transcript and zerok writes the summary.",
         "empty_title": "No recordings yet",
         "in_course": "In course",
         "transcript_optional": "Transcript (optional)",
@@ -11484,7 +11501,7 @@
         "make_default": "Make default",
         "use_own_app": "Use your own app",
         "client_id": "Client ID",
-        "meet_description": "Built in, hosted by LearnHouse",
+        "meet_description": "Built in, hosted by zerok",
         "default": "Default",
         "defaults_title": "Defaults",
         "reminders_description": "Emails go to people who RSVP'd and to the host."
@@ -11637,9 +11654,9 @@
       "where": "Where",
       "repeat_monthly": "Every month",
       "provider": "Meeting tool",
-      "provider_connected_hint": "LearnHouse creates the {{provider}} meeting with {{account}}.",
+      "provider_connected_hint": "zerok creates the {{provider}} meeting with {{account}}.",
       "attendance_completion_hint": "Marks the course activity done once a learner stays long enough",
-      "provider_embedded_hint": "Runs inside LearnHouse. Nobody needs another account.",
+      "provider_embedded_hint": "Runs inside zerok. Nobody needs another account.",
       "waiting_room": "Waiting room",
       "no_board": "No board",
       "provider_link_hint": "Paste your {{provider}} link. Chat, Q&A, polls and attendance still run here.",
@@ -11799,7 +11816,7 @@
       "recording_started": "Recording. Everyone in the call can see it.",
       "stop_recording": "Stop recording",
       "remove": "Remove from call",
-      "unavailable_body": "Chat, Q&A and polls work as usual. Ask your administrator to set up LearnHouse Meet.",
+      "unavailable_body": "Chat, Q&A and polls work as usual. Ask your administrator to set up zerok Meet.",
       "no_devices": "No devices found",
       "pick_microphone": "Choose microphone",
       "device_failed": "Couldn't use your camera or microphone",
@@ -11832,7 +11849,7 @@
       "recordings": "Recording",
       "cancelled_body": "This session was cancelled by the host.",
       "who": "Who can join",
-      "in_learnhouse": "{{provider}}, inside LearnHouse",
+      "in_zerok": "{{provider}}, inside zerok",
       "sign_in_to_join": "Sign in to RSVP and join.",
       "in_the_room": "In the room",
       "waiting_body": "It's time. The host hasn't started yet; enter the waiting room and you'll be let in.",
@@ -11878,7 +11895,7 @@
         "submit_series": "Schedule {{count}} sessions",
         "title": "Schedule a live session",
         "submit": "Schedule session",
-        "description": "Run a class, office hours or an event, live inside LearnHouse."
+        "description": "Run a class, office hours or an event, live inside zerok."
       }
     },
     "course_modal": {

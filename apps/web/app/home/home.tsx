@@ -110,13 +110,9 @@ function HomeClient() {
             {/* Brand */}
             <div className="flex flex-col items-center mb-10">
               { }
-              <img
-                src="/lrn.svg"
-                alt="LearnHouse"
-                width={44}
-                height={44}
-                className="opacity-90"
-              />
+              <span className="text-[30px] font-black lowercase tracking-[-0.04em] text-gray-900">
+                zerok<span className="text-[#6366f1]">.</span>
+              </span>
               <h1 className="mt-6 font-black tracking-tight text-2xl text-gray-900 text-center">
                 {t('common.your_organizations')}
               </h1>
@@ -262,12 +258,12 @@ function HomeClient() {
                 className="mt-10 flex items-center gap-1.5 text-[11px] text-black/30 hover:text-black/60 transition-colors"
               >
                 <span>{t('common.powered_by', { defaultValue: 'Powered by' })}</span>
-                <span className="font-semibold tracking-tight text-black/50 group-hover:text-black/70">LearnHouse</span>
+                <span className="font-semibold tracking-tight text-black/50 group-hover:text-black/70">zerok</span>
               </a>
             ) : (
               <div className="mt-10 flex items-center gap-1.5 text-[11px] text-black/30">
                 <span>{t('common.powered_by', { defaultValue: 'Powered by' })}</span>
-                <span className="font-semibold tracking-tight text-black/50">LearnHouse</span>
+                <span className="font-semibold tracking-tight text-black/50">zerok</span>
               </div>
             )}
             <CopyrightFooter year={new Date().getFullYear()} className="mt-4 pt-0" />

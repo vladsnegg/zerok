@@ -78,7 +78,9 @@ export default function WelcomeModal() {
                 className="px-6 sm:px-10 pt-8 sm:pt-10"
               >
                 <div className="text-center">
-                  <img src="/lrn-dash.svg" alt="LearnHouse" className="h-10 w-10 mx-auto mb-4" style={{ filter: 'brightness(0)' }} />
+                  <span className="mb-4 block text-center text-[30px] font-black lowercase tracking-[-0.04em] text-gray-900">
+                    zerok<span className="text-[#6366f1]">.</span>
+                  </span>
                   <h1 className="text-2xl font-bold text-gray-900 tracking-tight">
                     {firstName ? t('onboarding.welcome.hello_name', { name: firstName }) : t('onboarding.welcome.title')}
                   </h1>
