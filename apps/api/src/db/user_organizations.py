@@ -5,7 +5,9 @@ from sqlmodel import Field, SQLModel
 
 class UserOrganization(SQLModel, table=True):
     __table_args__ = (
-        Index("ix_userorg_user_org", "user_id", "org_id"),
+        # One membership per user per organization; the pair is also the
+        # lookup path used by every authorization check.
+        Index("uq_userorganization_user_org", "user_id", "org_id", unique=True),
         Index("ix_userorg_org_role", "org_id", "role_id"),
     )
     id: Optional[int] = Field(default=None, primary_key=True)

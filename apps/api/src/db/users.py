@@ -3,7 +3,7 @@ from typing import Optional, TYPE_CHECKING
 from datetime import datetime
 from pydantic import BaseModel, EmailStr, field_validator
 from sqlmodel import Field, SQLModel
-from sqlalchemy import JSON, Column, ForeignKey, Index, Integer
+from sqlalchemy import JSON, Column, ForeignKey, Index, Integer, text
 from sqlalchemy.dialects.postgresql import JSONB
 from src.db.roles import RoleRead
 
@@ -241,6 +241,11 @@ class SuperadminAPITokenUser(SQLModel):
 class User(UserBase, table=True):
     __table_args__ = (
         Index("ix_user_email", "email"),
+        # The application lower-cases addresses before writing, and login
+        # compares them lower-case too. The functional unique index closes the
+        # race where two concurrent registrations both pass the Python check.
+        Index("uq_user_email_lower", text("lower(email)"), unique=True),
+        Index("uq_user_username", "username", unique=True),
         {"extend_existing": True},
     )
     id: Optional[int] = Field(default=None, primary_key=True)

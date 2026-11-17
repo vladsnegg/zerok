@@ -12,6 +12,7 @@ from uuid import uuid4
 
 from fastapi import HTTPException, Request
 from sqlalchemy import func
+from sqlalchemy.exc import IntegrityError
 from sqlmodel import select
 from sqlmodel.ext.asyncio.session import AsyncSession
 
@@ -135,7 +136,20 @@ async def register_user(
         update_date=now,
     )
     db_session.add(user)
-    await db_session.commit()
+    try:
+        await db_session.commit()
+    except IntegrityError:
+        # The pre-flight lookup above loses races: two concurrent requests can
+        # both see "free" and then collide on uq_user_email_lower or
+        # uq_user_username. Report a normal conflict instead of a 500.
+        await db_session.rollback()
+        raise HTTPException(
+            status_code=400,
+            detail={
+                "code": "ACCOUNT_CONFLICT",
+                "message": "That e-mail or username is already taken. Try another one.",
+            },
+        )
     await db_session.refresh(user)
 
     membership = UserOrganization(
