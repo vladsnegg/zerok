@@ -13,6 +13,7 @@ from src.security.org_auth import (
 from src.db.organization_config import (
     OrganizationConfig,
     OrganizationConfigBase,
+    apply_new_org_feature_defaults,
 )
 from src.security.rbac.rbac import (
     authorization_verify_based_on_org_admin_status,
@@ -352,7 +353,7 @@ async def create_org(
         plan="free",
     )
 
-    org_config = json.loads(org_config.model_dump_json())
+    org_config = apply_new_org_feature_defaults(json.loads(org_config.model_dump_json()))
 
     # OrgSettings
     org_settings = OrganizationConfig(
@@ -450,6 +451,10 @@ async def create_org_with_config(
         org_config = submitted_config
     else:
         org_config = json.loads(submitted_config.model_dump_json())
+
+    # New orgs start without the default-off sections unless the caller
+    # explicitly enabled them in the submitted config.
+    org_config = apply_new_org_feature_defaults(org_config, force=False)
 
     # OrgSettings
     org_settings = OrganizationConfig(

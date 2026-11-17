@@ -392,6 +392,32 @@ class OrganizationConfigV2Base(BaseModel):
 
 
 # ============================================================================
+# New-organization defaults
+# ============================================================================
+
+# Features a brand-new organization starts with switched off. They remain in
+# the product and can be enabled from the org's features settings at any time;
+# a default install is courses / assignments / cabinet oriented, without the
+# podcast, community and AI-playground sections.
+DEFAULT_DISABLED_FEATURES = ("podcasts", "communities", "playgrounds")
+
+
+def apply_new_org_feature_defaults(config: dict, *, force: bool = True) -> dict:
+    """Turn the product's default-off features off in a freshly created config.
+
+    ``force`` rewrites the values emitted by the v2 model defaults. Callers that
+    received an explicit config (programmatic org creation) pass ``force=False``
+    so a deliberate ``org_disabled: false`` is preserved.
+    """
+    toggles = config.setdefault("admin_toggles", {})
+    for feature in DEFAULT_DISABLED_FEATURES:
+        feature_toggle = toggles.setdefault(feature, {})
+        if force or "org_disabled" not in feature_toggle:
+            feature_toggle["org_disabled"] = True
+    return config
+
+
+# ============================================================================
 # SQLModel table (unchanged; config is a JSON blob)
 # ============================================================================
 

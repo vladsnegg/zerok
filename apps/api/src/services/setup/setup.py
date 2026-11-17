@@ -8,6 +8,7 @@ from sqlmodel.ext.asyncio.session import AsyncSession
 from src.db.organization_config import (
     OrganizationConfig,
     OrganizationConfigV2Base,
+    apply_new_org_feature_defaults,
 )
 from src.db.organizations import Organization, OrganizationCreate
 from src.db.roles import DashboardPermission, Permission, PermissionsWithOwn, Rights, Role, RoleTypeEnum
@@ -431,6 +432,7 @@ async def install_create_organization(org_object: OrganizationCreate, db_session
     )
 
     org_config = json.loads(org_config.model_dump_json())
+    org_config = apply_new_org_feature_defaults(org_config)
 
     # OrgSettings
     org_settings = OrganizationConfig(
