@@ -15,8 +15,10 @@ import { useTranslation } from 'react-i18next'
 
 import { useOrg } from '@components/Contexts/OrgContext'
 import { useLHSession } from '@components/Contexts/LHSessionContext'
+import useAdminStatus from '@components/Hooks/useAdminStatus'
 import { getAPIUrl, getUriWithOrg } from '@services/config/config'
 import { RequestBodyWithAuthHeader, asArray } from '@services/utils/ts/requests'
+import TeacherCabinetHome from './teacher-home'
 
 type TrailRun = {
   id: number
@@ -30,8 +32,32 @@ type TrailRun = {
 
 type CalendarEvent = any
 
-export default function StudentCabinetPage({ params }: { params: Promise<{ orgslug: string }> }) {
+/**
+ * The cabinet is home for both learners and instructors: learners get their
+ * learning view, instructors a teaching view with the same shell.
+ */
+export default function CabinetPage({ params }: { params: Promise<{ orgslug: string }> }) {
   const { orgslug } = React.use(params)
+  const session = useLHSession() as any
+  const { isAdmin, loading: rightsLoading } = useAdminStatus() as any
+
+  // While the role is being resolved, keep the skeleton neutral so neither
+  // view flashes before we know who is asking.
+  if (rightsLoading) {
+    return (
+      <div className="mx-auto w-full max-w-5xl px-4 sm:px-6 py-10">
+        <div className="h-24 animate-pulse rounded-2xl bg-neutral-100" />
+      </div>
+    )
+  }
+
+  if (isAdmin) {
+    return <TeacherCabinetHome orgslug={orgslug} />
+  }
+  return <StudentCabinetView orgslug={orgslug} />
+}
+
+function StudentCabinetView({ orgslug }: { orgslug: string }) {
   const { t } = useTranslation()
   const org = useOrg() as any
   const session = useLHSession() as any

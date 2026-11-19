@@ -5,7 +5,7 @@ import { getOrgThumbnailMediaDirectory, getOrgOgImageMediaDirectory } from '@ser
 import { getOrgSeoConfig, buildPageTitle } from '@/lib/seo/utils'
 import { getServerCanonicalUrl } from '@/lib/seo/utils.server'
 import { getServerSession } from '@/lib/auth/server'
-import { isLearnerSession } from '@/lib/auth/home'
+import { isAdminSession } from '@/lib/auth/home'
 import HomeClient from './home-client'
 
 type MetadataProps = {
@@ -80,11 +80,10 @@ export async function generateMetadata(props: MetadataProps): Promise<Metadata> 
 const OrgHomePage = async (params: any) => {
   const orgslug = (await params.params).orgslug
 
-  // The catalog is staff territory. A learner's home is the cabinet, so the
-  // logo / any saved "/" link lands there instead of on a course list they
-  // should not be browsing from.
+  // The catalog is for admins; learners and instructors call the cabinet home,
+  // so the logo / any saved "/" link lands there instead.
   const session = await getServerSession()
-  if (session && !session.unresolved && isLearnerSession({ roles: session.roles })) {
+  if (session && !session.unresolved && !isAdminSession({ roles: session.roles })) {
     redirect('/cabinet')
   }
 
