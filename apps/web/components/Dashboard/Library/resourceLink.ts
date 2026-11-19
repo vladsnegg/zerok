@@ -29,19 +29,19 @@ export function resourceHref(
     case 'communities': {
       const id = (resource.community_uuid || '').replace('community_', '')
       return id
-        ? getUriWithOrg(orgslug, dash ? `/dash/communities/${id}/general` : `/community/${id}`)
+        ? getUriWithOrg(orgslug, dash ? `/cabinet/communities/${id}/general` : `/community/${id}`)
         : null
     }
     case 'boards': {
       const id = (resource.board_uuid || '').replace('board_', '')
       return id
-        ? getUriWithOrg(orgslug, dash ? `/dash/boards/${id}/general` : `/board/${id}`)
+        ? getUriWithOrg(orgslug, dash ? `/cabinet/boards/${id}/general` : `/board/${id}`)
         : null
     }
     case 'podcasts': {
       const id = (resource.podcast_uuid || '').replace('podcast_', '')
       return id
-        ? getUriWithOrg(orgslug, dash ? `/dash/podcasts/podcast/${id}/general` : `/podcast/${id}`)
+        ? getUriWithOrg(orgslug, dash ? `/cabinet/podcasts/podcast/${id}/general` : `/podcast/${id}`)
         : null
     }
     case 'playgrounds': {

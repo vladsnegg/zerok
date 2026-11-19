@@ -35,7 +35,7 @@ export default function PathsClient({ orgslug, org_id }: { orgslug: string; org_
             <TypeOfContentTitle title={t('paths.title')} type="path" />
             <AuthenticatedClientElement checkMethod="roles" action="create" ressourceType="courses" orgId={org_id}>
               <Link
-                href={getUriWithOrg(orgslug, '/dash/paths')}
+                href={getUriWithOrg(orgslug, '/cabinet/paths')}
                 className="text-xs font-bold text-gray-500 hover:text-gray-900 transition-colors"
               >
                 {t('paths.manage_paths')} &rarr;

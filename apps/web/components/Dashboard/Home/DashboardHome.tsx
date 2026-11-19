@@ -76,7 +76,7 @@ export default function DashboardHome() {
             </div>
             <div className="flex items-center gap-2 flex-wrap">
               <Link
-                href="/dash/courses?new=true"
+                href="/cabinet/courses?new=true"
                 className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-medium text-white bg-gray-900 rounded-lg hover:bg-gray-800 transition-colors"
               >
                 <PlusCircle size={14} weight="bold" />
@@ -84,7 +84,7 @@ export default function DashboardHome() {
               </Link>
               {isOrgAnalyticsAvailable() && (
                 <Link
-                  href="/dash/analytics"
+                  href="/cabinet/analytics"
                   className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-medium text-gray-600 bg-white rounded-lg nice-shadow hover:bg-gray-50 transition-colors"
                 >
                   <ChartBar size={14} weight="bold" />
@@ -92,14 +92,14 @@ export default function DashboardHome() {
                 </Link>
               )}
               <Link
-                href="/dash/users/settings/users"
+                href="/cabinet/users/settings/users"
                 className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-medium text-gray-600 bg-white rounded-lg nice-shadow hover:bg-gray-50 transition-colors"
               >
                 <Users size={14} weight="bold" />
                 {t('dashboard.home.members')}
               </Link>
               <Link
-                href="/dash/org/settings/general"
+                href="/cabinet/org/settings/general"
                 className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-medium text-gray-600 bg-white rounded-lg nice-shadow hover:bg-gray-50 transition-colors"
               >
                 <GearSix size={14} weight="bold" />

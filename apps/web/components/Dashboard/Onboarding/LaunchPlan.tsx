@@ -196,7 +196,7 @@ function StepPanel({
   // The add-content step goes straight into the course the admin just made.
   const href = useMemo(() => {
     if (step.id === 'add_content' && latestCourseUuid) {
-      return `/dash/courses/course/${latestCourseUuid.replace(/^course_/, '')}/content`
+      return `/cabinet/courses/course/${latestCourseUuid.replace(/^course_/, '')}/content`
     }
     return step.href
   }, [step, latestCourseUuid])

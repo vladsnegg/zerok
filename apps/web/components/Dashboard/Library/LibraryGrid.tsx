@@ -37,7 +37,7 @@ function CourseItem({ item, orgslug, onRemove }: { item: any; orgslug: string; o
         course={resource}
         orgslug={orgslug}
         isDashboard={true}
-        customLink={getUriWithOrg(orgslug, `/dash/courses/course/${removeCoursePrefix(resource.course_uuid || item.resource_uuid)}/general`)}
+        customLink={getUriWithOrg(orgslug, `/cabinet/courses/course/${removeCoursePrefix(resource.course_uuid || item.resource_uuid)}/general`)}
       />
       <div className="absolute top-2 start-2 z-30 opacity-0 group-hover:opacity-100 transition-opacity">
         <ConfirmationModal

@@ -135,7 +135,7 @@ class TestInEmail:
                 nudge_id="content.course_draft_d3",
                 email="a@b.com",
                 org_name="Acme",
-                cta_url="https://acme.test/dash",
+                cta_url="https://acme.test/cabinet",
                 unsubscribe_url="https://api.test/u?token=t.s",
                 track=track,
                 course_name="Course",

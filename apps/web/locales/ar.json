@@ -538,7 +538,24 @@
       "go_to_login": "الانتقال إلى تسجيل الدخول",
       "signing_in": "جارٍ تسجيل دخولك...",
       "setting_up": "يرجى الانتظار بينما نجهّز جلستك."
-    }
+    },
+    "registration_open_note": "التسجيل مفتوح: الحسابات الجديدة تبدأ بدور الطالب.",
+    "register_title": "إنشاء حساب",
+    "register_subtitle": "الحسابات الجديدة تبدأ بدور الطالب وتكون نشطة فوراً.",
+    "register_submit": "إنشاء حساب",
+    "register_success_title": "تم إنشاء الحساب",
+    "register_success_body": "حسابك نشط بدور الطالب. سجّل الدخول بالبريد وكلمة المرور.",
+    "branding_eyebrow": "منصة تعلّم",
+    "branding_headline_1": "تعلّم.",
+    "branding_headline_2": "درّس.",
+    "branding_headline_3": "انمُ.",
+    "branding_subtitle": "دورات ومهام ومجتمع وتعاون — في مساحة هادئة واحدة.",
+    "branding_footer": "تعلّم بلا ضجيج.",
+    "branding_tag_courses": "الدورات",
+    "branding_tag_assignments": "المهام",
+    "branding_tag_community": "المجتمع",
+    "branding_headline_short": "تعلّم. درّس. انمُ.",
+    "branding_subtitle_short": "دورات ومهام ومجتمع في مكان واحد."
   },
   "validation": {
     "required": "مطلوب",
@@ -2582,6 +2599,10 @@
         "live_sessions": {
           "description": "الدروس المباشرة القادمة والساعات المكتبية وإعادات المشاهدة",
           "keywords": "جلسات مباشرة دروس ندوة اجتماع مكالمة فيديو ساعات مكتبية فعاليات تقويم إعادة تسجيل live sessions webinar"
+        },
+        "notifications": {
+          "description": "المواعيد النهائية والدرجات وتحديثات الدورات",
+          "keywords": "إشعارات، تنبيهات، مواعيد نهائية، درجات، تحديثات"
         }
       }
     }
@@ -12476,6 +12497,48 @@
     "sign_in_title": "سجّل الدخول لرؤية تقويمك",
     "title": "التقويم",
     "more_events": "+{{count}} أخرى"
+  },
+  "cabinet": {
+    "eyebrow": "تعليمي",
+    "welcome": "أهلاً بك",
+    "welcome_name": "أهلاً بك، {{name}}",
+    "subtitle": "دوراتك ومواعيدك وتقدمك في مكان واحد.",
+    "browse_courses": "استعرض الدورات",
+    "courses": "الدورات",
+    "in_progress": "قيد التنفيذ",
+    "completed": "مكتملة",
+    "my_courses": "دوراتي",
+    "full_trail": "كل التقدم",
+    "no_courses": "لم تبدأ أي دورة بعد.",
+    "find_course": "ابحث عن دورة",
+    "status_completed": "مكتملة",
+    "status_in_progress": "قيد التنفيذ",
+    "continue": "افتح",
+    "deadlines": "المواعيد والأحداث",
+    "no_events": "لا شيء مجدول.",
+    "event": "حدث",
+    "open_calendar": "افتح التقويم",
+    "account": "الحساب",
+    "account_settings": "إعدادات الحساب",
+    "security": "الأمان",
+    "teacher_eyebrow": "التدريس",
+    "teacher_subtitle": "دوراتك ومهامك وأدوات التدريس في مكان واحد.",
+    "teacher_courses": "الدورات",
+    "teacher_published": "منشورة",
+    "teacher_drafts": "مسودات",
+    "teacher_link_courses": "الدورات",
+    "teacher_link_assignments": "المهام",
+    "teacher_link_boards": "اللوحات",
+    "teacher_link_dashboard": "لوحة التحكم الكاملة"
+  },
+  "notifications": {
+    "title": "الإشعارات",
+    "empty": "لا شيء هنا بعد. سظهر هنا المواعيد النهائية والأعمال المصححة وتحديثات الدورات."
+  },
+  "welcome": {
+    "sign_in": "تسجيل الدخول",
+    "create_account": "إنشاء حساب",
+    "gate_note": "يُفتح المكتب بعد تسجيل الدخول أو إنشاء حساب. التسجيل مجاني ويمنحك دور الطالب مباشرة."
   },
   "mobile_nav": {
     "tabs": "الرئيسية",

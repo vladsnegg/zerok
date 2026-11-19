@@ -42,7 +42,7 @@ function CommunityCard(props: PropsType) {
 
   // Different links based on variant
   const communityLink = variant === 'dashboard'
-    ? getUriWithOrg(props.orgslug, `/dash/communities/${communityId}/general`)
+    ? getUriWithOrg(props.orgslug, `/cabinet/communities/${communityId}/general`)
     : getUriWithOrg(props.orgslug, `/community/${communityId}`)
 
   return (
@@ -105,7 +105,7 @@ function CommunityCard(props: PropsType) {
 
           {variant === 'dashboard' ? (
             <Link
-              href={getUriWithOrg(props.orgslug, `/dash/communities/${communityId}/general`)}
+              href={getUriWithOrg(props.orgslug, `/cabinet/communities/${communityId}/general`)}
               className="text-[10px] font-bold text-gray-400 hover:text-gray-900 transition-colors uppercase tracking-wider"
             >
               {t('dashboard.courses.communities.card.open_settings')}
@@ -155,7 +155,7 @@ const CommunityAdminEditsArea = (props: any) => {
           <DropdownMenuContent align="end" className="w-48">
             <DropdownMenuItem asChild>
               <Link
-                href={getUriWithOrg(props.orgslug, `/dash/communities/${removeCommunityPrefix(props.community_uuid)}/general`)}
+                href={getUriWithOrg(props.orgslug, `/cabinet/communities/${removeCommunityPrefix(props.community_uuid)}/general`)}
                 className="flex items-center px-2 py-1.5 text-sm text-gray-700 hover:bg-gray-50 rounded-md transition-colors"
               >
                 <ExternalLink className="me-2 h-4 w-4" /> {t('dashboard.courses.communities.card.open_settings')}

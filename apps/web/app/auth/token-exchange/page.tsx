@@ -25,7 +25,7 @@ const ERROR_MESSAGES: Record<string, string> = {
 // Only allow same-origin paths, so the `?redirect=` param cannot become an open
 // redirect after a successful exchange.
 function sanitizeRedirect(raw: string | null): string {
-  return safeInternalPath(raw || null, '/dash')
+  return safeInternalPath(raw || null, '/cabinet')
 }
 
 function TokenExchangeInner() {

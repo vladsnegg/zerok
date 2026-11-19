@@ -8,7 +8,7 @@ import { usePathname } from 'next/navigation'
 // on a host that shares the platform session cookie.
 const Footer: React.FC<{ allowOrgScripts: boolean }> = ({ allowOrgScripts }) => {
   const pathname = usePathname()
-  // App/dashboard pages live under `/dash` on .io (org subdomains); the old
+  // App/dashboard pages live under `/cabinet` on .io (org subdomains); the old
   // `/dashboard` prefix never matches here. Match both to be safe.
   const isDashboard = /(?:^|\/)dash(?:board)?(?:\/|$)/.test(pathname || '')
 

@@ -97,7 +97,7 @@ _LANDING_TYPES = frozenset({
 })
 _UNSAFE_SCHEMES = ("javascript:", "vbscript:", "data:", "file:")
 _MAX_LANDING_CHARS = 100_000
-_SETTINGS_PAGE = "/dash/org/settings/general"
+_SETTINGS_PAGE = "/cabinet/org/settings/general"
 
 
 def _safe_link(value: str) -> str:

@@ -123,7 +123,7 @@ export function LibraryItemCard({ item, orgslug }: { item: any; orgslug: string 
   if (type === 'courses' && resource?.course_uuid) {
     const onCardClick = (e: React.MouseEvent) => {
       const link = (e.target as HTMLElement).closest('a')
-      if (link && !link.getAttribute('href')?.includes('/dash/')) trackOpened()
+      if (link && !link.getAttribute('href')?.includes('/cabinet/')) trackOpened()
     }
     return (
       <div className="contents" onClickCapture={onCardClick}>

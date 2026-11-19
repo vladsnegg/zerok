@@ -57,7 +57,7 @@ export async function GET(request: NextRequest) {
 
   const robotsTxt = `User-agent: *
 Allow: /
-Disallow: /dash/
+Disallow: /cabinet/
 Disallow: /api/
 Disallow: /auth/
 Disallow: /editor/

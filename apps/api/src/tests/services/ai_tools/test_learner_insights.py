@@ -296,7 +296,7 @@ async def test_report_for_instructor(registry, db, org, admin_user, setup):
     assert [a["done"] for a in item["activities"]] == [True, True]
     assert all(a["completed_at"] for a in item["activities"]) and item["activities"][0]["chapter"] == "Test Chapter"
     (hw,) = item["assignment_details"]
-    assert hw["assignment"]["url"] == "https://acme.test/dash/assignments/hw"
+    assert hw["assignment"]["url"] == "https://acme.test/cabinet/assignments/hw"
     assert hw["status"] == "graded" and hw["grade"]["percentage"] == 50.0 and hw["feedback"] == "Review question 2"
     quiz, essay = hw["tasks"]
     assert quiz["score"] == "10/10" and quiz["feedback"] == "Right" and quiz["auto_check"] == "1/1 correct"

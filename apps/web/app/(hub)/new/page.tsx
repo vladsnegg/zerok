@@ -676,8 +676,8 @@ function CreateOrgSuccess({ slug, t }: { slug: string; t: any }) {
     // getUriWithOrg stays relative on a custom domain (that host is another
     // org's), so build the new org's own subdomain URL there.
     window.location.href = getCustomDomainFromContext()
-      ? `${window.location.protocol}//${slug}.${getLEARNHOUSE_DOMAIN_VAL()}/dash/onboarding`
-      : getUriWithOrg(slug, '/dash/onboarding')
+      ? `${window.location.protocol}//${slug}.${getLEARNHOUSE_DOMAIN_VAL()}/cabinet/onboarding`
+      : getUriWithOrg(slug, '/cabinet/onboarding')
   }
 
   return (

@@ -42,27 +42,27 @@ async def org_base_url(org_slug: str, db_session=None, org_id: Optional[int] = N
 
 
 def dashboard_url(base: str) -> str:
-    return f"{base}/dash"
+    return f"{base}/cabinet"
 
 
 def courses_url(base: str) -> str:
-    return f"{base}/dash/courses"
+    return f"{base}/cabinet/courses"
 
 
 def course_migrate_url(base: str) -> str:
-    return f"{base}/dash/courses/migrate"
+    return f"{base}/cabinet/courses/migrate"
 
 
 def onboarding_url(base: str) -> str:
-    return f"{base}/dash/onboarding"
+    return f"{base}/cabinet/onboarding"
 
 
 def members_url(base: str) -> str:
-    return f"{base}/dash/users"
+    return f"{base}/cabinet/users"
 
 
 def org_settings_url(base: str, subpage: str = "general") -> str:
-    return f"{base}/dash/org/settings/{quote(subpage, safe='')}"
+    return f"{base}/cabinet/org/settings/{quote(subpage, safe='')}"
 
 
 def course_editor_url(base: str, course_uuid: str, subpage: str = "content") -> str:
@@ -74,7 +74,7 @@ def course_editor_url(base: str, course_uuid: str, subpage: str = "content") -> 
     if subpage not in COURSE_SUBPAGES:
         subpage = "content"
     bare = quote(strip_course_prefix(course_uuid), safe="")
-    return f"{base}/dash/courses/course/{bare}/{subpage}"
+    return f"{base}/cabinet/courses/course/{bare}/{subpage}"
 
 
 def public_course_url(base: str, course_uuid: str) -> str:

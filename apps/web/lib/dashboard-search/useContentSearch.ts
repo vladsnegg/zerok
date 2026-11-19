@@ -34,7 +34,7 @@ function normalize(data: any): ContentResult[] {
       type: 'course',
       title: c.name,
       subtitle: c.description ?? undefined,
-      href: `/dash/courses/course/${stripPrefix(c.course_uuid, 'course_')}/general`,
+      href: `/cabinet/courses/course/${stripPrefix(c.course_uuid, 'course_')}/general`,
     })
   }
   for (const u of data.users ?? []) {
@@ -44,7 +44,7 @@ function normalize(data: any): ContentResult[] {
       type: 'user',
       title: fullName || u.username,
       subtitle: u.username ? `@${u.username}` : undefined,
-      href: '/dash/users/settings/users',
+      href: '/cabinet/users/settings/users',
     })
   }
   for (const com of data.communities ?? []) {
@@ -53,7 +53,7 @@ function normalize(data: any): ContentResult[] {
       type: 'community',
       title: com.name,
       subtitle: com.description ?? undefined,
-      href: `/dash/communities/${stripPrefix(com.community_uuid, 'community_')}/general`,
+      href: `/cabinet/communities/${stripPrefix(com.community_uuid, 'community_')}/general`,
     })
   }
   for (const d of data.discussions ?? []) {
@@ -63,7 +63,7 @@ function normalize(data: any): ContentResult[] {
       type: 'discussion',
       title: d.title ?? d.content?.slice(0, 80) ?? '',
       subtitle: d.content ? d.content.slice(0, 100) : undefined,
-      href: community ? `/dash/communities/${community}/discussions` : '/dash/communities',
+      href: community ? `/cabinet/communities/${community}/discussions` : '/cabinet/communities',
     })
   }
   for (const p of data.playgrounds ?? []) {
@@ -72,7 +72,7 @@ function normalize(data: any): ContentResult[] {
       type: 'playground',
       title: p.name,
       subtitle: p.description ?? undefined,
-      href: '/dash/playgrounds',
+      href: '/cabinet/playgrounds',
     })
   }
   for (const p of data.podcasts ?? []) {
@@ -81,7 +81,7 @@ function normalize(data: any): ContentResult[] {
       type: 'podcast',
       title: p.name,
       subtitle: p.description ?? undefined,
-      href: `/dash/podcasts/podcast/${stripPrefix(p.podcast_uuid, 'podcast_')}/general`,
+      href: `/cabinet/podcasts/podcast/${stripPrefix(p.podcast_uuid, 'podcast_')}/general`,
     })
   }
   return out

@@ -132,7 +132,7 @@ class TestEmptyBatches:
         base = dict(org_id=1, org_slug="acme", org_name="Acme", plan="free", lang="en")
         newest = OrgSnapshot(**base, newest_course_uuid="course_new")
         assert _content_link(newest, "https://acme.test") == (
-            "https://acme.test/dash/courses/course/new/content"
+            "https://acme.test/cabinet/courses/course/new/content"
         )
 
         # Falls back to the draft when there is no newest course recorded.

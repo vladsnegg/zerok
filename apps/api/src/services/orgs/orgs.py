@@ -264,7 +264,7 @@ async def _try_send_org_created(request: Request, org, current_user, db_session)
         # Deliberately platform-branded: the org was created seconds ago, so it
         # has no configured sender name yet, and this mail is the platform
         # confirming an action taken on the platform.
-        send_org_created_email(email, org.name, f"{base.rstrip('/')}/dash")
+        send_org_created_email(email, org.name, f"{base.rstrip('/')}/cabinet")
     except Exception:
         logging.exception("send_org_created_email failed")
 

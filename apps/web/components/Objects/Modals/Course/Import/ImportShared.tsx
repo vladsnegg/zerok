@@ -351,7 +351,7 @@ export function ImportResults({
               {course.success && orgslug && course.uuid ? (
                 <Link
                   prefetch={false}
-                  href={getUriWithOrg(orgslug, `/dash/courses/course/${removeCoursePrefix(course.uuid)}/content`)}
+                  href={getUriWithOrg(orgslug, `/cabinet/courses/course/${removeCoursePrefix(course.uuid)}/content`)}
                   className="flex items-center gap-1 text-xs font-medium text-green-700 hover:text-green-900"
                 >
                   <span>{t('courses.import.open_course')}</span>

@@ -196,7 +196,7 @@ class TestNudgeRendering:
             nudge_id="content.course_draft_d3",
             email="admin@test.com",
             org_name="Maths & Physics",
-            cta_url="https://acme.test/dash/courses/course/abc/general",
+            cta_url="https://acme.test/cabinet/courses/course/abc/general",
             unsubscribe_url="https://api.test/api/v1/emails/unsubscribe?token=t.s",
             lang="en",
             course_name="Intro & Basics",
@@ -254,7 +254,7 @@ class TestNudgeRendering:
 
     def test_cta_button_is_rendered(self):
         captured = self._send()
-        assert "https://acme.test/dash/courses/course/abc/general" in captured["body"]
+        assert "https://acme.test/cabinet/courses/course/abc/general" in captured["body"]
 
     def test_no_cta_renders_a_button_free_email(self):
         """The "what stopped you?" nudge is a genuine question; a button
@@ -269,7 +269,7 @@ class TestNudgeRendering:
             nudge_id="activation.whats_blocking_d14", has_cta=False
         )
         assert STYLES["button"] not in captured["body"]
-        assert "https://acme.test/dash" not in captured["body"]
+        assert "https://acme.test/cabinet" not in captured["body"]
         # ...but the reader can still opt out.
         assert "unsubscribe" in captured["body"].lower()
 

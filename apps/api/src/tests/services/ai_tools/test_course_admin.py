@@ -180,7 +180,7 @@ async def test_certificate_on_configure_off(registry, db, org, admin_user, cours
     }
     assert on["certificate"]["enabled"] is True and on["certificate"]["issued_count"] == 0
     assert on["certificate"]["settings_url"] == (
-        "https://acme.test/dash/courses/course/test/certification"
+        "https://acme.test/cabinet/courses/course/test/certification"
     )
 
     again = ok(await call(registry, ctx, "set_course_certificate", {
@@ -350,7 +350,7 @@ async def test_contributors_add_list_change_remove(registry, db, org, admin_user
     assert people[1]["name"] == "Alice A" and people[1]["can_edit"] is True
     assert people[1]["email"] == "alice@test.com"  # managers see emails
     assert "contributors" in listed["untrusted_fields"]
-    assert listed["contributors_url"].endswith("/dash/courses/course/test/contributors")
+    assert listed["contributors_url"].endswith("/cabinet/courses/course/test/contributors")
 
     again = ok(await call(registry, approved, "manage_course_contributors", {
         "course_uuid": course.course_uuid, "add": ["alice"],

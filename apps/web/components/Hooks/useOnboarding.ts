@@ -7,7 +7,7 @@ export type OnboardingStep = {
   title: string
   description: string
   // CTA label + where it goes. `hrefType: 'root'` targets the org's public site
-  // (the shareable school), everything else is a /dash/* path.
+  // (the shareable school), everything else is a /cabinet/* path.
   action: string
   href: string
   hrefType?: 'org' | 'root'
@@ -46,7 +46,7 @@ const DEFAULT_STEPS: Omit<OnboardingStep, 'completed'>[] = [
     title: 'Your first course is live',
     description: 'Publish a course so there’s something real for learners to enroll in.',
     action: 'Create a course',
-    href: '/dash/courses?new=true',
+    href: '/cabinet/courses?new=true',
     video: 'ob2',
     minutes: 2,
   },
@@ -55,7 +55,7 @@ const DEFAULT_STEPS: Omit<OnboardingStep, 'completed'>[] = [
     title: 'A lesson worth showing up for',
     description: 'Add a video, page or quiz to give learners a real reason to enroll.',
     action: 'Add content',
-    href: '/dash/courses',
+    href: '/cabinet/courses',
     video: 'ob3',
     minutes: 5,
   },
@@ -64,7 +64,7 @@ const DEFAULT_STEPS: Omit<OnboardingStep, 'completed'>[] = [
     title: 'A school learners trust',
     description: 'Add your logo and colors so it looks like a credible, professional school.',
     action: 'Brand it',
-    href: '/dash/org/settings/branding',
+    href: '/cabinet/org/settings/branding',
     video: 'ob4',
     minutes: 2,
   },
@@ -84,7 +84,7 @@ const DEFAULT_STEPS: Omit<OnboardingStep, 'completed'>[] = [
     title: 'Welcome your first learner',
     description: 'Share your join link or invite people to get that first learner through the door.',
     action: 'Invite learners',
-    href: '/dash/users/settings/add',
+    href: '/cabinet/users/settings/add',
     video: 'ob6',
     minutes: 2,
   },
@@ -93,7 +93,7 @@ const DEFAULT_STEPS: Omit<OnboardingStep, 'completed'>[] = [
     title: 'Keep learners coming back',
     description: 'Open a community space so your learners stay active and bring their friends.',
     action: 'Open community',
-    href: '/dash/communities',
+    href: '/cabinet/communities',
     video: 'ob7',
     minutes: 2,
   },

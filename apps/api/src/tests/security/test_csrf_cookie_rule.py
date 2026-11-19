@@ -112,7 +112,7 @@ def test_foreign_referer_with_cookie_rejected():
 
 def test_allowed_referer_with_cookie_passes():
     result, _ = _run(
-        _middleware(), _request({"referer": "https://app.example.com/dash"}, COOKIE)
+        _middleware(), _request({"referer": "https://app.example.com/cabinet"}, COOKIE)
     )
     assert result == "ok"
 

@@ -235,7 +235,7 @@ async def _list_members(ctx: ToolContext, p: ListMembersParams):
         offset=offset,
         limit=p.limit,
         total=result.get("total"),
-        manage_url=await _dash_url(ctx, "/dash/users/settings/users"),
+        manage_url=await _dash_url(ctx, "/cabinet/users/settings/users"),
     )
     # Names and usernames are written by the members themselves.
     return untrusted(out, "items") if items else out
@@ -268,7 +268,7 @@ async def _list_invited(ctx: ToolContext, p: ListMembersParams):
             }
         )
     items.sort(key=lambda i: i["invited_at"] or "", reverse=True)
-    return page_of(items, p, manage_url=await _dash_url(ctx, "/dash/users/settings/users"))
+    return page_of(items, p, manage_url=await _dash_url(ctx, "/cabinet/users/settings/users"))
 
 
 # ─── get_member ──────────────────────────────────────────────────────────────
@@ -432,7 +432,7 @@ async def _invite_members(ctx: ToolContext, p: InviteMembersParams):
         "summary": "; ".join(parts) + ".",
         "results": results,
         "counts": counts,
-        "manage_url": await _dash_url(ctx, "/dash/users/settings/users"),
+        "manage_url": await _dash_url(ctx, "/cabinet/users/settings/users"),
     }
 
 
@@ -485,7 +485,7 @@ async def _list_invite_codes(ctx: ToolContext, _p: ListInviteCodesParams):
         total=len(items),
         max_links=MAX_INVITE_CODES,
         remaining=max(0, MAX_INVITE_CODES - len(items)),
-        manage_url=await _dash_url(ctx, "/dash/users/settings/signups"),
+        manage_url=await _dash_url(ctx, "/cabinet/users/settings/signups"),
     )
 
 

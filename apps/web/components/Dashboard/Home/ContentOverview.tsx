@@ -95,7 +95,7 @@ export default function ContentOverview() {
       icon: BookOpen,
       iconColor: 'text-blue-500',
       iconBg: 'bg-blue-50',
-      href: '/dash/courses',
+      href: '/cabinet/courses',
       show: true,
     },
     {
@@ -105,7 +105,7 @@ export default function ContentOverview() {
       icon: Users,
       iconColor: 'text-indigo-500',
       iconBg: 'bg-indigo-50',
-      href: '/dash/users/settings/users',
+      href: '/cabinet/users/settings/users',
       show: true,
     },
     {
@@ -115,7 +115,7 @@ export default function ContentOverview() {
       icon: ChatCircle,
       iconColor: 'text-violet-500',
       iconBg: 'bg-violet-50',
-      href: '/dash/communities',
+      href: '/cabinet/communities',
       show: communitiesEnabled,
     },
     {
@@ -125,7 +125,7 @@ export default function ContentOverview() {
       icon: Microphone,
       iconColor: 'text-amber-500',
       iconBg: 'bg-amber-50',
-      href: '/dash/podcasts',
+      href: '/cabinet/podcasts',
       show: podcastsEnabled,
     },
     {
@@ -135,7 +135,7 @@ export default function ContentOverview() {
       icon: Chalkboard,
       iconColor: 'text-rose-500',
       iconBg: 'bg-rose-50',
-      href: '/dash/boards',
+      href: '/cabinet/boards',
       show: boardsEnabled,
     },
   ]

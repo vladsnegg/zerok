@@ -264,15 +264,15 @@ _PATHS = {
     "discussion": "/community/{community}/discussion/{discussion}",
     "folder": "/library/folder/{folder}",
     "playground": "/playground/{playground}",
-    "board": "/dash/boards/{board}/general",
+    "board": "/cabinet/boards/{board}/general",
     "path": "/path/{path}",
-    "path_editor": "/dash/paths/path/{path}/general",
-    "assignment": "/dash/assignments/{assignment}",
-    "course_editor": "/dash/courses/course/{course}/content",
+    "path_editor": "/cabinet/paths/path/{path}/general",
+    "assignment": "/cabinet/assignments/{assignment}",
+    "course_editor": "/cabinet/courses/course/{course}/content",
     "activity_editor": "/course/{course}/activity/{activity}/edit",
     "user": "/user/{username}",
-    "usergroup": "/dash/users/settings/usergroups",
-    "role": "/dash/users/settings/roles",
+    "usergroup": "/cabinet/users/settings/usergroups",
+    "role": "/cabinet/users/settings/roles",
 }
 
 

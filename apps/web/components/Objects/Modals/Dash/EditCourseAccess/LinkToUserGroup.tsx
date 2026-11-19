@@ -81,7 +81,7 @@ function LinkToUserGroup(props: LinkToUserGroupProps) {
                 {usergroups?.length == 0 &&
                     <div className='flex space-x-3 items-center'>
                         <span className='px-3 text-yellow-700 font-bold rounded-full py-1 mx-3'>{t('dashboard.courses.access.usergroups.modals.no_usergroups')} </span>
-                        <Link className='px-3 text-blue-700 font-bold rounded-full py-1 bg-blue-100 mx-1' target='_blank' href={getUriWithOrg(org.slug, '/dash/users/settings/usergroups')}>{t('dashboard.courses.access.usergroups.modals.create_usergroup')}</Link>
+                        <Link className='px-3 text-blue-700 font-bold rounded-full py-1 bg-blue-100 mx-1' target='_blank' href={getUriWithOrg(org.slug, '/cabinet/users/settings/usergroups')}>{t('dashboard.courses.access.usergroups.modals.create_usergroup')}</Link>
                     </div>}
                 <div className='py-3'>
                     <button onClick={() => { handleLink() }} className='bg-green-700 text-white font-bold px-4 py-2 rounded-md shadow-sm'>{t('dashboard.courses.access.usergroups.modals.link_button')}</button>

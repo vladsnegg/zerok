@@ -13,9 +13,10 @@ type AuthorizationProps = {
   authorizationMode: 'component' | 'page';
 };
 
-// This component wraps the whole dashboard layout, so gate all of it: the old
-// allow-list named 3 sections and left /dash plus 10 others open to any member.
-const ADMIN_PATH_PREFIX = '/dash';
+// This component wraps the whole cabinet layout, so gate everything below the
+// cabinet home: the root `/cabinet` stays open to learners (it is their home),
+// while `/cabinet/…` management pages require dashboard access.
+const ADMIN_PATH_PREFIX = '/cabinet';
 
 const AdminAuthorization: React.FC<AuthorizationProps> = ({ children, authorizationMode }) => {
   const session = useLHSession() as any;
@@ -33,8 +34,9 @@ const AdminAuthorization: React.FC<AuthorizationProps> = ({ children, authorizat
 
   const isAdminPath = useMemo(() => {
     if (typeof pathname !== 'string') return false;
-    // The trailing check keeps a hypothetical sibling like /dashboard out.
-    return pathname === ADMIN_PATH_PREFIX || pathname.startsWith(`${ADMIN_PATH_PREFIX}/`);
+    // Only sub-pages of the cabinet are management surfaces; the exact root is
+    // excluded, so the cabinet home stays open to learners and instructors.
+    return pathname.startsWith(`${ADMIN_PATH_PREFIX}/`);
   }, [pathname]);
 
   const authorizeUser = useCallback(() => {
@@ -55,7 +57,7 @@ const AdminAuthorization: React.FC<AuthorizationProps> = ({ children, authorizat
 
     if (authorizationMode === 'page') {
       if (isAdminPath) {
-        // No redirect on denial: pushing to /dash raced the render below, so the
+        // No redirect on denial: pushing to /cabinet raced the render below, so the
         // message only flashed and the user never learned why.
         setIsAuthorized(isAdmin === true);
       } else {

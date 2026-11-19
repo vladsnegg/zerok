@@ -78,12 +78,12 @@ const AdminEditOptions: React.FC<AdminEditOptionsProps> = ({ course, orgslug, de
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-56">
             <DropdownMenuItem asChild>
-              <Link prefetch href={getUriWithOrg(orgslug, `/dash/courses/course/${removeCoursePrefix(course.course_uuid)}/content`)}>
+              <Link prefetch href={getUriWithOrg(orgslug, `/cabinet/courses/course/${removeCoursePrefix(course.course_uuid)}/content`)}>
                 <FilePenLine className="me-2 h-4 w-4" /> {t('courses.edit_content')}
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
-              <Link prefetch href={getUriWithOrg(orgslug, `/dash/courses/course/${removeCoursePrefix(course.course_uuid)}/general`)}>
+              <Link prefetch href={getUriWithOrg(orgslug, `/cabinet/courses/course/${removeCoursePrefix(course.course_uuid)}/general`)}>
                 <Settings2 className="me-2 h-4 w-4" /> {t('common.settings')}
               </Link>
             </DropdownMenuItem>

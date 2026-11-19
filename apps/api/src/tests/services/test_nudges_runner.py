@@ -142,7 +142,7 @@ class TestSending:
 
         kwargs = sender.call_args.kwargs
         assert kwargs["nudge_id"] == "activation.first_course_d1"
-        assert kwargs["cta_url"] == "https://test-org.test/dash/courses"
+        assert kwargs["cta_url"] == "https://test-org.test/cabinet/courses"
         assert kwargs["unsubscribe_url"].startswith(
             "https://api.test/api/v1/emails/unsubscribe?token="
         )

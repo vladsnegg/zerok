@@ -53,7 +53,7 @@ export default function LibraryHeader({
 
   return (
     <div className="flex flex-col space-y-2 pt-6">
-      <Breadcrumbs items={[{ label: t('library.library'), href: '/dash/library', icon: <FolderSimple size={14} /> }]} />
+      <Breadcrumbs items={[{ label: t('library.library'), href: '/cabinet/library', icon: <FolderSimple size={14} /> }]} />
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
         <h1 className="pt-3 font-bold text-3xl sm:text-4xl">{t('library.library')}</h1>
         <AuthenticatedClientElement checkMethod="roles" action="create" ressourceType={'folders' as any} orgId={org_id}>

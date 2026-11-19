@@ -40,7 +40,7 @@ function PathThumbnail({ path, orgslug, isDashboard = false }: PropsType) {
 
   const shortUuid = removePathPrefix(path.path_uuid)
   const pathLink = isDashboard
-    ? getUriWithOrg(orgslug, `/dash/paths/path/${shortUuid}/general`)
+    ? getUriWithOrg(orgslug, `/cabinet/paths/path/${shortUuid}/general`)
     : getUriWithOrg(orgslug, `/path/${shortUuid}`)
 
   const handleDelete = async () => {
@@ -178,12 +178,12 @@ function AdminEditOptions({
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-52">
             <DropdownMenuItem asChild>
-              <Link prefetch href={getUriWithOrg(orgslug, `/dash/paths/path/${shortUuid}/courses`)} className="flex items-center cursor-pointer">
+              <Link prefetch href={getUriWithOrg(orgslug, `/cabinet/paths/path/${shortUuid}/courses`)} className="flex items-center cursor-pointer">
                 <FilePenLine className="me-2 h-4 w-4" /> {t('paths.edit_courses')}
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
-              <Link prefetch href={getUriWithOrg(orgslug, `/dash/paths/path/${shortUuid}/general`)} className="flex items-center cursor-pointer">
+              <Link prefetch href={getUriWithOrg(orgslug, `/cabinet/paths/path/${shortUuid}/general`)} className="flex items-center cursor-pointer">
                 <Settings2 className="me-2 h-4 w-4" /> {t('common.settings')}
               </Link>
             </DropdownMenuItem>

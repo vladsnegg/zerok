@@ -521,7 +521,7 @@ export default function OrganizationList() {
                 </td>
                 <td className="px-4 py-3">
                   <a
-                    href={safeHref(`${orgUrl}/dash`)}
+                    href={safeHref(`${orgUrl}/cabinet`)}
                     rel="noopener"
                     className="inline-flex items-center gap-1.5 text-xs text-white/40 hover:text-white hover:bg-white/[0.08] px-2.5 py-1.5 rounded-lg transition-colors"
                     title={t('admin.org_list.open_dashboard')}

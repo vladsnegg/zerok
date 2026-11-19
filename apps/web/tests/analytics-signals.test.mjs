@@ -188,9 +188,13 @@ describe("isTrackedPagePath", () => {
   });
 
   test("dashboard, editor and super-admin pages don't", () => {
-    for (const p of ["/dash", "/dash/courses", "/orgs/acme/dash/analytics", "/editor/course/x/activity/y/edit", "/admin", "/admin/orgs"]) {
+    for (const p of ["/cabinet/courses", "/cabinet/org/settings/general", "/orgs/acme/cabinet/analytics", "/editor/course/x/activity/y/edit", "/admin", "/admin/orgs"]) {
       expect(isTrackedPagePath(p)).toBe(false);
     }
+  });
+
+  test("the cabinet root is the learners' home and stays tracked", () => {
+    expect(isTrackedPagePath("/cabinet")).toBe(true);
   });
 });
 

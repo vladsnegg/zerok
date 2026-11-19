@@ -54,7 +54,7 @@ export function CreatePathModal({ isOpen, onClose, orgId, orgSlug }: CreatePathM
         onClose()
         // Courses are the first thing a new path needs.
         router.push(
-          getUriWithOrg(orgSlug, `/dash/paths/path/${removePathPrefix(result.data.path_uuid)}/courses`)
+          getUriWithOrg(orgSlug, `/cabinet/paths/path/${removePathPrefix(result.data.path_uuid)}/courses`)
         )
       } else if (handlePlanLimit(result, { source: 'path_create', feature: 'paths', requiredPlan: 'pro' })) {
         onClose()

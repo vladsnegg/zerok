@@ -318,7 +318,7 @@ function ChapterElement(props: ChapterElementProps) {
               {dripSummary && (
                 <ToolTip content={t('dashboard.courses.structure.chapter_element.drip_tooltip', 'Release schedule: edit it in the Schedule tab')} side="top">
                   <Link
-                    href={getUriWithOrg(props.orgslug, '') + `/dash/courses/course/${cleanCourseUuid(props.course_uuid)}/schedule`}
+                    href={getUriWithOrg(props.orgslug, '') + `/cabinet/courses/course/${cleanCourseUuid(props.course_uuid)}/schedule`}
                     data-testid="chapter-drip-chip"
                     className="flex items-center gap-1 h-7 px-2 rounded-md bg-amber-50 text-amber-700 ring-1 ring-amber-200 text-xs font-semibold hover:bg-amber-100"
                   >

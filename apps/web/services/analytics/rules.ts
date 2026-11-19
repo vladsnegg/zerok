@@ -3,8 +3,9 @@
  * unit tested on their own.
  */
 
-// Dashboard, editor and super-admin pages are staff at work, not traffic.
-const STAFF_PATH = /(^|\/)(dash|editor)(\/|$)|^\/admin(\/|$)/
+// Editor, cabinet management pages and super-admin pages are staff at work,
+// not traffic. The cabinet root itself is the learners' home and stays tracked.
+const STAFF_PATH = /(^|\/)editor(\/|$)|(^|\/)cabinet\/|^\/admin(\/|$)/
 
 /** Whether a page view on `pathname` counts toward an org's traffic. */
 export function isTrackedPagePath(pathname: string): boolean {

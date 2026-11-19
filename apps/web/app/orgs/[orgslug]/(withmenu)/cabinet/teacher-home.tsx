@@ -23,6 +23,11 @@ import { RequestBodyWithAuthHeader, asArray } from '@services/utils/ts/requests'
 import { getOrgCourses } from '@services/courses/courses'
 import { isOrgAnalyticsAvailable } from '@ee/components/Analytics/availability'
 import RecentCourses from '@components/Dashboard/Home/RecentCourses'
+import OnboardingHomeCard from '@components/Dashboard/Onboarding/OnboardingHomeCard'
+import ContentOverview from '@components/Dashboard/Home/ContentOverview'
+import RecentMembers from '@components/Dashboard/Home/RecentMembers'
+import UsageOverview from '@components/Dashboard/Home/UsageOverview'
+import QuickStats from '@ee/components/Analytics/Home/QuickStats'
 
 type CalendarEvent = any
 
@@ -92,22 +97,22 @@ export default function TeacherCabinetHome({ orgslug }: { orgslug: string }) {
 
   const quickLinks = [
     {
-      href: '/dash/courses',
+      href: '/cabinet/courses',
       label: t('cabinet.teacher_link_courses', { defaultValue: 'Courses' }),
       Icon: BookOpen,
     },
     {
-      href: '/dash/assignments',
+      href: '/cabinet/assignments',
       label: t('cabinet.teacher_link_assignments', { defaultValue: 'Assignments' }),
       Icon: ClipboardList,
     },
     {
-      href: '/dash/boards',
+      href: '/cabinet/boards',
       label: t('cabinet.teacher_link_boards', { defaultValue: 'Boards' }),
       Icon: ChartNoAxesColumn,
     },
     {
-      href: '/dash',
+      href: '/cabinet',
       label: t('cabinet.teacher_link_dashboard', { defaultValue: 'Full dashboard' }),
       Icon: LayoutDashboard,
     },
@@ -133,7 +138,7 @@ export default function TeacherCabinetHome({ orgslug }: { orgslug: string }) {
         </div>
         <div className="flex flex-wrap items-center gap-2">
           <Link
-            href={getUriWithOrg(orgslug, '/dash/courses?new=true')}
+            href={getUriWithOrg(orgslug, '/cabinet/courses?new=true')}
             className="inline-flex items-center gap-2 rounded-lg bg-black px-4 py-2 text-sm font-bold text-white hover:bg-black/85"
           >
             <PlusCircle size={16} />
@@ -141,7 +146,7 @@ export default function TeacherCabinetHome({ orgslug }: { orgslug: string }) {
           </Link>
           {isOrgAnalyticsAvailable() && (
             <Link
-              href={getUriWithOrg(orgslug, '/dash/analytics')}
+              href={getUriWithOrg(orgslug, '/cabinet/analytics')}
               className="inline-flex items-center gap-2 rounded-lg border border-neutral-200 bg-white px-4 py-2 text-sm font-semibold text-black/70 hover:text-black"
             >
               <ChartNoAxesColumn size={16} />
@@ -150,7 +155,7 @@ export default function TeacherCabinetHome({ orgslug }: { orgslug: string }) {
           )}
           {canManageOrg && (
             <Link
-              href={getUriWithOrg(orgslug, '/dash/users/settings/users')}
+              href={getUriWithOrg(orgslug, '/cabinet/users/settings/users')}
               className="inline-flex items-center gap-2 rounded-lg border border-neutral-200 bg-white px-4 py-2 text-sm font-semibold text-black/70 hover:text-black"
             >
               <Users size={16} />
@@ -270,6 +275,24 @@ export default function TeacherCabinetHome({ orgslug }: { orgslug: string }) {
           </section>
         </aside>
       </div>
+
+      {/* Org-management widgets: admins only. Instructors do not hold the
+          users/organizations rights these panels need. */}
+      {canManageOrg && (
+        <div className="mt-10 space-y-6">
+          <OnboardingHomeCard />
+          <ContentOverview />
+          <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+            <div className="lg:col-span-2">
+              <RecentMembers />
+            </div>
+            <div className="space-y-6">
+              <UsageOverview />
+              {isOrgAnalyticsAvailable() && <QuickStats />}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

@@ -176,7 +176,7 @@ async def test_create_assignment_with_every_task_type(registry, db, org, admin_u
     out = await _create(registry, db, org, admin_user, tasks, due_date="2030-01-31", grading_type="pass_fail")
     assert out["ok"] is True
     assert out["assignment"]["kind"] == "assignment"
-    assert out["assignment"]["url"].startswith("https://acme.test/dash/assignments/")
+    assert out["assignment"]["url"].startswith("https://acme.test/cabinet/assignments/")
     assert len(out["tasks"]) == 7 and out["tasks"][0]["kind"] == "assignment_task"
 
     a = (await db.execute(select(Assignment))).scalars().one()
@@ -480,7 +480,7 @@ async def test_get_submission(registry, db, org, admin_user, regular_user, assig
     assert "note" in out and out["status"] == "submitted"
     task = out["tasks"][0]
     assert task["answer"] == "4" and task["grade"] == 100 and task["feedback"] == "Correct"
-    assert out["grading_url"].endswith("/dash/assignments/test")
+    assert out["grading_url"].endswith("/cabinet/assignments/test")
 
     own = ok(await call(registry, ctx_for(db, org, regular_user), "get_submission", {"assignment_uuid": "assignment_test", "user_uuid": "user_regular"}))
     assert own["tasks"][0]["answer"] == "4" and "grading_url" not in own

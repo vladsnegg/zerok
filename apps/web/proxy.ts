@@ -343,6 +343,13 @@ export default async function proxy(req: NextRequest) {
     return NextResponse.rewrite(new URL(`/welcome${search}`, req.url))
   }
 
+  // The dashboard moved under the cabinet: send every legacy /dash link there
+  // so bookmarks, emails and docs keep working.
+  if (pathname === '/dash' || pathname.startsWith('/dash/')) {
+    const target = pathname === '/dash' ? '/cabinet' : `/cabinet${pathname.slice('/dash'.length)}`
+    return NextResponse.redirect(new URL(`${target}${search}`, req.url))
+  }
+
   // Registration is a top-level auth page, not org content.
   if (pathname === '/register') {
     return NextResponse.rewrite(new URL(`/auth/register${search}`, req.url))

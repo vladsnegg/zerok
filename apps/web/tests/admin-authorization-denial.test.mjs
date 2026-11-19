@@ -1,8 +1,8 @@
 // Three faults this pins down:
 //
 // 1. ADMIN_PATHS named 3 sections while AdminAuthorization wraps the whole dash
-//    layout, so /dash and 10 other sections were reachable by any member.
-// 2. Denial set isAuthorized(false) *and* router.push('/dash'), so the message
+//    layout, so /cabinet and 10 other sections were reachable by any member.
+// 2. Denial set isAuthorized(false) *and* router.push('/cabinet'), so the message
 //    flashed for a frame and the user was bounced with no explanation.
 // 3. isAuthorized started at `false` while the decision is made in an effect,
 //    which runs after the commit, so the denial surface painted for a frame on
@@ -18,12 +18,12 @@ const COMPONENT_DIR = join(import.meta.dir, "..", "components", "Security");
 const SOURCE = readFileSync(join(COMPONENT_DIR, "AdminAuthorization.tsx"), "utf8");
 
 // Mirrors the component's isAdminPath so the gate can be exercised directly.
-const PREFIX = "/dash";
+const PREFIX = "/cabinet";
 const isAdminPath = (pathname) =>
   pathname === PREFIX || pathname.startsWith(`${PREFIX}/`);
 
 describe("every dash section is gated", () => {
-  // The sections that exist under app/orgs/[orgslug]/dash. Only 3 were listed
+  // The sections that exist under app/orgs/[orgslug]/cabinet. Only 3 were listed
   // before; the rest fell through to the "not an admin path" branch.
   const SECTIONS = [
     "analytics", "assignments", "boards", "communities", "courses",
@@ -31,13 +31,13 @@ describe("every dash section is gated", () => {
     "playgrounds", "podcasts", "users",
   ];
 
-  test("/dash itself is gated", () => {
-    expect(isAdminPath("/dash")).toBe(true);
+  test("/cabinet itself is gated", () => {
+    expect(isAdminPath("/cabinet")).toBe(true);
   });
 
-  test.each(SECTIONS)("/dash/%s is gated", (section) => {
-    expect(isAdminPath(`/dash/${section}`)).toBe(true);
-    expect(isAdminPath(`/dash/${section}/nested/page`)).toBe(true);
+  test.each(SECTIONS)("/cabinet/%s is gated", (section) => {
+    expect(isAdminPath(`/cabinet/${section}`)).toBe(true);
+    expect(isAdminPath(`/cabinet/${section}/nested/page`)).toBe(true);
   });
 
   test("paths outside the dashboard are untouched", () => {

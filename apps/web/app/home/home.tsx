@@ -399,7 +399,7 @@ function OrgRow({ org, access_token }: { org: any; access_token: string }) {
             <>
               <DropdownMenuItem asChild>
                 <Link
-                  href={getUriWithOrg(org.slug, '/dash/org/settings/general')}
+                  href={getUriWithOrg(org.slug, '/cabinet/org/settings/general')}
                   className="flex items-center space-x-2"
                 >
                   <Settings size={14} />

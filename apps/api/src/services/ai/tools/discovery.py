@@ -128,7 +128,7 @@ async def _get_context(ctx: ToolContext, _p: GetContextParams):
             "uuid": ctx.org.org_uuid,
             "plan": _plan(config),
             "url": base or None,
-            "dashboard_url": f"{base}/dash" if base else None,
+            "dashboard_url": f"{base}/cabinet" if base else None,
         },
         "caller": caller,
         "connection": {

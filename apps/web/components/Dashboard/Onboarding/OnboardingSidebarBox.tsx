@@ -23,7 +23,7 @@ export default function OnboardingSidebarBox() {
   if (dismissed || !welcomeSeen || allCompleted || !currentStep) return null
 
   const completedCount = steps.filter((s) => s.completed).length
-  const href = getUriWithOrg(orgSlug, '/dash/onboarding')
+  const href = getUriWithOrg(orgSlug, '/cabinet/onboarding')
 
   return (
     <motion.div

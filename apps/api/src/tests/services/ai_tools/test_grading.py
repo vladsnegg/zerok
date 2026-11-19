@@ -538,7 +538,7 @@ async def test_list_assignments_counts_submissions_for_instructors(registry, db,
 async def test_learner_link_needs_an_activity(db, org, regular_user, course):
     ctx = ctx_for(db, org, regular_user)
     assert await assignments._assignment_url(ctx, "assignment_x", course, None, False) is None
-    assert await assignments._assignment_url(ctx, "assignment_x", None, None, True) == "https://acme.test/dash/assignments/x"
+    assert await assignments._assignment_url(ctx, "assignment_x", None, None, True) == "https://acme.test/cabinet/assignments/x"
 
 
 async def test_assignment_whose_course_is_gone(registry, db, org, admin_user, assignment):

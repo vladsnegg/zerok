@@ -245,7 +245,7 @@ export const HeaderProfileBox = ({ primaryColor = '' }: { primaryColor?: string 
                 <DropdownMenuSeparator />
                 {rights?.dashboard?.action_access && (
                   <DropdownMenuItem asChild>
-                    <Link href="/dash" className="flex items-center space-x-2">
+                    <Link href="/cabinet" className="flex items-center space-x-2">
                       <Shield size={16} weight="fill" />
                       <span>{t('common.dashboard')}</span>
                     </Link>

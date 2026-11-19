@@ -51,7 +51,7 @@ export default function RecentCourses() {
           )}
         </div>
         <Link
-          href="/dash/courses"
+          href="/cabinet/courses"
           className="text-[11px] font-medium text-gray-400 hover:text-gray-600 transition-colors"
         >
           {t('dashboard.home.view_all')} &rarr;
@@ -82,7 +82,7 @@ export default function RecentCourses() {
             </div>
             <p className="text-xs text-gray-400 mb-3">{t('dashboard.home.no_courses_yet')}</p>
             <Link
-              href="/dash/courses?new=true"
+              href="/cabinet/courses?new=true"
               className="inline-flex items-center gap-1.5 text-xs font-medium text-blue-600 hover:text-blue-700"
             >
               <PlusCircle size={14} weight="bold" />
@@ -113,7 +113,7 @@ export default function RecentCourses() {
               <Link
                 key={course.course_uuid}
                 prefetch={false}
-                href={`/dash/courses/course/${courseId}/general`}
+                href={`/cabinet/courses/course/${courseId}/general`}
                 className="flex items-center gap-3 px-5 py-3 hover:bg-gray-50 transition-colors group"
               >
                 <div className="w-10 h-10 rounded-lg bg-gray-100 overflow-hidden shrink-0 flex items-center justify-center">

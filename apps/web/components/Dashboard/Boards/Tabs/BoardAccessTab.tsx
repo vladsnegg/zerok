@@ -278,7 +278,7 @@ function LinkUserGroupToBoard({ boardUuid, orgId, accessToken, setModalOpen }: {
             <Link
               className="px-3 text-blue-700 font-bold rounded-full py-1 bg-blue-100 mx-1"
               target="_blank"
-              href={getUriWithOrg(org?.slug, '/dash/users/settings/usergroups')}
+              href={getUriWithOrg(org?.slug, '/cabinet/users/settings/usergroups')}
             >
               {t('boards.access.create_user_group')}
             </Link>

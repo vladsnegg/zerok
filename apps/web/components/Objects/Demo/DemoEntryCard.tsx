@@ -86,7 +86,7 @@ export default function DemoEntryCard({ className = '' }: { className?: string }
       const result = await enterDemo(session?.data?.tokens?.access_token)
       // Full navigation rather than a client push: the demo lives on its own
       // org path, and the session's roles were just invalidated server-side.
-      window.location.href = getUriWithOrg(result.org_slug, '/dash')
+      window.location.href = getUriWithOrg(result.org_slug, '/cabinet')
     } catch {
       toast.error(
         t('demo.entry_busy', {

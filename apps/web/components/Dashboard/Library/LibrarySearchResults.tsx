@@ -92,7 +92,7 @@ export default function LibrarySearchResults({ results, isLoading, orgslug, org_
                     course={resource}
                     orgslug={orgslug}
                     isDashboard
-                    customLink={getUriWithOrg(orgslug, `/dash/courses/course/${removeCoursePrefix(resource.course_uuid || item.resource_uuid)}/general`)}
+                    customLink={getUriWithOrg(orgslug, `/cabinet/courses/course/${removeCoursePrefix(resource.course_uuid || item.resource_uuid)}/general`)}
                   />
                 ) : (
                   <LibraryItemCard item={item} orgslug={orgslug} org_id={org_id} onRemove={() => removeItem(item)} />

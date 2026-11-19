@@ -86,7 +86,7 @@ function CreatePodcastModal({ closeModal, orgslug }: any) {
           closeModal()
           // Redirect to the podcast dashboard
           const podcastId = res.data.podcast_uuid?.replace('podcast_', '') || res.data.podcast_uuid
-          router.push(`/dash/podcasts/podcast/${podcastId}/general`)
+          router.push(`/cabinet/podcasts/podcast/${podcastId}/general`)
         } else {
           toast.dismiss(toast_loading)
           // Podcasts are gated on the free plan → offer an upgrade at the

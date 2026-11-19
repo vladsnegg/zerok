@@ -224,7 +224,7 @@ async def test_learner_search_skips_drafts_and_other_orgs(db, org, regular_user,
     assert not found & FOREIGN
     assert not found & {"activity_cells_draft", "assignment_cells_draft", "chapter_secret", "activity_secret", "course_secret"}
     quiz = next(m for m in out["matches"] if m["uuid"] == "assignment_cells")
-    assert quiz["in"]["uuid"] == "course_bio" and quiz["url"].endswith("/dash/assignments/cells")
+    assert quiz["in"]["uuid"] == "course_bio" and quiz["url"].endswith("/cabinet/assignments/cells")
 
 
 async def test_admin_search_sees_drafts_but_not_other_orgs(db, org, admin_user, registry, cells):

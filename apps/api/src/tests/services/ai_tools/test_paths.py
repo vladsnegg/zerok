@@ -181,7 +181,7 @@ async def test_create_path_as_draft_with_courses_by_id_and_name(registry, db, or
     assert out["path"]["status"] == "draft"
     uuid = out["path"]["uuid"]
     assert out["path"]["url"] == f"{BASE}/path/{uuid.removeprefix('path_')}"
-    assert out["editor_url"].endswith(f"/dash/paths/path/{uuid.removeprefix('path_')}/general")
+    assert out["editor_url"].endswith(f"/cabinet/paths/path/{uuid.removeprefix('path_')}/general")
     assert [(c["uuid"], c["required"]) for c in out["courses"]] == [
         ("course_python", True), ("course_data", True), ("course_viz", False),
     ]

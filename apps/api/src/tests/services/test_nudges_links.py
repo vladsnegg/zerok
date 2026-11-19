@@ -59,7 +59,7 @@ class TestCoursePrefixTrap:
 
     def test_course_urls_use_the_bare_uuid(self):
         assert course_editor_url(BASE, "course_abc123") == (
-            f"{BASE}/dash/courses/course/abc123/content"
+            f"{BASE}/cabinet/courses/course/abc123/content"
         )
         assert public_course_url(BASE, "course_abc123") == f"{BASE}/course/abc123"
 
@@ -90,7 +90,7 @@ class TestRouteShapes:
         assert url.endswith("/a%20b%2Fc/content")
 
     def test_settings_subpage_is_quoted(self):
-        assert org_settings_url(BASE, "general").endswith("/dash/org/settings/general")
+        assert org_settings_url(BASE, "general").endswith("/cabinet/org/settings/general")
 
 
 class TestUnsubscribeUrl:

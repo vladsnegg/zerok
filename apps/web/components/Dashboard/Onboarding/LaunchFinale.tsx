@@ -10,9 +10,9 @@ import { useLHAnalytics, AnalyticsEvent } from '@services/analytics'
 import { isOrgAnalyticsAvailable } from '@ee/components/Analytics/availability'
 
 const NEXT = [
-  { key: 'certificates', icon: Certificate, href: '/dash/courses' },
-  { key: 'analytics', icon: ChartLineUp, href: '/dash/analytics' },
-  { key: 'next_course', icon: PlusCircle, href: '/dash/courses?new=true' },
+  { key: 'certificates', icon: Certificate, href: '/cabinet/courses' },
+  { key: 'analytics', icon: ChartLineUp, href: '/cabinet/analytics' },
+  { key: 'next_course', icon: PlusCircle, href: '/cabinet/courses?new=true' },
 ]
 
 /** The end of setup: the school is live, here is its link, here is what's next. */
@@ -75,7 +75,7 @@ export default function LaunchFinale() {
         </div>
         <div className="border-t border-gray-100 px-5 py-3">
           <Link
-            href={getUriWithOrg(orgSlug, '/dash')}
+            href={getUriWithOrg(orgSlug, '/cabinet')}
             onClick={() => {
               track(AnalyticsEvent.OnboardingFinished)
               dismiss()

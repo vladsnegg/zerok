@@ -18,7 +18,7 @@ export default function OnboardingHomeCard() {
   const org = useOrg() as any
   if (dismissed || !welcomeSeen || allCompleted || !currentStep) return null
 
-  const href = getUriWithOrg(org?.slug || '', '/dash/onboarding')
+  const href = getUriWithOrg(org?.slug || '', '/cabinet/onboarding')
   const done = steps.filter((s) => s.completed).length
 
   return (

@@ -235,10 +235,10 @@ function ActivityElement(props: ActivitiyElementProps) {
     ? getUriWithOrg(org?.slug || props.orgslug, '') +
       `/course/${course?.courseStructure.course_uuid.replace('course_', '')}/activity/${props.activity.activity_uuid.replace('activity_', '')}/edit`
     : props.activity.activity_type === 'TYPE_ASSIGNMENT'
-    ? getUriWithOrg(org?.slug || props.orgslug, '') + `/dash/assignments/${assignmentUUID}`
+    ? getUriWithOrg(org?.slug || props.orgslug, '') + `/cabinet/assignments/${assignmentUUID}`
     : props.activity.activity_type === 'TYPE_LIVE_SESSION' && props.activity.content?.live_session_uuid
     ? getUriWithOrg(org?.slug || props.orgslug, '') +
-      `/dash/live-sessions/session/${String(props.activity.content.live_session_uuid).replace(/^livesession_/, '')}/general`
+      `/cabinet/live-sessions/session/${String(props.activity.content.live_session_uuid).replace(/^livesession_/, '')}/general`
     : null
 
   const previewHref = getUriWithOrg(props.orgslug, '') +

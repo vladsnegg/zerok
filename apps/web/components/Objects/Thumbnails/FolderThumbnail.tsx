@@ -49,7 +49,7 @@ function FolderThumbnail({ folder, orgslug, org_id, isDashboard = false, onChang
     : null
 
   const folderLink = isDashboard
-    ? getUriWithOrg(orgslug, `/dash/library/folder/${cleanUuid}`)
+    ? getUriWithOrg(orgslug, `/cabinet/library/folder/${cleanUuid}`)
     : getUriWithOrg(orgslug, `/library/folder/${cleanUuid}`)
 
   const handleDelete = async () => {

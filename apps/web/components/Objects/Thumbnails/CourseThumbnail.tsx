@@ -311,12 +311,12 @@ const AdminEditOptions = ({ course, orgSlug, deleteCourse, cloneCourse, exportCo
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-52">
             <DropdownMenuItem asChild>
-              <Link prefetch={false} href={getUriWithOrg(orgSlug, `/dash/courses/course/${removeCoursePrefix(course.course_uuid)}/content`)} className="flex items-center cursor-pointer">
+              <Link prefetch={false} href={getUriWithOrg(orgSlug, `/cabinet/courses/course/${removeCoursePrefix(course.course_uuid)}/content`)} className="flex items-center cursor-pointer">
                 <FilePenLine className="me-2 h-4 w-4" /> {t('courses.edit_content')}
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
-              <Link prefetch={false} href={getUriWithOrg(orgSlug, `/dash/courses/course/${removeCoursePrefix(course.course_uuid)}/general`)} className="flex items-center cursor-pointer">
+              <Link prefetch={false} href={getUriWithOrg(orgSlug, `/cabinet/courses/course/${removeCoursePrefix(course.course_uuid)}/general`)} className="flex items-center cursor-pointer">
                 <Settings2 className="me-2 h-4 w-4" /> {t('common.settings')}
               </Link>
             </DropdownMenuItem>

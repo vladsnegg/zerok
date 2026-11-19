@@ -105,7 +105,7 @@ export default function UsageOverview() {
       icon: BookOpen,
       enabled: orgFeatures?.courses?.enabled !== false,
       upgradePlan: null,
-      href: '/dash/courses',
+      href: '/cabinet/courses',
     },
     {
       key: 'communities',
@@ -113,7 +113,7 @@ export default function UsageOverview() {
       icon: ChatCircle,
       enabled: orgFeatures?.communities?.enabled !== false,
       upgradePlan: getOptionalFeatureState(orgFeatures?.communities).upgradePlan,
-      href: '/dash/communities',
+      href: '/cabinet/communities',
     },
     {
       key: 'podcasts',
@@ -121,7 +121,7 @@ export default function UsageOverview() {
       icon: Microphone,
       enabled: orgFeatures?.podcasts?.enabled === true,
       upgradePlan: getOptionalFeatureState(orgFeatures?.podcasts).upgradePlan,
-      href: '/dash/podcasts',
+      href: '/cabinet/podcasts',
     },
     {
       key: 'boards',
@@ -129,7 +129,7 @@ export default function UsageOverview() {
       icon: Chalkboard,
       enabled: orgFeatures?.boards?.enabled === true,
       upgradePlan: getOptionalFeatureState(orgFeatures?.boards).upgradePlan,
-      href: '/dash/boards',
+      href: '/cabinet/boards',
     },
   ]
 

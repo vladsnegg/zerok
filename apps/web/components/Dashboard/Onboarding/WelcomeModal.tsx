@@ -39,7 +39,7 @@ export default function WelcomeModal() {
     track(AnalyticsEvent.OnboardingWelcomeCompleted, { intent: choice ?? 'none' })
     markWelcomeSeen()
     // Relative on purpose: the dashboard is already on the org's host.
-    if (goToPlan) router.push('/dash/onboarding')
+    if (goToPlan) router.push('/cabinet/onboarding')
   }
 
   const primary =

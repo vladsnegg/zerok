@@ -51,17 +51,17 @@ export interface OptionalFeature {
 
 /** In sidebar order. */
 export const OPTIONAL_FEATURES: OptionalFeature[] = [
-  { key: 'paths', href: '/dash/paths', labelKey: 'paths.title', descriptionKey: 'dashboard.organization.features.toggles.paths.description', Icon: Steps },
-  { key: 'folders', href: '/dash/library', labelKey: 'library.library', descriptionKey: 'dashboard.organization.features.toggles.folders.description', Icon: FolderSimple },
-  { key: 'communities', href: '/dash/communities', labelKey: 'communities.title', descriptionKey: 'dashboard.organization.features.toggles.communities.description', Icon: ChatsCircle },
-  { key: 'podcasts', href: '/dash/podcasts', labelKey: 'podcasts.podcasts', descriptionKey: 'dashboard.organization.features.toggles.podcasts.description', Icon: Headphones },
-  { key: 'live_sessions', href: '/dash/live-sessions', labelKey: 'live_sessions.title', descriptionKey: 'dashboard.organization.features.toggles.live_sessions.description', Icon: VideoCamera },
-  { key: 'boards', href: '/dash/boards', labelKey: 'boards.boards', descriptionKey: 'dashboard.organization.features.toggles.boards.description', Icon: ChalkboardSimple },
-  { key: 'playgrounds', href: '/dash/playgrounds', labelKey: 'common.playgrounds', descriptionKey: 'dashboard.organization.features.toggles.playgrounds.description', Icon: Cube },
-  { key: 'payments', href: '/dash/payments/overview', labelKey: 'common.payments', descriptionKey: 'dashboard.organization.features.toggles.payments.description', Icon: CurrencyCircleDollar },
+  { key: 'paths', href: '/cabinet/paths', labelKey: 'paths.title', descriptionKey: 'dashboard.organization.features.toggles.paths.description', Icon: Steps },
+  { key: 'folders', href: '/cabinet/library', labelKey: 'library.library', descriptionKey: 'dashboard.organization.features.toggles.folders.description', Icon: FolderSimple },
+  { key: 'communities', href: '/cabinet/communities', labelKey: 'communities.title', descriptionKey: 'dashboard.organization.features.toggles.communities.description', Icon: ChatsCircle },
+  { key: 'podcasts', href: '/cabinet/podcasts', labelKey: 'podcasts.podcasts', descriptionKey: 'dashboard.organization.features.toggles.podcasts.description', Icon: Headphones },
+  { key: 'live_sessions', href: '/cabinet/live-sessions', labelKey: 'live_sessions.title', descriptionKey: 'dashboard.organization.features.toggles.live_sessions.description', Icon: VideoCamera },
+  { key: 'boards', href: '/cabinet/boards', labelKey: 'boards.boards', descriptionKey: 'dashboard.organization.features.toggles.boards.description', Icon: ChalkboardSimple },
+  { key: 'playgrounds', href: '/cabinet/playgrounds', labelKey: 'common.playgrounds', descriptionKey: 'dashboard.organization.features.toggles.playgrounds.description', Icon: Cube },
+  { key: 'payments', href: '/cabinet/payments/overview', labelKey: 'common.payments', descriptionKey: 'dashboard.organization.features.toggles.payments.description', Icon: CurrencyCircleDollar },
 ]
 
-export const FEATURES_SETTINGS_HREF = '/dash/org/settings/features'
+export const FEATURES_SETTINGS_HREF = '/cabinet/org/settings/features'
 
 export type OptionalFeatureStatus = 'on' | 'off' | 'locked'
 

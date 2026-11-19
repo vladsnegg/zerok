@@ -42,7 +42,7 @@ export default function RecentMembers() {
           )}
         </div>
         <Link
-          href="/dash/users/settings/users"
+          href="/cabinet/users/settings/users"
           className="text-[11px] font-medium text-gray-400 hover:text-gray-600 transition-colors"
         >
           {t('dashboard.home.view_all')} &rarr;

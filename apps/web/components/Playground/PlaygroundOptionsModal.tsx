@@ -375,7 +375,7 @@ function AccessTab({
                 <Lock size={20} className="text-gray-300 mx-auto mb-2" />
                 <p className="text-xs text-gray-400">{t('playgrounds.options.no_groups_linked')}</p>
                 <Link
-                  href={getUriWithOrg(orgslug, '/dash/users/settings/usergroups')}
+                  href={getUriWithOrg(orgslug, '/cabinet/users/settings/usergroups')}
                   target="_blank"
                   className="text-xs text-sky-600 hover:underline mt-1 inline-block"
                 >
@@ -619,7 +619,7 @@ function LinkUserGroupForm({
       <div className="py-6 text-center space-y-2">
         <p className="text-sm text-gray-500">{t('playgrounds.options.no_groups_available')}</p>
         <Link
-          href={getUriWithOrg(orgslug, '/dash/users/settings/usergroups')}
+          href={getUriWithOrg(orgslug, '/cabinet/users/settings/usergroups')}
           target="_blank"
           className="text-sm text-sky-600 hover:underline"
         >

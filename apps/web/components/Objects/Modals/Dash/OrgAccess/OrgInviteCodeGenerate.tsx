@@ -125,7 +125,7 @@ function OrgInviteCodeGenerate(props: OrgInviteCodeGenerateProps) {
                     <Link
                         className='px-3 text-blue-700 font-bold rounded-full py-1 bg-blue-100'
                         target='_blank'
-                        href={getUriWithOrg(org.slug, '/dash/users/settings/usergroups')}
+                        href={getUriWithOrg(org.slug, '/cabinet/users/settings/usergroups')}
                     >
                         {t('dashboard.users.signups.generate_modal.create_usergroup_link')}
                     </Link>

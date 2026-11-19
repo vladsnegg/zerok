@@ -89,7 +89,7 @@ export default function BoardToolbar({
       }}
     >
       {/* Logo */}
-      <Link href="/dash/boards">
+      <Link href="/cabinet/boards">
         <div className="bg-black rounded-md w-[25px] h-[25px] flex items-center justify-center hover:opacity-80 transition-opacity">
           <span className="text-[15px] font-black leading-none lowercase text-white">z</span>
         </div>

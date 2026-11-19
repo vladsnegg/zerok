@@ -74,23 +74,23 @@ describe('URL parsing at links, images and navigation sinks', () => {
 describe('organization and authentication redirects', () => {
   test('preserves same-origin paths and sibling organization navigation', () => {
     browserAt()
-    expect(safeRedirectUrl('/dash?tab=users')).toBe('/dash?tab=users')
-    expect(safeRedirectUrl('https://other.learnhouse.example/dash')).toBe('https://other.learnhouse.example/dash')
-    expect(safeRedirectUrl('https://learnhouse.example/dash')).toBe('https://learnhouse.example/dash')
+    expect(safeRedirectUrl('/cabinet?tab=users')).toBe('/cabinet?tab=users')
+    expect(safeRedirectUrl('https://other.learnhouse.example/cabinet')).toBe('https://other.learnhouse.example/cabinet')
+    expect(safeRedirectUrl('https://learnhouse.example/cabinet')).toBe('https://learnhouse.example/cabinet')
   })
 
   test('rejects external hosts, suffix tricks, ports and HTTPS downgrade', () => {
     browserAt()
-    for (const value of ['https://attacker.example', 'https://learnhouse.example.attacker.example', 'https://notlearnhouse.example', 'https://other.learnhouse.example:444', 'http://school.learnhouse.example/dash']) {
+    for (const value of ['https://attacker.example', 'https://learnhouse.example.attacker.example', 'https://notlearnhouse.example', 'https://other.learnhouse.example:444', 'http://school.learnhouse.example/cabinet']) {
       expect(safeRedirectUrl(value, '/login')).toBe('/login')
     }
   })
 
   test('keeps custom-domain and localhost authentication working', () => {
     browserAt('https://custom.example')
-    expect(safeRedirectUrl('https://custom.example/dash')).toBe('https://custom.example/dash')
+    expect(safeRedirectUrl('https://custom.example/cabinet')).toBe('https://custom.example/cabinet')
     browserAt('http://localhost:3000')
-    expect(safeRedirectUrl('http://localhost:3000/dash')).toBe('http://localhost:3000/dash')
+    expect(safeRedirectUrl('http://localhost:3000/cabinet')).toBe('http://localhost:3000/cabinet')
   })
 
   test('malformed cookies do not crash authentication', () => {

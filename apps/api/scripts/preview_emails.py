@@ -54,7 +54,7 @@ def _renders() -> dict[str, callable]:
         "account_creation_org": lambda: emails.send_account_creation_email(
             USER, USER.email, cta_url=BASE, org_name=ORG.name, **BRAND
         ),
-        "org_created": lambda: emails.send_org_created_email(USER.email, ORG.name, f"{BASE}/dash"),
+        "org_created": lambda: emails.send_org_created_email(USER.email, ORG.name, f"{BASE}/cabinet"),
         "org_deleted": lambda: emails.send_org_deleted_email(USER.email, ORG.name),
         "account_deleted": lambda: emails.send_account_deleted_email(USER.email, USER.username),
         "email_changed": lambda: emails.send_email_changed_notice(USER.email, "ada@newmail.test", USER.username),
@@ -76,7 +76,7 @@ def _renders() -> dict[str, callable]:
         ),
         "magic_login_platform": lambda: send_magic_login_email(USER, USER.email, BASE, "tok_preview"),
         "nudge": lambda: emails.send_nudge_email(
-            "content.course_draft_d3", USER.email, ORG.name, f"{BASE}/dash/courses",
+            "content.course_draft_d3", USER.email, ORG.name, f"{BASE}/cabinet/courses",
             f"{BASE}/unsubscribe?token=preview", course_name="Intro to DNS", plan_name="pro",
             next_plan="enterprise", track="content", stats=[("lessons", 8), ("learners", 0)], **BRAND,
         ),

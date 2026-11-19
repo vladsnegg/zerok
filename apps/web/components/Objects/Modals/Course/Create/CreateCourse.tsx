@@ -129,7 +129,7 @@ function CreateCourseModal({ closeModal, orgslug }: any) {
           // popup so a brand-new course lands the teacher on the core creation
           // action (their first activity) instead of an empty settings page.
           const courseId = res.data.course_uuid?.replace('course_', '') || res.data.course_uuid
-          router.push(`/dash/courses/course/${courseId}/content?new_activity=1`)
+          router.push(`/cabinet/courses/course/${courseId}/content?new_activity=1`)
         } else {
           toast.dismiss(toast_loading)
           const detail = typeof res.data?.detail === 'string' ? res.data.detail : ''

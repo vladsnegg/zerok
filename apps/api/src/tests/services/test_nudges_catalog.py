@@ -202,7 +202,7 @@ class TestContentCourseDraft:
             oldest_draft_course_uuid="course_abc",
         )
         url = get_spec(self.SPEC).cta(s, "https://acme.test")
-        assert url == "https://acme.test/dash/courses/course/abc/general"
+        assert url == "https://acme.test/cabinet/courses/course/abc/general"
 
 
 class TestAudiencePublishedNoMembers:

@@ -3,12 +3,12 @@ import { useAssignmentSubmission, useAssignmentTaskSubmissions } from '@componen
 import { useCourse } from '@components/Contexts/CourseContext';
 import { useOrg } from '@components/Contexts/OrgContext';
 import { getAssignmentSolutionFileDir, getTaskRefFileDir } from '@services/media/media';
-import TaskFileObject from 'app/orgs/[orgslug]/dash/assignments/[assignmentuuid]/_components/TaskEditor/Subs/TaskTypes/TaskFileObject';
-import TaskQuizObject from 'app/orgs/[orgslug]/dash/assignments/[assignmentuuid]/_components/TaskEditor/Subs/TaskTypes/TaskQuizObject'
-import TaskFormObject from 'app/orgs/[orgslug]/dash/assignments/[assignmentuuid]/_components/TaskEditor/Subs/TaskTypes/TaskFormObject'
-import TaskCodeObject from 'app/orgs/[orgslug]/dash/assignments/[assignmentuuid]/_components/TaskEditor/Subs/TaskTypes/TaskCodeObject'
-import TaskShortAnswerObject from 'app/orgs/[orgslug]/dash/assignments/[assignmentuuid]/_components/TaskEditor/Subs/TaskTypes/TaskShortAnswerObject'
-import TaskNumberAnswerObject from 'app/orgs/[orgslug]/dash/assignments/[assignmentuuid]/_components/TaskEditor/Subs/TaskTypes/TaskNumberAnswerObject'
+import TaskFileObject from 'app/orgs/[orgslug]/(withmenu)/cabinet/assignments/[assignmentuuid]/_components/TaskEditor/Subs/TaskTypes/TaskFileObject';
+import TaskQuizObject from 'app/orgs/[orgslug]/(withmenu)/cabinet/assignments/[assignmentuuid]/_components/TaskEditor/Subs/TaskTypes/TaskQuizObject'
+import TaskFormObject from 'app/orgs/[orgslug]/(withmenu)/cabinet/assignments/[assignmentuuid]/_components/TaskEditor/Subs/TaskTypes/TaskFormObject'
+import TaskCodeObject from 'app/orgs/[orgslug]/(withmenu)/cabinet/assignments/[assignmentuuid]/_components/TaskEditor/Subs/TaskTypes/TaskCodeObject'
+import TaskShortAnswerObject from 'app/orgs/[orgslug]/(withmenu)/cabinet/assignments/[assignmentuuid]/_components/TaskEditor/Subs/TaskTypes/TaskShortAnswerObject'
+import TaskNumberAnswerObject from 'app/orgs/[orgslug]/(withmenu)/cabinet/assignments/[assignmentuuid]/_components/TaskEditor/Subs/TaskTypes/TaskNumberAnswerObject'
 import toast from 'react-hot-toast';
 import { AlarmClockOff, BookOpenCheck, Calendar, Check, CheckCircle2, Circle, ClipboardCheck, ClipboardList, Download, Hourglass, Lightbulb, ListChecks, Lock, MessageSquare, PencilLine, RotateCcw, Send, Trophy, X } from 'lucide-react';
 import Link from 'next/link';
