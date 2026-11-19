@@ -2,21 +2,24 @@
 
 import React, { useState } from 'react'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
 import { useTranslation } from 'react-i18next'
 import { ArrowRight, CheckCircle2, Info, Lock, Mail, User } from 'lucide-react'
 
 import AuthLayout from '@components/Auth/AuthLayout'
 import { useAuth } from '@components/Contexts/AuthContext'
+import { safeRedirectUrl } from '@services/auth/redirects'
 
 interface RegisterClientProps {
   org: any
+  /** Where to go after the account is created (pre-validated by the page). */
+  next?: string
 }
 
-export default function RegisterClient({ org }: RegisterClientProps) {
+export default function RegisterClient({ org, next }: RegisterClientProps) {
   const { t } = useTranslation()
-  const router = useRouter()
   const { signIn } = useAuth()
+
+  const target = safeRedirectUrl(next, '')
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -66,17 +69,18 @@ export default function RegisterClient({ org }: RegisterClientProps) {
         return
       }
 
-      // The account is active immediately: sign in and land in the student
-      // cabinet. If automatic sign-in fails, the success screen links to login.
+      // The account is active immediately: sign in and land on the requested
+      // page (or the student cabinet). If automatic sign-in fails, the success
+      // screen links to login.
       const result: any = await signIn('credentials', {
         redirect: false,
         email: cleanEmail,
         password,
         orgSlug: org?.slug,
-        callbackUrl: '/cabinet',
+        callbackUrl: target || '/cabinet',
       })
       if (result?.ok) {
-        window.location.href = '/cabinet'
+        window.location.href = target || '/cabinet'
         return
       }
       setSent(true)
@@ -110,7 +114,7 @@ export default function RegisterClient({ org }: RegisterClientProps) {
               })}
             </p>
             <Link
-              href="/login"
+              href={target ? `/login?next=${encodeURIComponent(target)}` : '/login'}
               className="mt-8 inline-flex h-[44px] items-center justify-center rounded-lg bg-black px-6 text-sm font-bold text-white hover:bg-black/85"
             >
               {t('auth.back_to_login', { defaultValue: 'Back to sign in' })}
@@ -241,7 +245,10 @@ export default function RegisterClient({ org }: RegisterClientProps) {
 
           <div className="mt-6 text-center text-sm text-black/40">
             {t('auth.already_have_account', { defaultValue: 'Already have an account?' })}{' '}
-            <Link href="/login" className="text-black font-semibold hover:underline">
+            <Link
+              href={target ? `/login?next=${encodeURIComponent(target)}` : '/login'}
+              className="text-black font-semibold hover:underline"
+            >
               {t('auth.login', { defaultValue: 'Sign in' })}
             </Link>
           </div>

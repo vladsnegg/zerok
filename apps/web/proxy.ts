@@ -318,17 +318,29 @@ export default async function proxy(req: NextRequest) {
   const isAuthEntry =
     pathname === '/login' ||
     pathname === '/register' ||
+    pathname === '/welcome' ||
     pathname === '/health' ||
     pathname.startsWith('/auth/') ||
     pathname.startsWith('/api/')
 
   if (!hasSessionCookie && !isAuthEntry) {
-    return NextResponse.redirect(new URL('/login', req.url))
+    // Guests land on the welcome screen; the page they wanted is carried as
+    // ?next so the sign-in / registration forms can return them there.
+    if (pathname === '/') {
+      return NextResponse.rewrite(new URL('/welcome', req.url))
+    }
+    const next = encodeURIComponent(`${pathname}${search}`)
+    return NextResponse.redirect(new URL(`/welcome?next=${next}`, req.url))
   }
 
   // Self-service signup is replaced by the access-request form on /login.
   if (pathname === '/signup') {
     return NextResponse.redirect(new URL('/login', req.url))
+  }
+
+  // The welcome screen is a top-level public page, not org content.
+  if (pathname === '/welcome') {
+    return NextResponse.rewrite(new URL(`/welcome${search}`, req.url))
   }
 
   // Registration is a top-level auth page, not org content.

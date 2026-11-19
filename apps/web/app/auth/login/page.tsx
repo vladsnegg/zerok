@@ -1,5 +1,6 @@
 import { getOrganizationContextInfo } from '@services/organizations/orgs'
 import { getAuthOrgSlug } from '@services/org/orgResolution'
+import { safeInternalPath } from '@services/security/url'
 import LoginClient from './login'
 import { Metadata } from 'next'
 import OrgNotFound from '@components/Objects/StyledElements/Error/OrgNotFound'
@@ -28,7 +29,11 @@ export async function generateMetadata(): Promise<Metadata> {
   }
 }
 
-const Login = async () => {
+const Login = async ({ searchParams }: { searchParams: Promise<{ next?: string }> }) => {
+  const { next } = await searchParams
+  // The proxy only forwards relative paths here, but validate again: this
+  // value ends up in a redirect after sign-in.
+  const safeNext = next ? safeInternalPath(next, '') : ''
   const orgslug = await getAuthOrgSlug()
 
   // No org slug → bare apex (learn.io) → generic, org-less login.
@@ -50,7 +55,7 @@ const Login = async () => {
 
   return (
     <div>
-      <LoginClient org={org}></LoginClient>
+      <LoginClient org={org} next={safeNext || undefined}></LoginClient>
     </div>
   )
 }

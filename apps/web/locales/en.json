@@ -12004,6 +12004,11 @@
     "title": "Notifications",
     "empty": "Nothing here yet. Deadlines, graded work and course updates will appear here."
   },
+  "welcome": {
+    "sign_in": "Sign in",
+    "create_account": "Create account",
+    "gate_note": "The cabinet opens after you sign in or create an account. Registration is free and starts you off with the student role."
+  },
   "mobile_nav": {
     "tabs": "Main",
     "explore": "Explore",

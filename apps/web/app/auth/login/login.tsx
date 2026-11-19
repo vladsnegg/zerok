@@ -7,15 +7,19 @@ import { ArrowRight, Info, Lock, Mail } from 'lucide-react'
 
 import AuthLayout from '@components/Auth/AuthLayout'
 import { useAuth } from '@components/Contexts/AuthContext'
-import { postAuthPathForSession } from '@services/auth/redirects'
+import { postAuthPathForSession, safeRedirectUrl } from '@services/auth/redirects'
 
 interface LoginClientProps {
   org: any
+  /** Where to go after a successful sign-in (pre-validated by the page). */
+  next?: string
 }
 
-export default function LoginClient({ org }: LoginClientProps) {
+export default function LoginClient({ org, next }: LoginClientProps) {
   const { t } = useTranslation()
   const { signIn } = useAuth()
+
+  const target = safeRedirectUrl(next, '')
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -40,7 +44,7 @@ export default function LoginClient({ org }: LoginClientProps) {
         email: cleanEmail,
         password,
         orgSlug: org?.slug,
-        callbackUrl: '/',
+        callbackUrl: target || '/',
       })
 
       if (result?.ok) {
@@ -50,7 +54,7 @@ export default function LoginClient({ org }: LoginClientProps) {
         })
           .then((response) => (response.ok ? response.json() : null))
           .catch(() => null)
-        window.location.href = postAuthPathForSession(session)
+        window.location.href = target || postAuthPathForSession(session)
         return
       }
 
@@ -156,7 +160,10 @@ export default function LoginClient({ org }: LoginClientProps) {
 
           <div className="mt-8 text-center text-sm text-black/40">
             {t('auth.no_account', { defaultValue: "Don't have an account?" })}{' '}
-            <Link href="/register" className="text-black font-semibold hover:underline">
+            <Link
+              href={target ? `/register?next=${encodeURIComponent(target)}` : '/register'}
+              className="text-black font-semibold hover:underline"
+            >
               {t('auth.sign_up', { defaultValue: 'Register' })}
             </Link>
           </div>
