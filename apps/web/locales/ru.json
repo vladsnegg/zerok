@@ -11968,7 +11968,9 @@
     "teacher_link_courses": "Курсы",
     "teacher_link_assignments": "Задания",
     "teacher_link_boards": "Доски",
-    "teacher_link_dashboard": "Весь дашборд"
+    "teacher_link_members": "Участники",
+    "teacher_link_settings": "Настройки",
+    "teacher_link_library": "Библиотека"
   },
   "notifications": {
     "title": "Уведомления",

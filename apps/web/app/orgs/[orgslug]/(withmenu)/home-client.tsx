@@ -11,7 +11,6 @@ import { getUriWithOrg } from '@services/config/config'
 import { getOrgLogoMediaDirectory } from '@services/media/media'
 import GeneralWrapperStyled from '@components/Objects/StyledElements/Wrappers/GeneralWrapper'
 import ListShortcuts from '@components/Objects/Shortcuts/ListShortcuts'
-import { isAdminSession } from '@/lib/auth/home'
 
 // Only orgs with a custom landing need it (and its markdown/payments code).
 // Still server-rendered, so the HTML is unchanged.
@@ -24,10 +23,10 @@ export default function HomeClient({ orgslug }: { orgslug: string }) {
   const { data: courses, isLoading: coursesLoading } = useCourses(orgslug)
 
   // Server-side redirect covers the normal case; this catches a session that
-  // was still unresolved on the server and only hydrated here. Admins stay on
-  // the catalog; instructors and learners go to the cabinet.
+  // was still unresolved on the server and only hydrated here. Every role
+  // calls the cabinet home.
   useEffect(() => {
-    if (session?.status === 'authenticated' && !isAdminSession(session.data)) {
+    if (session?.status === 'authenticated') {
       router.replace(getUriWithOrg(orgslug, '/cabinet'))
     }
   }, [session?.status, session?.data, orgslug, router])

@@ -9,8 +9,9 @@ import {
   CheckCircle2,
   ClipboardList,
   ChartNoAxesColumn,
-  LayoutDashboard,
+  FolderOpen,
   PlusCircle,
+  Settings,
   Users,
 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
@@ -111,11 +112,28 @@ export default function TeacherCabinetHome({ orgslug }: { orgslug: string }) {
       label: t('cabinet.teacher_link_boards', { defaultValue: 'Boards' }),
       Icon: ChartNoAxesColumn,
     },
-    {
-      href: '/cabinet',
-      label: t('cabinet.teacher_link_dashboard', { defaultValue: 'Full dashboard' }),
-      Icon: LayoutDashboard,
-    },
+    // Admins manage the organization, so their grid gains the members and
+    // settings entries; instructors get the library instead.
+    ...(canManageOrg
+      ? [
+          {
+            href: '/cabinet/users/settings/users',
+            label: t('cabinet.teacher_link_members', { defaultValue: 'Members' }),
+            Icon: Users,
+          },
+          {
+            href: '/cabinet/org/settings/general',
+            label: t('cabinet.teacher_link_settings', { defaultValue: 'Settings' }),
+            Icon: Settings,
+          },
+        ]
+      : [
+          {
+            href: '/cabinet/library',
+            label: t('cabinet.teacher_link_library', { defaultValue: 'Library' }),
+            Icon: FolderOpen,
+          },
+        ]),
   ]
 
   return (
@@ -160,6 +178,15 @@ export default function TeacherCabinetHome({ orgslug }: { orgslug: string }) {
             >
               <Users size={16} />
               {t('dashboard.home.members', { defaultValue: 'Members' })}
+            </Link>
+          )}
+          {canManageOrg && (
+            <Link
+              href={getUriWithOrg(orgslug, '/cabinet/org/settings/general')}
+              className="inline-flex items-center gap-2 rounded-lg border border-neutral-200 bg-white px-4 py-2 text-sm font-semibold text-black/70 hover:text-black"
+            >
+              <Settings size={16} />
+              {t('dashboard.home.settings', { defaultValue: 'Settings' })}
             </Link>
           )}
         </div>

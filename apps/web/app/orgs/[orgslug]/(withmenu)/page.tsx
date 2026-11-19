@@ -5,7 +5,6 @@ import { getOrgThumbnailMediaDirectory, getOrgOgImageMediaDirectory } from '@ser
 import { getOrgSeoConfig, buildPageTitle } from '@/lib/seo/utils'
 import { getServerCanonicalUrl } from '@/lib/seo/utils.server'
 import { getServerSession } from '@/lib/auth/server'
-import { isAdminSession } from '@/lib/auth/home'
 import HomeClient from './home-client'
 
 type MetadataProps = {
@@ -80,10 +79,10 @@ export async function generateMetadata(props: MetadataProps): Promise<Metadata> 
 const OrgHomePage = async (params: any) => {
   const orgslug = (await params.params).orgslug
 
-  // The catalog is for admins; learners and instructors call the cabinet home,
-  // so the logo / any saved "/" link lands there instead.
+  // The catalog page is gone from the flow: every signed-in role calls the
+  // cabinet home, so the logo / any saved "/" link lands there.
   const session = await getServerSession()
-  if (session && !session.unresolved && !isAdminSession({ roles: session.roles })) {
+  if (session && !session.unresolved) {
     redirect('/cabinet')
   }
 

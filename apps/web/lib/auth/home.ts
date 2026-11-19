@@ -35,10 +35,9 @@ export function homePathForSession(_session: any): string {
 }
 
 /**
- * Logo / "home" link inside an organization. The cabinet is home for learners
- * and instructors; admins keep the organization's public home (course
- * catalog), which is where they preview and manage content from.
+ * Logo / "home" link inside an organization. The cabinet is home for every
+ * role; admins preview content from the dedicated management pages.
  */
-export function orgHomePathForSession(session: any): string {
-  return isAdminSession(session) ? '/' : CABINET_HOME
+export function orgHomePathForSession(_session: any): string {
+  return CABINET_HOME
 }

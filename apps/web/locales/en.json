@@ -12031,7 +12031,9 @@
     "teacher_link_courses": "Courses",
     "teacher_link_assignments": "Assignments",
     "teacher_link_boards": "Boards",
-    "teacher_link_dashboard": "Full dashboard"
+    "teacher_link_members": "Members",
+    "teacher_link_settings": "Settings",
+    "teacher_link_library": "Library"
   },
   "notifications": {
     "title": "Notifications",

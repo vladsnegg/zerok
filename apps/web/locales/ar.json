@@ -12529,7 +12529,9 @@
     "teacher_link_courses": "الدورات",
     "teacher_link_assignments": "المهام",
     "teacher_link_boards": "اللوحات",
-    "teacher_link_dashboard": "لوحة التحكم الكاملة"
+    "teacher_link_members": "الأعضاء",
+    "teacher_link_settings": "الإعدادات",
+    "teacher_link_library": "المكتبة"
   },
   "notifications": {
     "title": "الإشعارات",
