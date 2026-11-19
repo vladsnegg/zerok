@@ -23,6 +23,7 @@ import { getAPIUrl, getUriWithOrg } from '@services/config/config'
 import { RequestBodyWithAuthHeader, asArray } from '@services/utils/ts/requests'
 import { getOrgCourses } from '@services/courses/courses'
 import { isOrgAnalyticsAvailable } from '@ee/components/Analytics/availability'
+import { isOrgFeatureEnabled } from '@/lib/org/features'
 import RecentCourses from '@components/Dashboard/Home/RecentCourses'
 import OnboardingHomeCard from '@components/Dashboard/Onboarding/OnboardingHomeCard'
 import ContentOverview from '@components/Dashboard/Home/ContentOverview'
@@ -107,11 +108,16 @@ export default function TeacherCabinetHome({ orgslug }: { orgslug: string }) {
       label: t('cabinet.teacher_link_assignments', { defaultValue: 'Assignments' }),
       Icon: ClipboardList,
     },
-    {
-      href: '/cabinet/boards',
-      label: t('cabinet.teacher_link_boards', { defaultValue: 'Boards' }),
-      Icon: ChartNoAxesColumn,
-    },
+    // Feature-gated: boards and the library can be switched off per org.
+    ...(isOrgFeatureEnabled(org, 'boards')
+      ? [
+          {
+            href: '/cabinet/boards',
+            label: t('cabinet.teacher_link_boards', { defaultValue: 'Boards' }),
+            Icon: ChartNoAxesColumn,
+          },
+        ]
+      : []),
     // Admins manage the organization, so their grid gains the members and
     // settings entries; instructors get the library instead.
     ...(canManageOrg
@@ -127,13 +133,16 @@ export default function TeacherCabinetHome({ orgslug }: { orgslug: string }) {
             Icon: Settings,
           },
         ]
-      : [
+      : []),
+    ...(isOrgFeatureEnabled(org, 'folders')
+      ? [
           {
             href: '/cabinet/library',
             label: t('cabinet.teacher_link_library', { defaultValue: 'Library' }),
             Icon: FolderOpen,
           },
-        ]),
+        ]
+      : []),
   ]
 
   return (

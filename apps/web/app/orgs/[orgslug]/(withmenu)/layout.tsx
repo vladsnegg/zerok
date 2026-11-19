@@ -12,6 +12,7 @@ import { SiteCommandPaletteProvider } from '@components/Objects/Search/SiteComma
 import { ShortcutsProvider } from '@/lib/shortcuts/ShortcutsContext'
 import { MessagingProvider } from '@components/Messaging/MessagingProvider'
 import ChatDock from '@components/Messaging/Dock/ChatDock'
+import MessagingFeatureGate from '@components/Messaging/MessagingFeatureGate'
 import GlobalShortcuts from '@components/Objects/Shortcuts/GlobalShortcuts'
 import dynamic from 'next/dynamic'
 const PodcastPlayer = dynamic(() => import('@components/Objects/Podcasts/PodcastPlayer'), { ssr: false })
@@ -131,7 +132,11 @@ function LayoutContent({ children, orgslug }: { children: ReactNode; orgslug: st
       {!chromeless && <SiteCommandPalette />}
       {!chromeless && <GlobalShortcuts />}
       {!chromeless && <ShortcutHelp />}
-      {!chromeless && <ChatDock orgslug={orgslug} />}
+      {!chromeless && (
+        <MessagingFeatureGate>
+          <ChatDock orgslug={orgslug} />
+        </MessagingFeatureGate>
+      )}
       {!chromeless && <LiveNowBanner orgslug={orgslug} />}
     </div>
   )

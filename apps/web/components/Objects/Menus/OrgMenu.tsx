@@ -77,26 +77,35 @@ export const OrgMenu = (props: any) => {
   const { isVisible: isJoinBannerVisible } = useJoinBannerVisible()
   const { track } = useLHAnalytics()
 
+  // Get primary color from org config (v2: customization.general.color, v1: general.color)
+  const config = org?.config?.config
+  const rf = config?.resolved_features
+
   const messagingEnabled = useMessagingEnabled()
   const { unreadTotal } = useMessaging()
+  // The org can switch messaging off; the chat stays in the code and comes
+  // back with the feature toggle.
+  const messagingVisible = messagingEnabled && rf?.messaging?.enabled !== false
 
 
   const topOffset = isJoinBannerVisible ? JOIN_BANNER_HEIGHT : 0
 
   // Get primary color from org config (v2: customization.general.color, v1: general.color)
-  const config = org?.config?.config
   const primaryColor = config?.customization?.general?.color || config?.general?.color || ''
   const colors = getMenuColorClasses(primaryColor)
   const showBranding = useShowLearnHouseBranding()
 
   // Filter dashboard menu items by resolved_features from API
-  const rf = config?.resolved_features
   const visibleDashboardItems = DASHBOARD_MENU_ITEMS.filter((item: DashboardMenuItem) => {
     if (item.available && !item.available()) return false
     if (!item.featureKey) return true
     if (rf?.[item.featureKey]) return rf[item.featureKey].enabled
     return isFeatureAvailable(item.featureKey)
   })
+
+  // Parked for now: the help links point at the upstream project (docs,
+  // website, Discord), not at zerok. Flip to true to bring the dropdown back.
+  const SHOW_HELP_DROPDOWN = false
 
   useEffect(() => {
     // Only check focus mode if we're in an activity page
@@ -227,7 +236,7 @@ export const OrgMenu = (props: any) => {
               </div>
             </AuthenticatedClientElement>
             {/* Messages */}
-            {messagingEnabled && (
+            {messagingVisible && (
               <AuthenticatedClientElement checkMethod="authentication">
                 <div className="hidden lg:flex">
                   <TooltipProvider delayDuration={0}>
@@ -302,7 +311,7 @@ export const OrgMenu = (props: any) => {
             )}
 
             {/* Help Dropdown - Only visible to admins/maintainers/instructors */}
-            {session?.status === 'authenticated' && rights?.dashboard?.action_access && (
+            {SHOW_HELP_DROPDOWN && session?.status === 'authenticated' && rights?.dashboard?.action_access && (
               <div className="hidden lg:flex">
                 <DropdownMenu>
                   <TooltipProvider delayDuration={0}>
@@ -386,7 +395,7 @@ export const OrgMenu = (props: any) => {
             <div className="flex lg:hidden items-center gap-1">
               {session?.status === 'authenticated' ? (
                 <>
-                  {messagingEnabled && (
+                  {messagingVisible && (
                     <Link
                       href={getUriWithOrg(orgslug, '/messages')}
                       className={`lh-press relative flex h-10 w-10 items-center justify-center rounded-full ${colors.iconBtn}`}

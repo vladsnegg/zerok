@@ -25,7 +25,7 @@ const expand = (key) => {
 }
 
 const sources = [
-  'app/orgs/[orgslug]/cabinet/onboarding/page.tsx',
+  'app/orgs/[orgslug]/(withmenu)/cabinet/onboarding/page.tsx',
   ...readdirSync(join(root, 'components/Dashboard/Onboarding'))
     .filter((f) => /\.tsx?$/.test(f))
     .map((f) => `components/Dashboard/Onboarding/${f}`),
