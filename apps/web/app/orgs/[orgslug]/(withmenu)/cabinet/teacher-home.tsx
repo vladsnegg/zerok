@@ -118,22 +118,6 @@ export default function TeacherCabinetHome({ orgslug }: { orgslug: string }) {
           },
         ]
       : []),
-    // Admins manage the organization, so their grid gains the members and
-    // settings entries; instructors get the library instead.
-    ...(canManageOrg
-      ? [
-          {
-            href: '/cabinet/users/settings/users',
-            label: t('cabinet.teacher_link_members', { defaultValue: 'Members' }),
-            Icon: Users,
-          },
-          {
-            href: '/cabinet/org/settings/general',
-            label: t('cabinet.teacher_link_settings', { defaultValue: 'Settings' }),
-            Icon: Settings,
-          },
-        ]
-      : []),
     ...(isOrgFeatureEnabled(org, 'folders')
       ? [
           {
@@ -162,6 +146,22 @@ export default function TeacherCabinetHome({ orgslug }: { orgslug: string }) {
               defaultValue: 'Your courses, assignments and teaching tools in one place.',
             })}
           </p>
+          {/* Non-duplicating sections live here, top-left, so the header only
+              keeps actions (create, members, settings) that are not repeated. */}
+          {quickLinks.length > 0 && (
+            <div className="mt-3 flex flex-wrap items-center gap-2">
+              {quickLinks.map(({ href, label, Icon }) => (
+                <Link
+                  key={href}
+                  href={getUriWithOrg(orgslug, href)}
+                  className="inline-flex items-center gap-1.5 rounded-full border border-neutral-200 bg-white px-3 py-1.5 text-xs font-semibold text-black/60 transition-colors hover:text-black"
+                >
+                  <Icon size={14} className="text-black/40" />
+                  {label}
+                </Link>
+              ))}
+            </div>
+          )}
         </div>
         <div className="flex flex-wrap items-center gap-2">
           <Link
@@ -229,22 +229,6 @@ export default function TeacherCabinetHome({ orgslug }: { orgslug: string }) {
           </div>
           <p className="mt-3 text-3xl font-black text-black">{stats.drafts}</p>
         </div>
-      </div>
-
-      <div className="mt-8 grid grid-cols-2 gap-3 lg:grid-cols-4">
-        {quickLinks.map(({ href, label, Icon }) => (
-          <Link
-            key={href}
-            href={getUriWithOrg(orgslug, href)}
-            className="group flex items-center justify-between rounded-2xl border border-neutral-200 bg-white p-4 transition-colors hover:border-neutral-300"
-          >
-            <span className="flex items-center gap-2 text-sm font-semibold text-black">
-              <Icon size={16} className="text-black/45" />
-              {label}
-            </span>
-            <ArrowRight size={14} className="text-black/25 transition-transform group-hover:translate-x-0.5" />
-          </Link>
-        ))}
       </div>
 
       <div className="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-[1fr_320px]">
