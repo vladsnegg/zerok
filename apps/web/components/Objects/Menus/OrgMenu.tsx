@@ -1,5 +1,5 @@
 'use client'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import dynamic from 'next/dynamic'
 import { useMessaging, useMessagingEnabled } from '@components/Messaging/MessagingProvider'
 import Link from 'next/link'
@@ -70,7 +70,7 @@ export const OrgMenu = (props: any) => {
   const isPhone = useMediaQuery('(max-width: 767px)')
   const pathname = usePathname()
   const { t } = useTranslation()
-  const { rights } = useAdminStatus()
+  const { rights, userRoles } = useAdminStatus() as any
   const [feedbackModalOpen, setFeedbackModalOpen] = useState(false)
   // Mounted on first open and kept, so the close animation and draft survive.
   const [feedbackModalMounted, setFeedbackModalMounted] = useState(false)
@@ -106,6 +106,21 @@ export const OrgMenu = (props: any) => {
   // Parked for now: the help links point at the upstream project (docs,
   // website, Discord), not at zerok. Flip to true to bring the dropdown back.
   const SHOW_HELP_DROPDOWN = false
+
+  // Role label shown just left of the account avatar. Highest role in the
+  // current organization wins; no chip for visitors without a membership.
+  const roleLabel = useMemo(() => {
+    const orgRoles = (userRoles || []).filter((entry: any) => entry?.org?.id === org?.id)
+    const uuids = orgRoles.map((entry: any) => entry?.role?.role_uuid)
+    if (uuids.includes('role_global_admin')) {
+      return t('cabinet.role_admin', { defaultValue: 'Admin' })
+    }
+    if (uuids.includes('role_global_instructor')) {
+      return t('cabinet.role_instructor', { defaultValue: 'Instructor' })
+    }
+    if (uuids.length > 0) return t('cabinet.role_student', { defaultValue: 'Student' })
+    return null
+  }, [userRoles, org?.id, t])
 
   useEffect(() => {
     // Only check focus mode if we're in an activity page
@@ -386,7 +401,12 @@ export const OrgMenu = (props: any) => {
               </div>
             )}
 
-            <div className="hidden lg:flex">
+            <div className="hidden lg:flex items-center gap-2">
+              {roleLabel && (
+                <span className="inline-flex items-center rounded-full border border-black/[0.08] bg-black/[0.04] px-3 py-1 text-[11px] font-semibold text-black/50">
+                  {roleLabel}
+                </span>
+              )}
               <HeaderProfileBox primaryColor={primaryColor} />
             </div>
             {/* Phone and tablet actions. Navigation lives in the bottom tab bar

@@ -36,6 +36,7 @@ from src.services.courses.activities.assignments import (
     put_assignment_task_submission_file,
     read_assignment,
     read_assignment_from_activity_uuid,
+    read_assignment_review_queue,
     read_assignment_submissions,
     read_assignment_task,
     read_assignment_task_submissions,
@@ -960,6 +961,33 @@ async def api_submission_mark_as_done(
 
     return await mark_activity_as_done_for_user(
         request, user_id, assignment_uuid, current_user, db_session
+    )
+
+
+@router.get(
+    "/org/{org_id}/queue",
+    summary="Instructor review queue",
+    description=(
+        "Pending (submitted or late) assignment submissions across the "
+        "organization. Admins see every course; instructors only the courses "
+        "they author. Used by the cabinet's review queue."
+    ),
+    responses={
+        200: {"description": "Pending submissions, newest first."},
+        401: {"description": "Authentication required"},
+        403: {"description": "Caller is not an instructor or organization admin"},
+        404: {"description": "Organization not found"},
+    },
+)
+async def api_assignment_review_queue(
+    request: Request,
+    org_id: int,
+    limit: int = Query(30, ge=1, le=100),
+    current_user: PublicUser = Depends(get_current_user),
+    db_session=Depends(get_db_session),
+):
+    return await read_assignment_review_queue(
+        request, org_id, current_user, db_session, limit=limit
     )
 
 

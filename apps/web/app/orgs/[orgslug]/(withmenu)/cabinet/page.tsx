@@ -9,6 +9,8 @@ import {
   CheckCircle2,
   Clock3,
   GraduationCap,
+  Target,
+  TrendingUp,
   UserRound,
 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
@@ -153,9 +155,6 @@ function StudentCabinetView({ orgslug }: { orgslug: string }) {
     : null
 
   const displayName = [user?.first_name, user?.last_name].filter(Boolean).join(' ') || user?.username
-  const initials = `${(user?.first_name?.[0] || user?.username?.[0] || '').toUpperCase()}${(
-    user?.last_name?.[0] || ''
-  ).toUpperCase()}`
 
   const greeting = greetingKey
     ? `${t(greetingKey)}, ${displayName || ''}`.trim()
@@ -179,25 +178,20 @@ function StudentCabinetView({ orgslug }: { orgslug: string }) {
           <div className="mt-3 flex flex-wrap items-center gap-2">
             {currentRun && (
               <span className="inline-flex items-center gap-1.5 rounded-full bg-neutral-100 px-3 py-1.5 text-xs font-semibold text-black/60">
-                📈 {t('cabinet.progress_chip', { defaultValue: '{{percent}}% in your current course', percent: currentProgress })}
+                <TrendingUp size={14} className="text-black/40" />
+                {t('cabinet.progress_chip', { defaultValue: '{{percent}}% in your current course', percent: currentProgress })}
               </span>
             )}
             {daysUntilNextEvent !== null && (
               <span className="inline-flex items-center gap-1.5 rounded-full border border-orange-200 bg-orange-50 px-3 py-1.5 text-xs font-semibold text-orange-700">
-                🎯 {t('cabinet.deadline_chip', { defaultValue: 'Next deadline in {{days}} d.', days: daysUntilNextEvent })}
+                <Target size={14} />
+                {t('cabinet.deadline_chip', { defaultValue: 'Next deadline in {{days}} d.', days: daysUntilNextEvent })}
               </span>
             )}
             <span className="inline-flex items-center gap-1.5 rounded-full border border-neutral-200 bg-white px-3 py-1.5 text-xs font-semibold text-black/50">
-              📚 {stats.total} {t('cabinet.courses', { defaultValue: 'Courses' })}
+              <BookOpen size={14} className="text-black/40" />
+              {stats.total} {t('cabinet.courses', { defaultValue: 'Courses' })}
             </span>
-          </div>
-        </div>
-        <div className="flex shrink-0 items-center gap-2">
-          <span className="rounded-full border border-neutral-200 bg-white px-3 py-1.5 text-xs font-semibold text-black/50">
-            {t('cabinet.role_student', { defaultValue: 'Student' })}
-          </span>
-          <div className="grid h-10 w-10 place-items-center rounded-full border border-neutral-200 bg-neutral-50 text-sm font-black text-black">
-            {initials || '·'}
           </div>
         </div>
       </div>

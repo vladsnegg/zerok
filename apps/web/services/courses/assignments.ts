@@ -72,6 +72,30 @@ export async function getAssignmentFromActivityUUID(
   return res
 }
 
+export interface ReviewQueueItem {
+  submission_id: number
+  status: string
+  submitted_at: string | null
+  attempt_number: number
+  user: { user_uuid: string; username: string; name: string; avatar_image?: string }
+  assignment: { assignment_uuid: string; title: string }
+  course: { course_uuid: string; name: string }
+}
+
+/** Pending grading work for the cabinet: submitted/late submissions. */
+export async function getAssignmentReviewQueue(
+  orgId: number,
+  access_token: string,
+  limit = 30
+): Promise<{ items: ReviewQueueItem[]; total: number }> {
+  const result: any = await fetch(
+    `${getAPIUrl()}assignments/org/${orgId}/queue?limit=${limit}`,
+    RequestBodyWithAuthHeader('GET', null, null, access_token)
+  )
+  const res = await getResponseMetadata(result)
+  return res as unknown as { items: ReviewQueueItem[]; total: number }
+}
+
 // Delete an assignment
 export async function deleteAssignment(
   assignmentUUID: string,

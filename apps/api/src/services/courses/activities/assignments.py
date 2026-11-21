@@ -46,6 +46,10 @@ from src.db.courses.assignments import (
 )
 from src.db.courses.courses import Course
 from src.db.organizations import Organization
+from src.db.resource_authors import (
+    ResourceAuthor,
+    ResourceAuthorshipStatusEnum,
+)
 from src.db.trail_runs import TrailRun
 from src.db.trail_steps import TrailStep
 from src.db.users import AnonymousUser, PublicUser, User, APITokenUser
@@ -55,6 +59,7 @@ from src.security.features_utils.usage import (
     increase_feature_usage,
 )
 from src.security.submission_file_access import submission_files_belong_to
+from src.security.org_auth import get_user_org_role
 from src.security.rbac import (
     authorization_verify_based_on_roles,
     authorization_verify_api_token_permissions,
@@ -4438,3 +4443,99 @@ async def get_assignments_from_course(
             )
         )
     return results
+
+async def read_assignment_review_queue(
+    request: Request,
+    org_id: int,
+    current_user: PublicUser | APITokenUser,
+    db_session: AsyncSession,
+    limit: int = 30,
+) -> dict:
+    """Pending grading work for an instructor's cabinet.
+
+    One query instead of walking every course -> assignment -> submissions:
+    the queue is the set of SUBMITTED/LATE submissions in the organization.
+    Admins see the whole organization; instructors only the courses they are
+    an active author of.
+    """
+    org = (
+        await db_session.execute(select(Organization).where(Organization.id == org_id))
+    ).scalars().first()
+    if not org:
+        raise HTTPException(status_code=404, detail="Organization not found")
+
+    role = await get_user_org_role(int(current_user.id or 0), org_id, db_session)
+    is_admin = bool(getattr(current_user, "is_superadmin", False)) or (
+        role is not None
+        and (role.id == 1 or role.role_uuid == "role_global_admin")
+    )
+    is_instructor = is_admin or (
+        role is not None and role.role_uuid == "role_global_instructor"
+    )
+    if not is_instructor:
+        raise HTTPException(
+            status_code=403,
+            detail="Only instructors and organization admins can open the review queue",
+        )
+
+    statement = (
+        select(AssignmentUserSubmission, Assignment, Course, User)
+        .join(Assignment, Assignment.id == AssignmentUserSubmission.assignment_id)
+        .join(Course, Course.id == Assignment.course_id)
+        .join(User, User.id == AssignmentUserSubmission.user_id)
+        .where(Course.org_id == org_id)
+        .where(
+            AssignmentUserSubmission.submission_status.in_(
+                [
+                    AssignmentUserSubmissionStatus.SUBMITTED,
+                    AssignmentUserSubmissionStatus.LATE,
+                ]
+            )
+        )
+    )
+
+    if not is_admin:
+        authored = select(ResourceAuthor.resource_uuid).where(
+            ResourceAuthor.user_id == current_user.id,
+            ResourceAuthor.authorship_status == ResourceAuthorshipStatusEnum.ACTIVE,
+        )
+        statement = statement.where(Course.course_uuid.in_(authored))
+
+    statement = (
+        statement.order_by(AssignmentUserSubmission.id.desc())
+        .limit(max(1, min(int(limit), 100)))
+    )
+
+    rows = (await db_session.execute(statement)).all()
+
+    items = []
+    for submission, assignment, course, user in rows:
+        display_name = " ".join(
+            part for part in [user.first_name or "", user.last_name or ""] if part
+        ).strip() or user.username
+        items.append(
+            {
+                "submission_id": submission.id,
+                "status": submission.submission_status.value
+                if hasattr(submission.submission_status, "value")
+                else str(submission.submission_status),
+                "submitted_at": submission.update_date or submission.creation_date,
+                "attempt_number": submission.attempt_number,
+                "user": {
+                    "user_uuid": user.user_uuid,
+                    "username": user.username,
+                    "name": display_name,
+                    "avatar_image": user.avatar_image,
+                },
+                "assignment": {
+                    "assignment_uuid": assignment.assignment_uuid,
+                    "title": assignment.title,
+                },
+                "course": {
+                    "course_uuid": course.course_uuid,
+                    "name": course.name,
+                },
+            }
+        )
+
+    return {"items": items, "total": len(items)}

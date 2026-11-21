@@ -12005,6 +12005,8 @@
     "welcome": "Welcome",
     "welcome_name": "Welcome, {{name}}",
     "role_student": "Student",
+    "role_instructor": "Instructor",
+    "role_admin": "Admin",
     "greeting_morning": "Good morning",
     "greeting_day": "Good afternoon",
     "greeting_evening": "Good evening",
@@ -12042,7 +12044,14 @@
     "teacher_link_boards": "Boards",
     "teacher_link_members": "Members",
     "teacher_link_settings": "Settings",
-    "teacher_link_library": "Library"
+    "teacher_link_library": "Library",
+    "review_queue": "Review queue",
+    "review_all": "All assignments",
+    "review_empty": "Nothing to review right now.",
+    "review_empty_hint": "Submitted work shows up here automatically.",
+    "review_pending": "Awaiting review",
+    "review_overdue": "Overdue",
+    "review_check": "Review"
   },
   "notifications": {
     "title": "Notifications",

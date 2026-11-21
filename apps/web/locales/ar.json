@@ -12540,7 +12540,16 @@
     "teacher_link_boards": "اللوحات",
     "teacher_link_members": "الأعضاء",
     "teacher_link_settings": "الإعدادات",
-    "teacher_link_library": "المكتبة"
+    "teacher_link_library": "المكتبة",
+    "review_queue": "قائمة المراجعة",
+    "review_all": "كل المهام",
+    "review_empty": "لا يوجد ما يُراجع الآن.",
+    "review_empty_hint": "تظهر الأعمال المسلّمة هنا تلقائياً.",
+    "review_pending": "بانتظار المراجعة",
+    "review_overdue": "متأخرة",
+    "review_check": "راجع",
+    "role_instructor": "مدرّس",
+    "role_admin": "مدير"
   },
   "notifications": {
     "title": "الإشعارات",

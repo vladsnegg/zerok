@@ -11942,6 +11942,8 @@
     "welcome": "Добро пожаловать",
     "welcome_name": "С возвращением, {{name}}",
     "role_student": "Студент",
+    "role_instructor": "Преподаватель",
+    "role_admin": "Админ",
     "greeting_morning": "Доброе утро",
     "greeting_day": "Добрый день",
     "greeting_evening": "Добрый вечер",
@@ -11979,7 +11981,14 @@
     "teacher_link_boards": "Доски",
     "teacher_link_members": "Участники",
     "teacher_link_settings": "Настройки",
-    "teacher_link_library": "Библиотека"
+    "teacher_link_library": "Библиотека",
+    "review_queue": "Очередь проверки",
+    "review_all": "Все задания",
+    "review_empty": "Сейчас нечего проверять.",
+    "review_empty_hint": "Сданные работы появятся здесь автоматически.",
+    "review_pending": "Ждёт проверки",
+    "review_overdue": "Просрочено",
+    "review_check": "Проверить"
   },
   "notifications": {
     "title": "Уведомления",

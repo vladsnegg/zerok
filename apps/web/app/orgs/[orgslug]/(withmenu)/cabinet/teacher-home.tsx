@@ -22,6 +22,11 @@ import useAdminStatus from '@components/Hooks/useAdminStatus'
 import { getAPIUrl, getUriWithOrg } from '@services/config/config'
 import { RequestBodyWithAuthHeader, asArray } from '@services/utils/ts/requests'
 import { getOrgCourses } from '@services/courses/courses'
+import {
+  getAssignmentReviewQueue,
+  type ReviewQueueItem,
+} from '@services/courses/assignments'
+import { formatDate } from '@/lib/format'
 import { isOrgAnalyticsAvailable } from '@ee/components/Analytics/availability'
 import { isOrgFeatureEnabled } from '@/lib/org/features'
 import RecentCourses from '@components/Dashboard/Home/RecentCourses'
@@ -42,7 +47,7 @@ type CalendarEvent = any
  * (members, org settings) appear only for admins.
  */
 export default function TeacherCabinetHome({ orgslug }: { orgslug: string }) {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const org = useOrg() as any
   const session = useLHSession() as any
   const { canManageOrg } = useAdminStatus() as any
@@ -53,6 +58,28 @@ export default function TeacherCabinetHome({ orgslug }: { orgslug: string }) {
   const [coursesLoading, setCoursesLoading] = useState(true)
   const [events, setEvents] = useState<CalendarEvent[]>([])
   const [eventsLoading, setEventsLoading] = useState(true)
+  const [queue, setQueue] = useState<ReviewQueueItem[]>([])
+  const [queueLoading, setQueueLoading] = useState(true)
+
+  useEffect(() => {
+    if (!token || !org?.id) return
+    let cancelled = false
+
+    getAssignmentReviewQueue(org.id, token, 8)
+      .then((res) => {
+        if (!cancelled) setQueue(asArray<ReviewQueueItem>(res?.items))
+      })
+      .catch(() => {
+        if (!cancelled) setQueue([])
+      })
+      .finally(() => {
+        if (!cancelled) setQueueLoading(false)
+      })
+
+    return () => {
+      cancelled = true
+    }
+  }, [token, org?.id])
 
   useEffect(() => {
     if (!token) return
@@ -200,6 +227,114 @@ export default function TeacherCabinetHome({ orgslug }: { orgslug: string }) {
           )}
         </div>
       </div>
+
+      {/* Review queue: the teacher's most actionable block, built from the
+          existing submissions API. Icons and card styling follow the cabinet. */}
+      <section className="mt-8 overflow-hidden rounded-2xl border border-neutral-200 bg-white">
+        <div className="flex items-center justify-between gap-3 border-b border-neutral-200 px-5 py-4">
+          <h2 className="flex items-center gap-2 text-sm font-bold text-black">
+            <ClipboardList size={16} className="text-black/45" />
+            {t('cabinet.review_queue', { defaultValue: 'Review queue' })}
+            {queue.length > 0 && (
+              <span className="rounded-full bg-neutral-100 px-2.5 py-0.5 text-[11px] font-bold text-black/55">
+                {queue.length}
+              </span>
+            )}
+          </h2>
+          <Link
+            href={getUriWithOrg(orgslug, '/cabinet/assignments')}
+            className="text-xs font-semibold text-black/45 hover:text-black"
+          >
+            {t('cabinet.review_all', { defaultValue: 'All assignments' })} →
+          </Link>
+        </div>
+
+        {queueLoading && (
+          <div className="space-y-3 px-5 py-4">
+            {[1, 2, 3].map((i) => (
+              <div key={i} className="h-12 animate-pulse rounded-xl bg-neutral-100" />
+            ))}
+          </div>
+        )}
+
+        {!queueLoading && queue.length === 0 && (
+          <div className="flex flex-col items-center justify-center px-5 py-10 text-center">
+            <div className="mb-3 flex h-11 w-11 items-center justify-center rounded-full bg-neutral-100 text-neutral-400">
+              <CheckCircle2 size={20} />
+            </div>
+            <p className="text-sm font-semibold text-black/60">
+              {t('cabinet.review_empty', { defaultValue: 'Nothing to review right now.' })}
+            </p>
+            <p className="mt-1 text-xs text-black/35">
+              {t('cabinet.review_empty_hint', {
+                defaultValue: 'Submitted work shows up here automatically.',
+              })}
+            </p>
+          </div>
+        )}
+
+        {!queueLoading && queue.length > 0 && (
+          <ul className="divide-y divide-neutral-100">
+            {queue.map((item) => {
+              const assignmentUuid = item.assignment.assignment_uuid.replace('assignment_', '')
+              const late = item.status === 'LATE'
+              const initials = item.user.name
+                .split(' ')
+                .map((part) => part[0])
+                .join('')
+                .slice(0, 2)
+                .toUpperCase()
+              return (
+                <li
+                  key={item.submission_id}
+                  className="flex flex-wrap items-center gap-3 px-5 py-3.5 sm:flex-nowrap"
+                >
+                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-neutral-100 text-[11px] font-bold text-black/60">
+                    {initials || '·'}
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <p className="truncate text-sm font-semibold text-black">{item.user.name}</p>
+                    <p className="truncate text-xs text-black/45">
+                      {item.assignment.title} · {item.course.name}
+                    </p>
+                    {item.submitted_at && (
+                      <p className="mt-0.5 text-[11px] text-black/30">
+                        {formatDate(item.submitted_at, i18n.language, {
+                          dateStyle: undefined,
+                          month: 'short',
+                          day: 'numeric',
+                          hour: '2-digit',
+                          minute: '2-digit',
+                        })}
+                      </p>
+                    )}
+                  </div>
+                  <span
+                    className={`shrink-0 rounded-full px-2.5 py-1 text-[11px] font-bold ${
+                      late
+                        ? 'bg-orange-50 text-orange-700'
+                        : 'bg-[rgba(198,255,74,0.22)] text-[#4d7a00]'
+                    }`}
+                  >
+                    {late
+                      ? t('cabinet.review_overdue', { defaultValue: 'Overdue' })
+                      : t('cabinet.review_pending', { defaultValue: 'Awaiting review' })}
+                  </span>
+                  <Link
+                    href={getUriWithOrg(
+                      orgslug,
+                      `/cabinet/assignments/${assignmentUuid}?subpage=submissions`,
+                    )}
+                    className="shrink-0 rounded-lg bg-black px-3 py-1.5 text-xs font-bold text-white hover:bg-black/85"
+                  >
+                    {t('cabinet.review_check', { defaultValue: 'Review' })}
+                  </Link>
+                </li>
+              )
+            })}
+          </ul>
+        )}
+      </section>
 
       <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-3">
         <div className="rounded-2xl border border-neutral-200 bg-white p-5">
