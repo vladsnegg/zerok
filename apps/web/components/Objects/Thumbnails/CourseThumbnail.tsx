@@ -160,7 +160,7 @@ function CourseThumbnail({ course, orgslug, customLink, isDashboard = false, isS
   const courseLink = customLink ? customLink : getUriWithOrg(orgslug, `/course/${removeCoursePrefix(course.course_uuid)}`)
 
   return (
-    <div data-kbd-item="" onMouseEnter={handleMouseEnter} className={`group relative flex flex-col bg-white rounded-xl nice-shadow overflow-hidden w-full transition-all duration-300 hover:scale-[1.01] ${isSelected ? 'ring-2 ring-black ring-offset-2' : ''}`}>
+    <div data-kbd-item="" onMouseEnter={handleMouseEnter} className={`group relative flex flex-col bg-white rounded-2xl border border-neutral-200 overflow-hidden w-full transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg hover:border-neutral-300 ${isSelected ? 'ring-2 ring-black ring-offset-2' : ''}`}>
       {/* Selection checkbox - visible on hover or when selected (dashboard only) */}
       {isDashboard && onToggleSelect && (
         <button
@@ -211,25 +211,25 @@ function CourseThumbnail({ course, orgslug, customLink, isDashboard = false, isS
         )}
       </Link>
 
-      <div className="p-3 flex flex-col space-y-1.5">
+      <div className="p-4 flex flex-col space-y-1.5">
         <div className="flex items-start justify-between">
           <Link
             prefetch={false}
             href={courseLink}
             onClick={handleCardOpen}
-            className="text-base font-bold text-gray-900 leading-tight hover:text-black transition-colors line-clamp-1"
+            className="text-[15px] font-bold text-gray-900 leading-tight hover:text-black transition-colors line-clamp-1"
            dir="auto">
             {course.name}
           </Link>
         </div>
         
         {course.description && (
-          <p className="text-[11px] text-gray-500 line-clamp-2 min-h-[1.5rem]">
+          <p className="text-xs text-gray-500 line-clamp-2 min-h-[1.75rem]">
             {course.description}
           </p>
         )}
 
-        <div className="pt-1.5 flex items-center justify-between border-t border-gray-100">
+        <div className="pt-2 flex items-center justify-between border-t border-neutral-100">
           <div className="flex items-center gap-2">
             {displayedAuthors.length > 0 && (
               <div className="flex -space-x-2 items-center">

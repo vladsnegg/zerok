@@ -67,6 +67,9 @@ function StudentCabinetView({ orgslug }: { orgslug: string }) {
   const [runs, setRuns] = useState<TrailRun[]>([])
   const [events, setEvents] = useState<CalendarEvent[]>([])
   const [loading, setLoading] = useState(true)
+  // Greeting is computed after mount: the server cannot know the visitor's
+  // local time, and computing it during render would break hydration.
+  const [greetingKey, setGreetingKey] = useState<string | null>(null)
 
   useEffect(() => {
     if (!token) return
@@ -104,6 +107,19 @@ function StudentCabinetView({ orgslug }: { orgslug: string }) {
     return { total: runs.length, inProgress, completed }
   }, [runs])
 
+  useEffect(() => {
+    const hour = new Date().getHours()
+    setGreetingKey(
+      hour < 5
+        ? 'cabinet.greeting_night'
+        : hour < 12
+          ? 'cabinet.greeting_morning'
+          : hour < 18
+            ? 'cabinet.greeting_day'
+            : 'cabinet.greeting_evening',
+    )
+  }, [])
+
   const progressOf = (run: TrailRun) => {
     const total = run.course_total_steps || 0
     const done = (run.steps || []).length
@@ -111,34 +127,112 @@ function StudentCabinetView({ orgslug }: { orgslug: string }) {
     return Math.min(100, Math.round((done / total) * 100))
   }
 
+  const currentRun =
+    runs.find((run) => run.status === 'STATUS_IN_PROGRESS' && run.course) || runs[0] || null
+  const currentProgress = currentRun ? progressOf(currentRun) : 0
+  const currentCourse = currentRun?.course || null
+  const currentUuidRaw = currentCourse?.course_uuid || currentCourse?.uuid
+  const currentUuid = currentUuidRaw ? String(currentUuidRaw).replace('course_', '') : null
+
+  const nextEvent = useMemo(() => {
+    const now = Date.now()
+    const dated = events
+      .map((event) => {
+        const raw = event?.start || event?.date || event?.due_date
+        const time = raw ? new Date(raw).getTime() : NaN
+        return Number.isFinite(time) ? { event, time } : null
+      })
+      .filter(Boolean) as { event: CalendarEvent; time: number }[]
+    dated.sort((a, b) => a.time - b.time)
+    const upcoming = dated.find((entry) => entry.time >= now - 60_000)
+    return upcoming || null
+  }, [events])
+
+  const daysUntilNextEvent = nextEvent
+    ? Math.max(0, Math.ceil((nextEvent.time - Date.now()) / 86_400_000))
+    : null
+
   const displayName = [user?.first_name, user?.last_name].filter(Boolean).join(' ') || user?.username
+  const initials = `${(user?.first_name?.[0] || user?.username?.[0] || '').toUpperCase()}${(
+    user?.last_name?.[0] || ''
+  ).toUpperCase()}`
+
+  const greeting = greetingKey
+    ? `${t(greetingKey)}, ${displayName || ''}`.trim()
+    : displayName
+      ? t('cabinet.welcome_name', { defaultValue: 'Welcome, {{name}}', name: displayName })
+      : t('cabinet.welcome', { defaultValue: 'Welcome' })
 
   return (
     <div className="mx-auto w-full max-w-5xl px-4 sm:px-6 py-10">
-      <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div>
           <p className="text-xs font-semibold uppercase tracking-wide text-black/35">
             {t('cabinet.eyebrow', { defaultValue: 'My learning' })}
           </p>
-          <h1 className="mt-1 text-3xl font-black tracking-tight text-black">
-            {displayName
-              ? t('cabinet.welcome_name', { defaultValue: 'Welcome, {{name}}', name: displayName })
-              : t('cabinet.welcome', { defaultValue: 'Welcome' })}
-          </h1>
+          <h1 className="mt-1 text-3xl font-black tracking-tight text-black">{greeting}</h1>
           <p className="mt-1 text-sm text-black/45">
             {t('cabinet.subtitle', {
               defaultValue: 'Your courses, deadlines and progress in one place.',
             })}
           </p>
+          <div className="mt-3 flex flex-wrap items-center gap-2">
+            {currentRun && (
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-neutral-100 px-3 py-1.5 text-xs font-semibold text-black/60">
+                📈 {t('cabinet.progress_chip', { defaultValue: '{{percent}}% in your current course', percent: currentProgress })}
+              </span>
+            )}
+            {daysUntilNextEvent !== null && (
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-orange-200 bg-orange-50 px-3 py-1.5 text-xs font-semibold text-orange-700">
+                🎯 {t('cabinet.deadline_chip', { defaultValue: 'Next deadline in {{days}} d.', days: daysUntilNextEvent })}
+              </span>
+            )}
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-neutral-200 bg-white px-3 py-1.5 text-xs font-semibold text-black/50">
+              📚 {stats.total} {t('cabinet.courses', { defaultValue: 'Courses' })}
+            </span>
+          </div>
         </div>
-        <Link
-          href={getUriWithOrg(orgslug, '/courses')}
-          className="inline-flex items-center gap-2 rounded-lg bg-black px-4 py-2 text-sm font-bold text-white hover:bg-black/85"
-        >
-          <BookOpen size={16} />
-          {t('cabinet.browse_courses', { defaultValue: 'Browse courses' })}
-        </Link>
+        <div className="flex shrink-0 items-center gap-2">
+          <span className="rounded-full border border-neutral-200 bg-white px-3 py-1.5 text-xs font-semibold text-black/50">
+            {t('cabinet.role_student', { defaultValue: 'Student' })}
+          </span>
+          <div className="grid h-10 w-10 place-items-center rounded-full border border-neutral-200 bg-neutral-50 text-sm font-black text-black">
+            {initials || '·'}
+          </div>
+        </div>
       </div>
+
+      {currentRun && currentUuid && (
+        <div className="mt-8 flex flex-col items-start justify-between gap-6 overflow-hidden rounded-2xl border border-neutral-800 bg-[#0b0c0d] p-6 text-white sm:flex-row sm:items-center">
+          <div className="min-w-0">
+            <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-white/45">
+              {t('cabinet.continue_learning', { defaultValue: 'Continue learning' })}
+            </p>
+            <p className="mt-2 truncate text-2xl font-black tracking-tight">
+              {currentCourse?.name || t('cabinet.my_courses', { defaultValue: 'My courses' })}
+            </p>
+            <p className="mt-1 text-sm text-white/50">
+              {t('cabinet.lesson_of', {
+                defaultValue: 'Lesson {{current}} of {{total}}',
+                current: (currentRun.steps || []).length,
+                total: currentRun.course_total_steps || 0,
+              })}
+              {' · '}
+              {currentProgress}%
+            </p>
+            <div className="mt-4 h-1.5 w-full max-w-[340px] overflow-hidden rounded-full bg-white/15">
+              <div className="h-full rounded-full bg-[#c6ff4a]" style={{ width: `${currentProgress}%` }} />
+            </div>
+          </div>
+          <Link
+            href={getUriWithOrg(orgslug, `/course/${currentUuid}`)}
+            className="inline-flex shrink-0 items-center gap-2 rounded-xl bg-[#c6ff4a] px-5 py-3 text-sm font-bold text-black transition-opacity hover:opacity-90"
+          >
+            {t('cabinet.continue', { defaultValue: 'Continue' })}
+            <ArrowRight size={16} />
+          </Link>
+        </div>
+      )}
 
       <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-3">
         <div className="rounded-2xl border border-neutral-200 bg-white p-5">
