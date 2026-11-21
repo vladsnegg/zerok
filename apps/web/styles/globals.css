@@ -2608,3 +2608,211 @@
   outline: 2px solid rgb(0 0 0 / 0.65);
   outline-offset: 3px;
 }
+
+/* ==========================================================================
+   Themes (account appearance)
+   Data attribute lives on <html>; theme-init.js applies the stored value
+   before first paint so there is no flash and no hydration mismatch.
+   Only the neutral surfaces change here; the accent recolours the existing
+   lime marks (wordmark dot, hero progress, primary accents).
+   ========================================================================== */
+
+:root,
+html[data-theme='snow'] {
+  --t-bg: #ffffff;
+  --t-surface: #ffffff;
+  --t-surface-2: #f6f6f6;
+  --t-border: #e5e5e5;
+  --t-text: #0a0a0a;
+  --t-muted: #8a8a8a;
+  --t-faint: #b5b5b5;
+  --t-accent: #c6ff4a;
+  --t-accent-ink: #0a0a0a;
+}
+
+html[data-theme='paper'] {
+  --t-bg: #faf6ee;
+  --t-surface: #fffdf8;
+  --t-surface-2: #f3ede1;
+  --t-border: #e8dfd0;
+  --t-text: #1c1710;
+  --t-muted: #8a7f6d;
+  --t-faint: #b8ac97;
+  --t-accent: #f59e0b;
+  --t-accent-ink: #1c1202;
+}
+
+html[data-theme='mist'] {
+  --t-bg: #f3f6fb;
+  --t-surface: #ffffff;
+  --t-surface-2: #ecf1f9;
+  --t-border: #dfe6f1;
+  --t-text: #0b1220;
+  --t-muted: #6f7d92;
+  --t-faint: #a3aebf;
+  --t-accent: #6366f1;
+  --t-accent-ink: #ffffff;
+}
+
+html[data-theme='sage'] {
+  --t-bg: #f2f7f1;
+  --t-surface: #ffffff;
+  --t-surface-2: #e9f1e7;
+  --t-border: #dde8da;
+  --t-text: #101a0e;
+  --t-muted: #6b7d66;
+  --t-faint: #a4b39f;
+  --t-accent: #10b981;
+  --t-accent-ink: #04231a;
+}
+
+html[data-theme='rose'] {
+  --t-bg: #fdf4f6;
+  --t-surface: #ffffff;
+  --t-surface-2: #fae9ee;
+  --t-border: #f0dde3;
+  --t-text: #1d0d12;
+  --t-muted: #8f6b75;
+  --t-faint: #c3a3ac;
+  --t-accent: #f43f5e;
+  --t-accent-ink: #ffffff;
+}
+
+html[data-theme='graphite'] {
+  --t-bg: #f0f1f3;
+  --t-surface: #ffffff;
+  --t-surface-2: #e9eaee;
+  --t-border: #dcdee3;
+  --t-text: #101114;
+  --t-muted: #70747d;
+  --t-faint: #a6aab2;
+  --t-accent: #0d9488;
+  --t-accent-ink: #ffffff;
+}
+
+html[data-theme='night'] {
+  --t-bg: #0b0c0d;
+  --t-surface: #151617;
+  --t-surface-2: #1c1d1f;
+  --t-border: #262728;
+  --t-text: #f2f2f2;
+  --t-muted: #9a9a9a;
+  --t-faint: #6c6c6c;
+  --t-accent: #c6ff4a;
+  --t-accent-ink: #0a0a0a;
+  color-scheme: dark;
+}
+
+html {
+  background-color: var(--t-bg);
+}
+
+body {
+  background-color: var(--t-bg);
+  color: var(--t-text);
+}
+
+/* Neutral surfaces ------------------------------------------------------- */
+.bg-white {
+  background-color: var(--t-surface) !important;
+}
+[class*='bg-[#f8f8f8]'],
+[class*='bg-[#fcfcfc]'],
+[class*='bg-[#fafafa]'],
+[class*='bg-[#f5f5f5]'] {
+  background-color: var(--t-bg) !important;
+}
+.bg-neutral-50,
+.bg-neutral-100,
+.bg-gray-50,
+.bg-gray-100,
+.bg-slate-50,
+.bg-zinc-50,
+.bg-zinc-100 {
+  background-color: var(--t-surface-2) !important;
+}
+.border-neutral-100,
+.border-neutral-200,
+.border-gray-100,
+.border-gray-200,
+.border-slate-200,
+.border-zinc-100,
+.border-zinc-200 {
+  border-color: var(--t-border) !important;
+}
+.divide-neutral-100 > :not([hidden]) ~ :not([hidden]),
+.divide-gray-50 > :not([hidden]) ~ :not([hidden]),
+.divide-neutral-200 > :not([hidden]) ~ :not([hidden]) {
+  border-color: var(--t-border) !important;
+}
+
+/* Typography ------------------------------------------------------------ */
+.text-black {
+  color: var(--t-text) !important;
+}
+[class*='text-black/'] {
+  color: color-mix(in srgb, var(--t-text) 55%, transparent) !important;
+}
+.text-gray-900,
+.text-gray-800,
+.text-gray-700,
+.text-neutral-900,
+.text-neutral-800,
+.text-zinc-900 {
+  color: var(--t-text) !important;
+}
+.text-gray-500,
+.text-gray-600,
+.text-neutral-500,
+.text-neutral-400,
+.text-zinc-500 {
+  color: var(--t-muted) !important;
+}
+.text-gray-400,
+.text-gray-300,
+.text-neutral-300,
+.text-zinc-400 {
+  color: var(--t-faint) !important;
+}
+
+/* Accent ---------------------------------------------------------------- */
+[class*='bg-[#c6ff4a]'] {
+  background-color: var(--t-accent) !important;
+  color: var(--t-accent-ink) !important;
+}
+[class*='text-[#c6ff4a]'] {
+  color: var(--t-accent) !important;
+}
+[class*='border-[#c6ff4a]'] {
+  border-color: var(--t-accent) !important;
+}
+[class*='text-[#6366f1]'] {
+  color: var(--t-accent) !important;
+}
+
+/* Night-only corrections for literal white/black utilities ----------------- */
+html[data-theme='night'] [class*='bg-white/90'],
+html[data-theme='night'] [class*='bg-white/85'],
+html[data-theme='night'] [class*='bg-white/80'] {
+  background-color: color-mix(in srgb, var(--t-surface) 88%, transparent) !important;
+}
+html[data-theme='night'] .bg-black {
+  background-color: #f2f2f2 !important;
+}
+html[data-theme='night'] .bg-black.text-white,
+html[data-theme='night'] .bg-black .text-white {
+  color: #0b0c0d !important;
+}
+html[data-theme='night'] [class*='hover:bg-black']:hover {
+  background-color: #ffffff !important;
+}
+html[data-theme='night'] input::placeholder,
+html[data-theme='night'] textarea::placeholder {
+  color: #7c7c7c !important;
+}
+html[data-theme='night'] .nice-shadow {
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.45) !important;
+}
+html[data-theme='night'] [class*='bg-white/80'][class*='backdrop-blur'] {
+  background-color: color-mix(in srgb, var(--t-surface) 85%, transparent) !important;
+}

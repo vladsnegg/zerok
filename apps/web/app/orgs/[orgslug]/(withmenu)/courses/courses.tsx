@@ -22,6 +22,7 @@ import { useCourses } from '@/hooks/queries/useCourses'
 import { useLHAnalytics, AnalyticsEvent } from '@services/analytics'
 import CatalogPagination, { useCatalogPagination } from '@components/Objects/Catalog/CatalogPagination'
 import ListShortcuts from '@components/Objects/Shortcuts/ListShortcuts'
+import ContinueLearningStrip from '@components/Objects/Courses/ContinueLearningStrip'
 import { asArray } from '@services/utils/ts/requests'
 
 interface CourseProps {
@@ -225,6 +226,8 @@ function Courses(props: CourseProps) {
               />
             </AuthenticatedClientElement>
           </div>
+
+          <ContinueLearningStrip orgslug={orgslug} />
 
           {/* Search and Usergroup Filter */}
           {allCourses.length > 0 && (

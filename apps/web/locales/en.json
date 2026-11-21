@@ -2700,7 +2700,19 @@
       "zone_body": "This removes your account and access. Any organization you are the sole admin of, and all of its courses and content, will be deleted too. Organizations with other admins are kept; you are simply removed from them."
     },
     "ai_apps": "AI apps",
+    "appearance": "Appearance",
+    "appearance_subtitle": "Pick the palette that feels right. The choice is saved in this browser.",
+    "appearance_note": "More themes are on the way; the dark theme is ready to try.",
     "mobile_actions": "Account mobile actions"
+  },
+  "theme": {
+    "snow": "Snow",
+    "paper": "Warm paper",
+    "mist": "Cool mist",
+    "sage": "Sage",
+    "rose": "Rose quartz",
+    "graphite": "Graphite",
+    "night": "Night"
   },
   "user": {
     "user_settings": "User Settings",

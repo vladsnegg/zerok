@@ -10,6 +10,7 @@ import { getUriWithOrg } from '@services/config/config'
 import { useLHSession } from '@components/Contexts/LHSessionContext'
 import { useTranslation } from 'react-i18next'
 import AccountGeneral from '@components/Objects/Account/subpages/AccountGeneral'
+import AccountAppearance from '@components/Objects/Account/subpages/AccountAppearance'
 import AccountProfile from '@components/Objects/Account/subpages/AccountProfile'
 import AccountSecurity from '@components/Objects/Account/subpages/AccountSecurity'
 import AccountPurchases from '@ee/components/Payments/AccountPurchases'
@@ -25,6 +26,7 @@ interface AccountClientProps {
 const getSubpageTitle = (subpage: string, t: (_key: string) => string): string => {
   const titles: Record<string, string> = {
     'general': t('account.general'),
+    'appearance': t('account.appearance'),
     'profile': t('account.profile'),
     'security': t('account.security'),
     'purchases': t('account.purchases'),
@@ -53,6 +55,8 @@ const AccountClient = ({ orgslug, org_id, subpage }: AccountClientProps) => {
     switch (subpage) {
       case 'general':
         return <AccountGeneral />
+      case 'appearance':
+        return <AccountAppearance />
       case 'profile':
         return <AccountProfile />
       case 'security':
