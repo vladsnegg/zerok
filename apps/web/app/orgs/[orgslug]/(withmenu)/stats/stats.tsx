@@ -22,6 +22,7 @@ import { useLHSession } from '@components/Contexts/LHSessionContext'
 import useAdminStatus from '@components/Hooks/useAdminStatus'
 import { getAPIUrl, getUriWithOrg } from '@services/config/config'
 import { RequestBodyWithAuthHeader, asArray } from '@services/utils/ts/requests'
+import { getOrgCourses } from '@services/courses/courses'
 import {
   addContest,
   addDefense,
@@ -61,6 +62,8 @@ export default function StatsClient({ orgslug }: { orgslug: string }) {
   const [leaderboard, setLeaderboard] = useState<Leaderboard | null>(null)
   const [contests, setContests] = useState<ContestEntry[]>([])
   const [runs, setRuns] = useState<TrailRun[]>([])
+  const [orgCourses, setOrgCourses] = useState<any[]>([])
+  const [boardMetric, setBoardMetric] = useState<'score' | 'defenses' | 'contests'>('score')
   const [events, setEvents] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
   const [contestTitle, setContestTitle] = useState('')
@@ -128,6 +131,25 @@ export default function StatsClient({ orgslug }: { orgslug: string }) {
     setContests(asArray<ContestEntry>(nextContests?.items))
   }
 
+  useEffect(() => {
+    if (!token || !isAdmin) return
+    let cancelled = false
+    getOrgCourses(orgslug, null, token, true)
+      .then((courses: any) => {
+        if (cancelled) return
+        const list = Array.isArray(courses) ? courses : []
+        setOrgCourses(list)
+        const first = list.find((course: any) => course.course_uuid)?.course_uuid
+        if (first) setCourseUuid((current) => current || String(first))
+      })
+      .catch(() => {
+        if (!cancelled) setOrgCourses([])
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [token, isAdmin, orgslug])
+
   const courseOptions = useMemo(() => {
     const seen = new Set<string>()
     const options: { uuid: string; name: string }[] = []
@@ -137,8 +159,15 @@ export default function StatsClient({ orgslug }: { orgslug: string }) {
       seen.add(uuid)
       options.push({ uuid: String(uuid), name: run.course?.name || t('stats.course', { defaultValue: 'Course' }) })
     }
+    // Staff often teach courses they are not enrolled in.
+    for (const course of orgCourses) {
+      const uuid = course.course_uuid
+      if (!uuid || seen.has(uuid)) continue
+      seen.add(uuid)
+      options.push({ uuid: String(uuid), name: course.name || t('stats.course', { defaultValue: 'Course' }) })
+    }
     return options
-  }, [runs, t])
+  }, [runs, orgCourses, t])
 
   const upcoming = useMemo(() => {
     const now = Date.now()
@@ -158,6 +187,29 @@ export default function StatsClient({ orgslug }: { orgslug: string }) {
   const regularShare = breakdown && breakdown.total_weeks
     ? Math.round((breakdown.active_weeks / breakdown.total_weeks) * 100)
     : 0
+
+  // Course-scope scores renormalize the weights (contests are organization
+  // level), so the maxima for the bars change too.
+  const weightSum = scope === 'course' ? 0.95 : 1
+  const componentMax = {
+    regularity: (100 * 0.35) / weightSum,
+    defenses: (100 * 0.3) / weightSum,
+    solved: (100 * 0.3) / weightSum,
+    contests: (100 * 0.05) / weightSum,
+  }
+
+  const rankedItems = useMemo(() => {
+    const items = leaderboard?.items ? [...leaderboard.items] : []
+    if (boardMetric === 'score') return items
+    const key = boardMetric === 'defenses' ? 'defenses' : 'contests'
+    return items
+      .sort((a, b) => b[key] - a[key] || b.score - a.score)
+      .map((entry, index) => ({ ...entry, rank: index + 1 }))
+  }, [leaderboard, boardMetric])
+
+  const meInList = Boolean(
+    leaderboard?.me && rankedItems.some((entry) => entry.user_id === leaderboard.me?.user_id),
+  )
 
   const addContestEntry = async () => {
     if (!token || !org?.id || busy) return
@@ -297,6 +349,63 @@ export default function StatsClient({ orgslug }: { orgslug: string }) {
         </div>
       </div>
 
+      {/* Score breakdown */}
+      {breakdown && (
+        <section className="mt-4 rounded-2xl border border-neutral-200 bg-white p-5">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <h2 className="text-sm font-bold text-black">
+              {t('stats.breakdown_title', { defaultValue: 'How the score is built' })}
+            </h2>
+            <span className="text-xs text-black/35">
+              {t('stats.breakdown_note', { defaultValue: 'Regularity matters most' })}
+            </span>
+          </div>
+          <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
+            {[
+              {
+                label: t('stats.kpi_regularity', { defaultValue: 'Regularity' }),
+                points: breakdown.regularity,
+                max: componentMax.regularity,
+                hint: `${breakdown.active_weeks}/${Number(breakdown.total_weeks.toFixed(1))}`,
+              },
+              {
+                label: t('stats.kpi_defenses', { defaultValue: 'Defenses' }),
+                points: breakdown.defenses,
+                max: componentMax.defenses,
+                hint: `${Math.round((breakdown.conversion || 0) * 100)}% ${t('stats.kpi_conversion', { defaultValue: 'converted' })}`,
+              },
+              {
+                label: t('stats.kpi_solved', { defaultValue: 'Tasks solved' }),
+                points: breakdown.solved,
+                max: componentMax.solved,
+                hint: `${breakdown.solved_count}`,
+              },
+              {
+                label: t('stats.kpi_contests', { defaultValue: 'Contests' }),
+                points: breakdown.contests,
+                max: componentMax.contests,
+                hint: t('stats.contests_note_short', { defaultValue: 'small weight' }),
+              },
+            ].map((part) => (
+              <div key={part.label}>
+                <div className="flex items-center justify-between text-xs">
+                  <span className="font-semibold text-black/60">{part.label}</span>
+                  <span className="text-black/35">
+                    {Math.round(part.points)}/{Math.round(part.max)} · {part.hint}
+                  </span>
+                </div>
+                <div className="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-neutral-100">
+                  <div
+                    className="h-full rounded-full bg-[#c6ff4a]"
+                    style={{ width: `${Math.min(100, (part.points / Math.max(1, part.max)) * 100)}%` }}
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+
       {/* Leaderboard */}
       <section className="mt-8 overflow-hidden rounded-2xl border border-neutral-200 bg-white">
         <div className="flex flex-wrap items-center justify-between gap-3 border-b border-neutral-200 px-5 py-4">
@@ -308,6 +417,29 @@ export default function StatsClient({ orgslug }: { orgslug: string }) {
             </span>
           </h2>
           <div className="flex flex-wrap items-center gap-2">
+            <div className="inline-flex overflow-hidden rounded-lg border border-neutral-200">
+              {(['score', 'defenses', 'contests'] as const).map((metric) => {
+                if (metric === 'contests' && scope === 'course') return null
+                const label =
+                  metric === 'score'
+                    ? t('stats.kpi_score', { defaultValue: 'Score' })
+                    : metric === 'defenses'
+                      ? t('stats.kpi_defenses', { defaultValue: 'Defenses' })
+                      : t('stats.kpi_contests', { defaultValue: 'Contests' })
+                return (
+                  <button
+                    key={metric}
+                    type="button"
+                    onClick={() => setBoardMetric(metric)}
+                    className={`px-3 py-1.5 text-xs font-bold ${
+                      boardMetric === metric ? 'bg-black text-white' : 'text-black/50'
+                    }`}
+                  >
+                    {label}
+                  </button>
+                )
+              })}
+            </div>
             <div className="inline-flex overflow-hidden rounded-lg border border-neutral-200">
               <button
                 type="button"
@@ -362,7 +494,7 @@ export default function StatsClient({ orgslug }: { orgslug: string }) {
                 </tr>
               </thead>
               <tbody className="divide-y divide-neutral-100">
-                {leaderboard.items.map((entry) => {
+                {rankedItems.map((entry) => {
                   const isMe = entry.user_id === user?.id
                   return (
                     <tr key={entry.user_id} className={isMe ? 'bg-neutral-50' : ''}>
@@ -397,6 +529,25 @@ export default function StatsClient({ orgslug }: { orgslug: string }) {
                   )
                 })}
               </tbody>
+              {leaderboard?.me && !meInList && (
+                <tfoot>
+                  <tr className="border-t border-neutral-200 bg-neutral-50">
+                    <td className="px-5 py-3 font-bold text-black/50">{leaderboard.me.rank}</td>
+                    <td className="px-3 py-3">
+                      <span className="font-semibold text-black">
+                        {leaderboard.me.name}
+                        <span className="ms-2 rounded-full bg-black px-2 py-0.5 text-[10px] font-bold text-white">
+                          {t('stats.you', { defaultValue: 'you' })}
+                        </span>
+                      </span>
+                    </td>
+                    <td className="px-3 py-3 font-black text-black">{Math.round(leaderboard.me.score)}</td>
+                    <td className="px-3 py-3 text-black/60">{leaderboard.me.defenses}</td>
+                    <td className="px-3 py-3 text-black/60">{leaderboard.me.solved}</td>
+                    {scope === 'course' && isAdmin && <td className="px-3 py-3" />}
+                  </tr>
+                </tfoot>
+              )}
             </table>
           </div>
         ) : (

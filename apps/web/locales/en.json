@@ -12044,7 +12044,10 @@
     "contest_date": "Date",
     "contest_title": "Contest (optional)",
     "contest_placeholder": "e.g. school olympiad",
-    "contest_add": "Add"
+    "contest_add": "Add",
+    "breakdown_title": "How the score is built",
+    "breakdown_note": "Regularity matters most",
+    "contests_note_short": "small weight"
   },
   "cabinet": {
     "eyebrow": "My learning",

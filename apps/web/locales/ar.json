@@ -12610,6 +12610,9 @@
     "contest_date": "التاريخ",
     "contest_title": "المسابقة (اختياري)",
     "contest_placeholder": "مثلاً أولمبياد المدرسة",
-    "contest_add": "أضف"
+    "contest_add": "أضف",
+    "breakdown_title": "كيف يُحسب المؤشر",
+    "breakdown_note": "الانتظام هو الأهم",
+    "contests_note_short": "وزن صغير"
   }
 }

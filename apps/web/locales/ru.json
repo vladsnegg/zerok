@@ -11978,7 +11978,10 @@
     "contest_date": "Дата",
     "contest_title": "Контест (необязательно)",
     "contest_placeholder": "например, школьная олимпиада",
-    "contest_add": "Добавить"
+    "contest_add": "Добавить",
+    "breakdown_title": "Из чего складывается КПД",
+    "breakdown_note": "Регулярность важнее всего",
+    "contests_note_short": "небольшой вес"
   },
   "cabinet": {
     "eyebrow": "Моё обучение",
