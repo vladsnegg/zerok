@@ -22,6 +22,7 @@ import { useLHSession } from '@components/Contexts/LHSessionContext'
 import useAdminStatus from '@components/Hooks/useAdminStatus'
 import { getAPIUrl, getUriWithOrg } from '@services/config/config'
 import { RequestBodyWithAuthHeader, asArray } from '@services/utils/ts/requests'
+import { getCalendarEvents } from '@services/calendar/calendar'
 import { getOrgCourses } from '@services/courses/courses'
 import {
   addContest,
@@ -74,25 +75,34 @@ export default function StatsClient({ orgslug }: { orgslug: string }) {
   useEffect(() => {
     if (!token) return
     let cancelled = false
+    const now = new Date()
+    const horizon = new Date(now.getTime() + 30 * 86_400_000)
     Promise.all([
       fetch(`${getAPIUrl()}trail/`, RequestBodyWithAuthHeader('GET', null, null, token))
         .then((res) => (res.ok ? res.json() : null))
         .catch(() => null),
-      fetch(`${getAPIUrl()}calendar`, RequestBodyWithAuthHeader('GET', null, null, token))
-        .then((res) => (res.ok ? res.json() : null))
-        .catch(() => null),
+      org?.id
+        ? getCalendarEvents(org.id, now, horizon, token).catch(() => [])
+        : Promise.resolve([]),
     ]).then(([trail, calendar]) => {
       if (cancelled) return
       const nextRuns = asArray<TrailRun>(trail?.runs)
       setRuns(nextRuns)
-      setEvents(Array.isArray(calendar) ? calendar : asArray(calendar?.events))
+      setEvents(
+        (Array.isArray(calendar) ? calendar : []).map((event) => ({
+          id: String(event.id),
+          title: event.title,
+          start: event.starts_at,
+          url: event.url ?? null,
+        })),
+      )
       const firstUuid = nextRuns.find((run) => run.course?.course_uuid)?.course?.course_uuid
       if (firstUuid) setCourseUuid((current) => current || String(firstUuid))
     })
     return () => {
       cancelled = true
     }
-  }, [token])
+  }, [token, org?.id])
 
   const activeCourseUuid = scope === 'course' ? courseUuid : null
 
@@ -173,7 +183,7 @@ export default function StatsClient({ orgslug }: { orgslug: string }) {
     const now = Date.now()
     return events
       .map((event) => {
-        const raw = event?.start || event?.date || event?.due_date
+        const raw = event?.start
         const time = raw ? new Date(raw).getTime() : NaN
         return Number.isFinite(time) ? { event, time } : null
       })
@@ -633,7 +643,7 @@ export default function StatsClient({ orgslug }: { orgslug: string }) {
               {upcoming.map(({ event, time }) => (
                 <li key={event.id || time} className="text-sm">
                   <p className="font-medium text-black">
-                    {event.title || event.name || t('cabinet.event', { defaultValue: 'Event' })}
+                    {event.title || t('cabinet.event', { defaultValue: 'Event' })}
                   </p>
                   <p className="text-xs text-black/35">
                     {new Date(time).toLocaleString(i18n.language)}

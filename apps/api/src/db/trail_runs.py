@@ -1,5 +1,5 @@
 from typing import Optional
-from pydantic import BaseModel
+from pydantic import BaseModel, field_validator
 from sqlalchemy import JSON, Column, ForeignKey, Integer, UniqueConstraint
 from sqlmodel import Field, SQLModel
 from enum import Enum
@@ -68,6 +68,16 @@ class TrailRunRead(BaseModel):
     id: Optional[int] = None
     data: dict = Field(default_factory=dict)
     status: StatusEnum = StatusEnum.STATUS_IN_PROGRESS
+
+    @field_validator("data", mode="before")
+    @classmethod
+    def _coerce_null_data(cls, value: object) -> object:
+        """Rows written outside the ORM can have a NULL JSON column.
+
+        The read model requires a dict, and a single such row used to fail the
+        whole trail response (the cabinet then showed "Failed to fetch").
+        """
+        return {} if value is None else value
     # foreign keys
     trail_id: Optional[int] = None
     course_id: Optional[int] = None

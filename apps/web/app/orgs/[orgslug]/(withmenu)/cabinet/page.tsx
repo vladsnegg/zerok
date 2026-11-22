@@ -20,6 +20,7 @@ import { useLHSession } from '@components/Contexts/LHSessionContext'
 import useAdminStatus from '@components/Hooks/useAdminStatus'
 import { getAPIUrl, getUriWithOrg } from '@services/config/config'
 import { RequestBodyWithAuthHeader, asArray } from '@services/utils/ts/requests'
+import { getCalendarEvents } from '@services/calendar/calendar'
 import TeacherCabinetHome from './teacher-home'
 
 type TrailRun = {
@@ -32,7 +33,12 @@ type TrailRun = {
   update_date?: string
 }
 
-type CalendarEvent = any
+type CalendarEvent = {
+  id: string
+  title: string
+  start: string
+  url?: string | null
+}
 
 /**
  * The cabinet is home for both learners and instructors: learners get their
@@ -78,19 +84,33 @@ function StudentCabinetView({ orgslug }: { orgslug: string }) {
     let cancelled = false
 
     const load = async () => {
+      const now = new Date()
+      const horizon = new Date(now.getTime() + 30 * 86_400_000)
       try {
-        const [trailRes, calendarRes] = await Promise.all([
-          fetch(`${getAPIUrl()}trail/`, RequestBodyWithAuthHeader('GET', null, null, token)),
-          fetch(`${getAPIUrl()}calendar`, RequestBodyWithAuthHeader('GET', null, null, token)),
-        ])
+        const trailPromise = fetch(
+          `${getAPIUrl()}trail/`,
+          RequestBodyWithAuthHeader('GET', null, null, token),
+        )
+          .then((res) => (res.ok ? res.json() : null))
+          .catch(() => null)
+        // The calendar is a separate endpoint (per org and date range); the
+        // bare `calendar` path used to 404.
+        const calendarPromise = org?.id
+          ? getCalendarEvents(org.id, now, horizon, token).catch(() => [])
+          : Promise.resolve([])
 
-        if (!cancelled && trailRes.ok) {
-          const trail = await trailRes.json().catch(() => null)
+        const [trail, calendar] = await Promise.all([trailPromise, calendarPromise])
+
+        if (!cancelled) {
           setRuns(asArray<TrailRun>(trail?.runs))
-        }
-        if (!cancelled && calendarRes.ok) {
-          const calendar = await calendarRes.json().catch(() => null)
-          setEvents(Array.isArray(calendar) ? calendar : asArray(calendar?.events))
+          setEvents(
+            (Array.isArray(calendar) ? calendar : []).map((event) => ({
+              id: String(event.id),
+              title: event.title,
+              start: event.starts_at,
+              url: event.url ?? null,
+            })),
+          )
         }
       } finally {
         if (!cancelled) setLoading(false)
@@ -101,7 +121,7 @@ function StudentCabinetView({ orgslug }: { orgslug: string }) {
     return () => {
       cancelled = true
     }
-  }, [token])
+  }, [token, org?.id])
 
   const stats = useMemo(() => {
     const inProgress = runs.filter((run) => run.status === 'STATUS_IN_PROGRESS').length
@@ -140,8 +160,7 @@ function StudentCabinetView({ orgslug }: { orgslug: string }) {
     const now = Date.now()
     const dated = events
       .map((event) => {
-        const raw = event?.start || event?.date || event?.due_date
-        const time = raw ? new Date(raw).getTime() : NaN
+        const time = event.start ? new Date(event.start).getTime() : NaN
         return Number.isFinite(time) ? { event, time } : null
       })
       .filter(Boolean) as { event: CalendarEvent; time: number }[]
@@ -350,11 +369,11 @@ function StudentCabinetView({ orgslug }: { orgslug: string }) {
               {events.slice(0, 5).map((event, index) => (
                 <li key={event.id ?? index} className="text-sm">
                   <p className="font-medium text-black">
-                    {event.title || event.name || t('cabinet.event', { defaultValue: 'Event' })}
+                    {event.title || t('cabinet.event', { defaultValue: 'Event' })}
                   </p>
-                  {(event.start || event.date || event.due_date) && (
+                  {event.start && (
                     <p className="text-xs text-black/35">
-                      {new Date(event.start || event.date || event.due_date).toLocaleString()}
+                      {new Date(event.start).toLocaleString()}
                     </p>
                   )}
                 </li>
