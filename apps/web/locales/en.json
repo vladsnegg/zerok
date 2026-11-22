@@ -2425,10 +2425,6 @@
           "description": "Paid courses and bundles",
           "keywords": "store, shop, buy, pricing, plans, offers, purchase"
         },
-        "trail": {
-          "description": "Your progress across courses",
-          "keywords": "trail, progress, my courses, continue, history, enrolled"
-        },
         "notifications": {
           "description": "Deadlines, grades and course updates",
           "keywords": "notifications, alerts, deadlines, grades, updates, inbox"
@@ -2465,6 +2461,10 @@
         "live_sessions": {
           "description": "Upcoming live classes, office hours and replays",
           "keywords": "live sessions classes webinar meeting call video office hours events calendar replay recording"
+        },
+        "stats": {
+          "description": "КПД, defenses, contests and deadlines",
+          "keywords": "stats, statistics, progress, leaderboard, kpd, defenses, contests"
         }
       }
     }
@@ -12011,6 +12011,40 @@
     "sign_in_title": "Sign in to see your calendar",
     "title": "Calendar",
     "more_events": "+{{count}} more"
+  },
+  "stats": {
+    "title": "Statistics",
+    "eyebrow": "Progress",
+    "subtitle": "Regular practice, defenses and deadlines in one place.",
+    "period_week": "Week",
+    "period_month": "Month",
+    "period_all": "All time",
+    "kpi_score": "Score",
+    "kpi_rank": "Rank",
+    "kpi_defenses": "Defenses",
+    "kpi_solved": "Tasks solved",
+    "kpi_regularity": "Regularity",
+    "kpi_conversion": "Converted to defense",
+    "kpi_contests": "Contests",
+    "organization": "Organization",
+    "course": "Course",
+    "student": "Student",
+    "you": "you",
+    "of_participants": "of {{count}}",
+    "add_defense": "Defense",
+    "leaderboard": "Leaderboard",
+    "empty_board": "No activity in this period yet.",
+    "my_courses": "My courses",
+    "all_courses": "All courses",
+    "no_course": "You are not enrolled in a course yet.",
+    "no_progress": "No courses started yet.",
+    "deadlines": "Deadlines",
+    "contests": "Contests",
+    "contests_note": "Self-reported: small weight, does not affect regularity.",
+    "contest_date": "Date",
+    "contest_title": "Contest (optional)",
+    "contest_placeholder": "e.g. school olympiad",
+    "contest_add": "Add"
   },
   "cabinet": {
     "eyebrow": "My learning",

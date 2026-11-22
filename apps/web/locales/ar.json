@@ -2563,10 +2563,6 @@
           "description": "الدورات والحزم المدفوعة",
           "keywords": "المتجر, شراء, الأسعار, الخطط, العروض, store"
         },
-        "trail": {
-          "description": "تقدّمك عبر الدورات",
-          "keywords": "المسار, التقدّم, دوراتي, متابعة, السجل, trail, progress"
-        },
         "boards": {
           "description": "لوحاتك",
           "keywords": "اللوحات, كانبان, المهام, التخطيط, الملاحظات, boards"
@@ -2603,6 +2599,10 @@
         "notifications": {
           "description": "المواعيد النهائية والدرجات وتحديثات الدورات",
           "keywords": "إشعارات، تنبيهات، مواعيد نهائية، درجات، تحديثات"
+        },
+        "stats": {
+          "description": "المؤشر والدفاعات والمسابقات والمواعيد",
+          "keywords": "إحصاءات، تقدم، ترتيب، دفاعات، مسابقات"
         }
       }
     }
@@ -12577,5 +12577,39 @@
     "rose": "كوارتز وردي",
     "graphite": "جرافيت",
     "night": "ليلية"
+  },
+  "stats": {
+    "title": "الإحصاءات",
+    "eyebrow": "التقدّم",
+    "subtitle": "تمارين منتظمة ودفاعات ومواعيد نهائية في مكان واحد.",
+    "period_week": "أسبوع",
+    "period_month": "شهر",
+    "period_all": "كل الوقت",
+    "kpi_score": "المؤشر",
+    "kpi_rank": "الترتيب",
+    "kpi_defenses": "الدفاعات",
+    "kpi_solved": "المهام المحلولة",
+    "kpi_regularity": "الانتظام",
+    "kpi_conversion": "نسبة التحويل إلى دفاع",
+    "kpi_contests": "المسابقات",
+    "organization": "المؤسسة",
+    "course": "الدورة",
+    "student": "الطالب",
+    "you": "أنت",
+    "of_participants": "من {{count}}",
+    "add_defense": "دفاع",
+    "leaderboard": "لوحة المتصدرين",
+    "empty_board": "لا يوجد نشاط في هذه الفترة.",
+    "my_courses": "دوراتي",
+    "all_courses": "كل الدورات",
+    "no_course": "لم تسجل في أي دورة بعد.",
+    "no_progress": "لم تبدأ أي دورة بعد.",
+    "deadlines": "المواعيد النهائية",
+    "contests": "المسابقات",
+    "contests_note": "تسجيل ذاتي: وزن صغير ولا يؤثر على الانتظام.",
+    "contest_date": "التاريخ",
+    "contest_title": "المسابقة (اختياري)",
+    "contest_placeholder": "مثلاً أولمبياد المدرسة",
+    "contest_add": "أضف"
   }
 }

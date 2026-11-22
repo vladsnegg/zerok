@@ -9,7 +9,7 @@ import { sitePage as liveSessions } from '@/app/orgs/[orgslug]/(withmenu)/live/p
 import { sitePage as communities } from '@/app/orgs/[orgslug]/(withmenu)/communities/page.search'
 import { sitePage as playgrounds } from '@/app/orgs/[orgslug]/(withmenu)/playgrounds/page.search'
 import { sitePage as store } from '@/app/orgs/[orgslug]/(withmenu)/store/page.search'
-import { sitePage as trail } from '@/app/orgs/[orgslug]/(withmenu)/trail/page.search'
+import { sitePage as stats } from '@/app/orgs/[orgslug]/(withmenu)/stats/page.search'
 import { sitePage as notifications } from '@/app/orgs/[orgslug]/(withmenu)/notifications/page.search'
 import { sitePage as calendar } from '@/app/orgs/[orgslug]/(withmenu)/calendar/page.search'
 import { sitePage as boards } from '@/app/orgs/[orgslug]/(withmenu)/boards/page.search'
@@ -45,7 +45,7 @@ export const sitePages: SitePageMeta[] = [
   communities,
   playgrounds,
   store,
-  trail,
+  stats,
   notifications,
   calendar,
   boards,

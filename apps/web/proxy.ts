@@ -343,6 +343,11 @@ export default async function proxy(req: NextRequest) {
     return NextResponse.rewrite(new URL(`/welcome${search}`, req.url))
   }
 
+  // Progress folded into /stats: keep old links working.
+  if (pathname === '/trail' || pathname.startsWith('/trail/')) {
+    return NextResponse.redirect(new URL('/stats', req.url), 308)
+  }
+
   // The dashboard moved under the cabinet: send every legacy /dash link there
   // so bookmarks, emails and docs keep working.
   if (pathname === '/dash' || pathname.startsWith('/dash/')) {

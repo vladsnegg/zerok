@@ -7,7 +7,7 @@ import {
   House,
   Books,
   MagnifyingGlass,
-  Signpost,
+  ChartLineUp,
   DotsNine,
   SignIn,
   CalendarDots,
@@ -124,7 +124,7 @@ export function MobileTabBar({ orgslug, primaryColor = '' }: { orgslug: string; 
       : []),
     { key: 'search', label: t('common.search'), Icon: MagnifyingGlass, onClick: () => openSearch(true), active: path.startsWith('/search') },
     isAuthenticated
-      ? { key: 'trail', label: t('courses.progress'), Icon: Signpost, href: getUriWithOrg(orgslug, '/trail'), active: path.startsWith('/trail') }
+      ? { key: 'stats', label: t('stats.title'), Icon: ChartLineUp, href: getUriWithOrg(orgslug, '/stats'), active: path.startsWith('/stats') }
       : { key: 'login', label: t('auth.login'), Icon: SignIn, href: getUriWithOrg(orgslug, '/login'), active: path.startsWith('/login') },
     { key: 'more', label: t('common.more'), Icon: DotsNine, onClick: () => setMoreOpen(true), active: moreOpen },
   ]

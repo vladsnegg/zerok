@@ -17,6 +17,7 @@ from src.routers import stream
 from src.routers import api_tokens
 from src.routers import mcp_oauth
 from src.routers import calendar as calendar_router_module
+from src.routers import stats as stats_router_module
 from src.routers import webhooks
 from src.routers.integrations import zapier as zapier_integration
 from src.routers.ai import ai, magicblocks, courseplanning, rag, images, quiz, assignment_gen, scenario, audio
@@ -120,6 +121,12 @@ v1_router.include_router(
     dependencies=[Depends(require_authenticated_user), Depends(require_plan("pro", "API Access"))]
 )
 v1_router.include_router(mcp_oauth.router, prefix="/mcp", tags=["mcp"])
+v1_router.include_router(
+    stats_router_module.router,
+    prefix="/stats",
+    tags=["stats"],
+    dependencies=[Depends(require_authenticated_user)],
+)
 v1_router.include_router(
     webhooks.router,
     prefix="/orgs",

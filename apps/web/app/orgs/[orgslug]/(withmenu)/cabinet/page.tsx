@@ -265,10 +265,10 @@ function StudentCabinetView({ orgslug }: { orgslug: string }) {
               {t('cabinet.my_courses', { defaultValue: 'My courses' })}
             </h2>
             <Link
-              href={getUriWithOrg(orgslug, '/trail')}
+              href={getUriWithOrg(orgslug, '/stats')}
               className="text-xs font-semibold text-black/45 hover:text-black"
             >
-              {t('cabinet.full_trail', { defaultValue: 'Full trail' })}
+              {t('stats.title', { defaultValue: 'Statistics' })}
             </Link>
           </div>
 
