@@ -100,6 +100,31 @@ def _install_stub_modules(monkeypatch: pytest.MonkeyPatch) -> None:
 
     install_router_module("src.routers.utils", "src.routers.utils")
 
+    # Modules added after this test was first written. Without a stub the
+    # `src.routers` package below has no __path__, so importing the real module
+    # fails and the whole router cannot be assembled.
+    for _name in (
+        "informatics",
+        "practice",
+        "stats",
+        "calendar",
+        "mcp_oauth",
+        "mfa",
+        "demo",
+        "editor_templates",
+        "editor_variables",
+    ):
+        install_router_module(f"src.routers.{_name}", f"src.routers.{_name}")
+        setattr(sys.modules["src.routers"], _name, sys.modules[f"src.routers.{_name}"])
+
+    install_router_module(
+        "src.routers.nudges",
+        "src.routers.nudges",
+        public_router=_named_router("src.routers.nudges.public_router"),
+        internal_router=_named_router("src.routers.nudges.internal_router"),
+    )
+    sys.modules["src.routers"].nudges = sys.modules["src.routers.nudges"]
+
     install_router_module(
         "src.routers.integrations.zapier", "src.routers.integrations.zapier"
     )
@@ -119,6 +144,7 @@ def _install_stub_modules(monkeypatch: pytest.MonkeyPatch) -> None:
         "src.routers.ai.assignment_gen", "src.routers.ai.assignment_gen"
     )
     install_router_module("src.routers.ai.scenario", "src.routers.ai.scenario")
+    install_router_module("src.routers.ai.audio", "src.routers.ai.audio")
     sys.modules["src.routers.ai"].ai = sys.modules["src.routers.ai.ai"]
     sys.modules["src.routers.ai"].magicblocks = sys.modules[
         "src.routers.ai.magicblocks"
@@ -133,6 +159,7 @@ def _install_stub_modules(monkeypatch: pytest.MonkeyPatch) -> None:
         "src.routers.ai.assignment_gen"
     ]
     sys.modules["src.routers.ai"].scenario = sys.modules["src.routers.ai.scenario"]
+    sys.modules["src.routers.ai"].audio = sys.modules["src.routers.ai.audio"]
 
     install_router_module("src.routers.boards.boards", "src.routers.boards.boards")
     install_router_module(
@@ -190,6 +217,9 @@ def _install_stub_modules(monkeypatch: pytest.MonkeyPatch) -> None:
     )
     install_router_module("src.routers.courses.courses", "src.routers.courses.courses")
     install_router_module(
+        "src.routers.courses.curriculum", "src.routers.courses.curriculum"
+    )
+    install_router_module(
         "src.routers.courses.assignments", "src.routers.courses.assignments"
     )
     install_router_module(
@@ -220,6 +250,9 @@ def _install_stub_modules(monkeypatch: pytest.MonkeyPatch) -> None:
         "src.routers.messaging.messaging"
     ]
     sys.modules["src.routers.courses"].courses = sys.modules["src.routers.courses.courses"]
+    sys.modules["src.routers.courses"].curriculum = sys.modules[
+        "src.routers.courses.curriculum"
+    ]
     sys.modules["src.routers.courses"].assignments = sys.modules[
         "src.routers.courses.assignments"
     ]

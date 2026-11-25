@@ -62,6 +62,50 @@ def startup_app(app: FastAPI) -> Callable:
         # Check if auto-installation is needed
         await auto_install()
 
+        # Drop the leftover platform-tour demo course before the programme
+        # seed runs, so it never re-enters the weighted KPI.
+        try:
+            from src.services.setup.review_course_cleanup import (
+                remove_legacy_review_course,
+            )
+
+            await remove_legacy_review_course()
+        except Exception:
+            logger.exception("Legacy review course cleanup failed")
+
+        # Bundled informatics course outline (topics + practice containers).
+        # Additive and idempotent: existing courses and edits are never touched.
+        # Imported lazily and guarded so a seed problem cannot stop the API.
+        try:
+            from src.services.setup.informatics_course import (
+                ensure_default_informatics_course,
+            )
+
+            await ensure_default_informatics_course()
+        except Exception:
+            logger.exception("Informatics course seeding failed")
+
+        # Three starter practice courses (Python, SQL, maths/logic). Additive
+        # and idempotent; the Informatics course above is a separate seeder.
+        try:
+            from src.services.setup.practice_courses import (
+                ensure_default_practice_courses,
+            )
+
+            await ensure_default_practice_courses()
+        except Exception:
+            logger.exception("Practice course seeding failed")
+
+        # One programme that gives each course its sequence and weight.
+        try:
+            from src.services.setup.learning_program import (
+                ensure_default_learning_program,
+            )
+
+            await ensure_default_learning_program()
+        except Exception:
+            logger.exception("Learning programme seeding failed")
+
         # Reconcile pack credits (Redis ↔ DB)
         await _reconcile_packs()
 
@@ -113,6 +157,16 @@ def startup_app(app: FastAPI) -> Callable:
         # video chapters) for whatever slipped through.
         from src.services.backfill.scheduler import start_scheduler as start_backfill
         start_backfill()
+        # Background worker for server-side Informatics submissions. It is a
+        # no-op unless the feature is used; TESTING disables it so unit tests
+        # never reach the network.
+        try:
+            from src.services.informatics.worker import start_worker
+
+            start_worker()
+        except Exception:
+            logger.exception("Informatics worker startup failed")
+
         # Start the embedded MCP session manager when enabled. Starlette
         # mounts don't run sub-app lifespans, so the manager's run()
         # context is entered here and closed in shutdown_app — without it
@@ -140,6 +194,13 @@ def shutdown_app(app: FastAPI) -> Callable:
                 await _cleanup_task
             except asyncio.CancelledError:
                 pass
+        # Stop the Informatics worker before the DB closes.
+        try:
+            from src.services.informatics.worker import stop_worker
+
+            await stop_worker()
+        except Exception:
+            logger.exception("Informatics worker shutdown failed")
         # Stop the in-app HLS consumer and wait for in-flight transcodes.
         from src.services.utils.hls_jobs import stop_consumer
         await stop_consumer()

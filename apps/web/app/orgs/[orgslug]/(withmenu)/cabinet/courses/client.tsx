@@ -3,7 +3,8 @@ import { Breadcrumbs } from '@components/Objects/Breadcrumbs/Breadcrumbs'
 import CreateCourseModal from '@components/Objects/Modals/Course/Create/CreateCourse'
 import CourseCreationTypeSelector from '@components/Objects/Modals/Course/Create/CourseCreationTypeSelector'
 import AICourseCreationModal from '@components/Objects/Modals/Course/Create/AICourse/AICourseCreationModal'
-import { BookCopy, Search, X, Trash2, Users, Info } from 'lucide-react'
+import { BookCopy, Search, X, Trash2, Users, Info, LibraryBig } from 'lucide-react'
+import Link from 'next/link'
 import ScormCourseImport from '@ee/components/Modals/ScormCourseImport'
 import { ImportTypeSelector, LearnHouseCourseImport, LmsCourseImport } from '@components/Objects/Modals/Course/Import'
 import CourseThumbnail, { removeCoursePrefix } from '@components/Objects/Thumbnails/CourseThumbnail'
@@ -468,6 +469,13 @@ function CoursesHome(params: CourseProps) {
                   {t('dashboard.courses.limit_reached', { limit: courseLimit })}
                 </div>
               )}
+              <Link
+                href={getUriWithOrg(orgslug, '/cabinet/practice/bank')}
+                className="rounded-lg border border-neutral-200 bg-white p-2 px-4 my-auto text-xs font-bold text-black/70 nice-shadow flex space-x-2 items-center transition-colors hover:text-black"
+              >
+                <LibraryBig className="w-4 h-4" />
+                <span>Банк задач</span>
+              </Link>
               <Modal
                 isDialogOpen={importCourseModal}
                 onOpenChange={(open) => {

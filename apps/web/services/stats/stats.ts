@@ -62,6 +62,127 @@ export interface ContestEntry {
   happened_on: string
 }
 
+export interface GlobalCourseStat {
+  course_uuid: string
+  name: string
+  sequence_order: number
+  weight: number
+  status: 'locked' | 'available' | 'in_progress' | 'completed' | string
+  course_kpi: number
+  course_percent: number
+  contribution: number
+  included: boolean
+  last_activity_at: string
+  activities_completed: number
+  activities_total: number
+  informatics_solved: number
+  informatics_attempts: number
+}
+
+export interface GlobalStats {
+  program_id: number
+  program_name: string
+  period: StatsPeriod | string
+  global_kpi: number
+  weighted_kpi_sum: number
+  weight_sum: number
+  coverage: number
+  active_days: number
+  courses_included: number
+  courses_started: number
+  courses_completed: number
+  courses_locked: number
+  computed_at: string
+  courses: GlobalCourseStat[]
+}
+
+export function getGlobalStats(
+  orgId: number,
+  token: string,
+  programId?: number | null,
+  period?: StatsPeriod,
+): Promise<GlobalStats> {
+  const query = new URLSearchParams({ org_id: String(orgId) })
+  if (programId) query.set('program_id', String(programId))
+  if (period) query.set('period', period)
+  return getJson(`${getAPIUrl()}stats/global?${query.toString()}`, token)
+}
+
+export interface CourseStatComponents {
+  activities_completed: number
+  activities_total: number
+  assignments_graded: number
+  assignments_total: number
+  tasks_solved: number
+  tasks_total: number
+  grade_percent: number
+  defense_count: number
+  informatics_attempts: number
+  informatics_solved: number
+  informatics_accepted: number
+  informatics_avg_score: number | null
+  active_weeks: number
+  total_weeks: number
+  active_days: number
+}
+
+export interface CourseStatDetail {
+  course_uuid: string
+  name: string
+  program_id: number
+  period: StatsPeriod | string
+  status: string
+  weight: number
+  course_kpi: number
+  course_percent: number
+  is_informatics: boolean
+  formula: Record<string, number>
+  components: CourseStatComponents
+  last_activity_at: string
+  computed_at: string
+}
+
+export interface CourseStudentRow {
+  user_id: number
+  name: string
+  username: string
+  course_kpi: number
+  course_percent: number
+  status: string
+  active_days: number
+  last_activity_at: string
+}
+
+export function getCourseStats(
+  orgId: number,
+  courseUuid: string,
+  token: string,
+  programId?: number | null,
+  period?: StatsPeriod,
+): Promise<CourseStatDetail> {
+  const query = new URLSearchParams({ org_id: String(orgId) })
+  if (programId) query.set('program_id', String(programId))
+  if (period) query.set('period', period)
+  return getJson(
+    `${getAPIUrl()}stats/courses/${encodeURIComponent(courseUuid)}?${query.toString()}`,
+    token,
+  )
+}
+
+export function getCourseStudents(
+  orgId: number,
+  courseUuid: string,
+  token: string,
+  programId?: number | null,
+): Promise<CourseStudentRow[]> {
+  const query = new URLSearchParams({ org_id: String(orgId) })
+  if (programId) query.set('program_id', String(programId))
+  return getJson(
+    `${getAPIUrl()}stats/courses/${encodeURIComponent(courseUuid)}/students?${query.toString()}`,
+    token,
+  )
+}
+
 async function getJson(url: string, token?: string) {
   const res = await fetch(url, RequestBodyWithAuthHeader('GET', null, null, token))
   if (!res.ok) throw new Error(`Request failed: ${res.status}`)

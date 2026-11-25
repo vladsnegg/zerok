@@ -782,6 +782,79 @@ async def _demo_teardown() -> None:
         await async_engine.dispose()
 
 
+@cli.command(name="informatics-seed")
+def informatics_seed(
+    dry_run: Annotated[
+        bool, typer.Option("--dry-run", help="Validate the bundle without writing")
+    ] = False,
+    bundle: Annotated[
+        str, typer.Option("--bundle", help="Path to an informatics seed bundle")
+    ] = "",
+):
+    """
+    Create the missing parts of the bundled informatics course.
+
+    Additive and idempotent: existing chapters, activities, assignments and
+    tasks are never edited. Run it after extending ``informatics_seed.json``
+    (or pass ``--bundle``) to replay the outline without restarting the API.
+    """
+    asyncio.run(_informatics_seed(dry_run=dry_run, bundle_path=bundle or None))
+
+
+async def _informatics_seed(dry_run: bool, bundle_path: str | None) -> None:
+    from pathlib import Path
+
+    from src.services.setup.informatics_course import (
+        SEED_FILE,
+        _pick_org,
+        load_seed_bundle,
+        seed_course_outline,
+    )
+
+    path = Path(bundle_path) if bundle_path else SEED_FILE
+    try:
+        data = load_seed_bundle(path)
+    except Exception as exc:  # noqa: BLE001 - CLI reports, never tracebacks
+        print(f"Bundle is invalid: {exc}")
+        raise typer.Exit(code=1) from exc
+
+    chapters = data["chapters"]
+    activities = sum(len(chapter.get("activities") or []) for chapter in chapters)
+    tasks = sum(
+        len(activity.get("assignment", {}).get("tasks") or [])
+        for chapter in chapters
+        for activity in chapter.get("activities") or []
+        if activity.get("assignment")
+    )
+    print(f"Bundle: {path}")
+    print(f"  course:      {data['course']['name']}")
+    print(f"  chapters:    {len(chapters)}")
+    print(f"  activities:  {activities}")
+    print(f"  tasks:       {tasks}")
+
+    if dry_run:
+        print("Dry run: nothing was written.")
+        return
+
+    learnhouse_config = get_learnhouse_config()
+    sql_url = learnhouse_config.database_config.sql_connection_string  # type: ignore
+    async_engine = create_async_engine(_to_async_url(sql_url), echo=False, pool_pre_ping=True)
+
+    try:
+        async with AsyncSession(async_engine, expire_on_commit=False) as db_session:
+            org = await _pick_org(db_session)
+            if org is None:
+                print("No organization exists yet; run the API once to install.")
+                raise typer.Exit(code=1)
+            report = await seed_course_outline(db_session, org, data)
+    finally:
+        await async_engine.dispose()
+
+    print(f"Applied to organization: {org.slug}")
+    for key, value in report.items():
+        print(f"  {key}: {value}")
+
+
 @cli.command()
 def main():
     cli()

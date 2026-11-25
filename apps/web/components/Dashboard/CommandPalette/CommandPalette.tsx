@@ -256,7 +256,7 @@ export default function CommandPalette() {
               </div>
               {!isWhiteLabel && (
                 <img
-                  src="/lrn-dash.svg"
+                  src="/zerok-icon.png"
                   alt=""
                   aria-hidden="true"
                   draggable={false}

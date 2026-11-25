@@ -10,7 +10,7 @@ import GeneralWrapperStyled from '@components/Objects/StyledElements/Wrappers/Ge
 import {
   getCourseThumbnailMediaDirectory,
 } from '@services/media/media'
-import { ArrowRight, Backpack, Check, File, StickyNote, Video, Square, Image as ImageIcon, Layers, BookCopy, Lock, Globe, Package, Puzzle, Gem, Eye, CalendarPlus, Radio } from 'lucide-react'
+import { ArrowRight, Backpack, Check, File, StickyNote, Video, Square, Image as ImageIcon, Layers, BookCopy, Lock, Globe, Package, Puzzle, Gem, Eye, CalendarPlus, Radio, Target } from 'lucide-react'
 import { getMyCourseAccess } from '@ee/services/payments/access'
 import { MarkdownLogo } from '@phosphor-icons/react'
 import { useOrg } from '@components/Contexts/OrgContext'
@@ -533,6 +533,26 @@ const CourseClient = (props: any) => {
               <div className='course_metadata_right w-full md:w-1/4 space-y-4'>
                 {/* Actions Box */}
                 <CoursesActions courseuuid={courseuuid} orgslug={orgslug} course={course} trailData={trailData} />
+
+                <Link
+                  href={getUriWithOrg(orgslug, `/course/${courseuuid}/practice`)}
+                  className="block rounded-lg border border-neutral-200 bg-white p-4 shadow-md shadow-gray-300/25 transition-colors hover:border-neutral-400"
+                >
+                  <div className="flex items-center justify-between gap-2">
+                    <div className="flex items-center gap-2">
+                      <span className="grid h-8 w-8 place-items-center rounded-lg bg-neutral-900 text-white">
+                        <Target size={16} />
+                      </span>
+                      <div>
+                        <p className="text-sm font-bold text-black">Практика</p>
+                        <p className="text-[11px] text-black/45">
+                          Задачи под ваш уровень
+                        </p>
+                      </div>
+                    </div>
+                    <ArrowRight size={15} className="text-black/35" />
+                  </div>
+                </Link>
 
                 <CoursePaths courseUuid={course.course_uuid} orgslug={orgslug} />
                 

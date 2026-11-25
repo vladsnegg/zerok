@@ -690,7 +690,7 @@ function AccountGeneral() {
     })
 
     await new Promise(resolve => setTimeout(resolve, 4000))
-    signOut({ redirect: true, callbackUrl: getUriWithoutOrg('/') })
+    signOut({ redirect: true, callbackUrl: getUriWithoutOrg('/welcome') })
   }
 
   if (!userData) {

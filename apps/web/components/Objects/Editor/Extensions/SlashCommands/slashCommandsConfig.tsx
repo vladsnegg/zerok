@@ -38,7 +38,7 @@ import {
   Video,
 } from 'lucide-react'
 import Image from 'next/image'
-import lrnaiIcon from 'public/lrnai_icon.png'
+const zerokAIIcon = '/zerok-ai.png'
 import { SiYoutube } from '@icons-pack/react-simple-icons'
 import { SlashCommandItem, SlashCommandCategory } from './types'
 import React from 'react'
@@ -287,7 +287,7 @@ export const slashCommands: SlashCommandItem[] = [
     description: 'Generate interactive content with AI',
     titleKey: 'editor.slash_menu.items.magic_block.title',
     descriptionKey: 'editor.slash_menu.items.magic_block.description',
-    icon: <div style={{ background: 'conic-gradient(from 32deg at 53.75% 50%, rgb(35, 40, 93) 4deg, rgba(20, 0, 52, 0.95) 59deg, rgba(164, 45, 238, 0.88) 281deg)' }} className="p-1 rounded-md"><Image src={lrnaiIcon} alt={i18n.t('editor.blocks.magic_block_content.title')} width={14} height={14} className="outline outline-1 outline-neutral-200/20 rounded" /></div>,
+    icon: <div style={{ background: 'conic-gradient(from 32deg at 53.75% 50%, rgb(35, 40, 93) 4deg, rgba(20, 0, 52, 0.95) 59deg, rgba(164, 45, 238, 0.88) 281deg)' }} className="p-1 rounded-md"><Image src={zerokAIIcon} alt={i18n.t('editor.blocks.magic_block_content.title')} width={14} height={14} className="outline outline-1 outline-neutral-200/20 rounded" /></div>,
     category: 'interactive',
     keywords: ['magic', 'ai', 'interactive', 'simulation', 'chart', 'generate', 'create'],
     command: (editor) => {

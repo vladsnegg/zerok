@@ -12,7 +12,7 @@ const ToolbarButtons = dynamic(
 import { motion } from 'motion/react'
 import Image from 'next/image'
 import { DividerVerticalIcon, SlashIcon } from '@radix-ui/react-icons'
-import learnhouseAI_icon from 'public/learnhouse_ai_simple.png'
+const zerokAI_icon = '/zerok-ai.png'
 import {
   AIEditorStateTypes,
   useAIEditor,
@@ -566,7 +566,7 @@ function Editor(props: EditorProps) {
                           <Image
                             className=""
                             width={20}
-                            src={learnhouseAI_icon}
+                            src={zerokAI_icon}
                             alt=""
                           />
                         </i>{' '}
@@ -581,7 +581,7 @@ function Editor(props: EditorProps) {
                           <Image
                             className="opacity-50 grayscale"
                             width={20}
-                            src={learnhouseAI_icon}
+                            src={zerokAI_icon}
                             alt=""
                           />
                         </i>

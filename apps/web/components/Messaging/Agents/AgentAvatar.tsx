@@ -9,10 +9,10 @@ export type AgentAvatarProps = {
   className?: string
 }
 
-/** The LearnHouse AI mark Copilot wears instead of an emoji tile. */
-export const COPILOT_LOGO = '/learnhouse_ai_simple_colored.png'
+/** The zerok AI mark Copilot wears instead of an emoji tile. */
+export const COPILOT_LOGO = '/zerok-ai.png'
 
-/** An agent's face: its two colors as a rounded tile, its emoji on top. Copilot wears the LearnHouse AI mark. */
+/** An agent's face: its two colors as a rounded tile, its emoji on top. Copilot wears the zerok AI mark. */
 export default function AgentAvatar({ agent, size = 36, className = '' }: AgentAvatarProps) {
   const radius = Math.max(6, Math.round(size * 0.25))
   if (agent.is_default) {

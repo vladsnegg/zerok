@@ -72,6 +72,7 @@ from src.services.courses.activities.uploads.sub_file import upload_submission_f
 from src.services.courses.activities.uploads.tasks_ref_files import (
     upload_reference_file,
 )
+from src.services.informatics.requirements import ensure_informatics_ready
 from src.services.courses.activities.uploads.solution_files import (
     upload_solution_file,
 )
@@ -2311,6 +2312,12 @@ async def handle_assignment_task_submission(
         is_instructor = await authorization_verify_based_on_roles(request, current_user.id, "update", course.course_uuid, db_session)
         is_token_submit = False
 
+    # A course can require the Informatics userscript. Learners (not
+    # instructors, not API-token writers) must have a connected account and a
+    # script that has pinged the LMS before the server accepts any answer.
+    if not is_instructor and not is_token_submit:
+        await ensure_informatics_ready(db_session, submitter.id, course)
+
     # For non-instructors (session students AND token submit-on-behalf), the call
     # writes a learner ANSWER, never a grade.
     if not is_instructor:
@@ -2995,6 +3002,12 @@ async def create_assignment_submission(
             request, current_user.id, "update", course.course_uuid, db_session
         )
         is_token_submit = False
+
+    # A course can require the Informatics userscript before any work may be
+    # handed in. Instructors and API-token writers are exempt; the flag is
+    # opt-in per course, so other courses are unaffected.
+    if not is_instructor and not is_token_submit:
+        await ensure_informatics_ready(db_session, submitter.id, course)
 
     # Session students are bound by the deadline; a token writing on behalf of a
     # learner is an authorized external writer (the custom frontend owns it).
@@ -4086,6 +4099,30 @@ async def _apply_grade_and_finalize(
                 "auto_graded": auto_graded,
             },
         )
+
+    # Adaptive practice reads the same final per-task grades. Best-effort: a
+    # missing practice migration or a bug here must never fail the grade.
+    try:
+        from src.services.practice.hooks import record_grading_attempts
+
+        await record_grading_attempts(
+            db_session,
+            assignment=assignment,
+            course=course,
+            user_id=user_id,
+            assignment_tasks=assignment_tasks,
+            task_submissions_by_task_id=task_submissions_by_task_id,
+            grade_breakdown=computed["tasks"],
+        )
+    except Exception:
+        logger.exception(
+            "Practice attempt recording failed for assignment %s",
+            assignment.assignment_uuid,
+        )
+        try:
+            await db_session.rollback()
+        except Exception:
+            logger.debug("Practice rollback failed", exc_info=True)
 
     return computed
 

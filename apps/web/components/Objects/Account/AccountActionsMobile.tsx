@@ -1,7 +1,7 @@
 'use client'
 import React from 'react'
 import Link from 'next/link'
-import { User, Lock, ShoppingBag, Plug, Settings, Palette } from 'lucide-react'
+import { User, Lock, Plug, Settings, Palette } from 'lucide-react'
 import { getUriWithOrg } from '@services/config/config'
 import { useTranslation } from 'react-i18next'
 
@@ -15,7 +15,6 @@ const NAV_ITEMS = [
   { id: 'appearance', icon: Palette, labelKey: 'account.appearance' },
   { id: 'profile', icon: User, labelKey: 'account.profile' },
   { id: 'security', icon: Lock, labelKey: 'account.security' },
-  { id: 'purchases', icon: ShoppingBag, labelKey: 'account.purchases' },
   { id: 'ai-apps', icon: Plug, labelKey: 'account.ai_apps' },
 ]
 

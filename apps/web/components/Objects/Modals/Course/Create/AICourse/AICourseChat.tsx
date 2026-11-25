@@ -5,7 +5,7 @@ import Image from 'next/image'
 import { cn } from '@/lib/utils'
 import { useTranslation } from 'react-i18next'
 import type { CoursePlanningMessage, Attachment } from '@services/ai/courseplanning'
-import lrnaiIcon from 'public/lrnai_icon.png'
+const zerokAIIcon = '/zerok-ai.png'
 import { safeImageSrc } from '@services/security/url'
 
 interface AICourseChatProps {
@@ -171,7 +171,7 @@ function AICourseChat({
               <Image
                 className="outline outline-1 outline-neutral-200/20 rounded-lg"
                 width={28}
-                src={lrnaiIcon}
+                src={zerokAIIcon}
                 alt="AI"
               />
             </div>

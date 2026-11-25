@@ -10,7 +10,7 @@ type MetadataProps = {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>
 }
 
-const VALID_SUBPAGES = ['general', 'appearance', 'profile', 'security', 'purchases', 'ai-apps']
+const VALID_SUBPAGES = ['general', 'appearance', 'profile', 'security', 'informatics', 'ai-apps']
 
 const getSubpageTitle = (subpage: string): string => {
   const titles: Record<string, string> = {
@@ -18,7 +18,7 @@ const getSubpageTitle = (subpage: string): string => {
     'appearance': 'Appearance',
     'profile': 'Profile Builder',
     'security': 'Security',
-    'purchases': 'Purchases',
+    'informatics': 'Informatics',
     'ai-apps': 'AI apps',
   }
   return titles[subpage] || 'Account'
@@ -66,6 +66,12 @@ const AccountSubPage = async (props: { params: Promise<{ orgslug: string; subpag
   // double-prefixed by the proxy → 404.
   if (!session) {
     redirect(`/login?redirect=/account/${params.subpage}`)
+  }
+
+  // The Informatics connection now lives in the profile settings. Keep old
+  // links working instead of rendering a separate page.
+  if (params.subpage === 'informatics') {
+    redirect('/account/profile')
   }
 
   // Redirect to general if invalid subpage

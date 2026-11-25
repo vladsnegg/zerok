@@ -43,15 +43,15 @@ describe('language registry', () => {
   const entries = [...src.matchAll(/\{\s*code:\s*'([a-z]+)'[^}]*\}/g)]
 
   test('every language declares a direction', () => {
-    expect(entries.length).toBeGreaterThan(20)
+    expect(entries.length).toBe(6)
     for (const entry of entries) {
       expect(entry[0]).toMatch(/dir:\s*'(ltr|rtl)'/)
     }
   })
 
-  test('ar and fa are the RTL entries', () => {
+  test('ar is the RTL entry in the registry', () => {
     const rtl = entries.filter((e) => /dir:\s*'rtl'/.test(e[0])).map((e) => e[1]).sort()
-    expect(rtl).toEqual(['ar', 'fa'])
+    expect(rtl).toEqual(['ar'])
   })
 
   // A locale that loads but isn't in the registry can never be picked, and one

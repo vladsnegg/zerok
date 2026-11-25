@@ -35,6 +35,8 @@ import ContentOverview from '@components/Dashboard/Home/ContentOverview'
 import RecentMembers from '@components/Dashboard/Home/RecentMembers'
 import UsageOverview from '@components/Dashboard/Home/UsageOverview'
 import QuickStats from '@ee/components/Analytics/Home/QuickStats'
+import PageLoading from '@components/Objects/Loaders/PageLoading'
+import { CabinetFocusWidget, CabinetPersonalBanner } from './CabinetPersonalBanner'
 
 type CalendarEvent = any
 
@@ -156,27 +158,26 @@ export default function TeacherCabinetHome({ orgslug }: { orgslug: string }) {
       : []),
   ]
 
+  if (coursesLoading && queueLoading) {
+    return <PageLoading />
+  }
+
   return (
     <div className="mx-auto w-full max-w-5xl px-4 sm:px-6 py-10">
-      <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
-        <div>
-          <p className="text-xs font-semibold uppercase tracking-wide text-black/35">
-            {t('cabinet.teacher_eyebrow', { defaultValue: 'My teaching' })}
-          </p>
-          <h1 className="mt-1 text-3xl font-black tracking-tight text-black">
-            {displayName
-              ? t('cabinet.welcome_name', { defaultValue: 'Welcome, {{name}}', name: displayName })
-              : t('cabinet.welcome', { defaultValue: 'Welcome' })}
-          </h1>
-          <p className="mt-1 text-sm text-black/45">
-            {t('cabinet.teacher_subtitle', {
-              defaultValue: 'Your courses, assignments and teaching tools in one place.',
-            })}
-          </p>
-          {/* Non-duplicating sections live here, top-left, so the header only
-              keeps actions (create, members, settings) that are not repeated. */}
-          {quickLinks.length > 0 && (
-            <div className="mt-3 flex flex-wrap items-center gap-2">
+      <CabinetPersonalBanner
+        orgslug={orgslug}
+        eyebrow={t('cabinet.teacher_eyebrow', { defaultValue: 'My teaching' })}
+        greeting={
+          displayName
+            ? t('cabinet.welcome_name', { defaultValue: 'Welcome, {{name}}', name: displayName })
+            : t('cabinet.welcome', { defaultValue: 'Welcome' })
+        }
+        subtitle={t('cabinet.teacher_subtitle', {
+          defaultValue: 'Your courses, assignments and teaching tools in one place.',
+        })}
+        chips={
+          quickLinks.length > 0 ? (
+            <>
               {quickLinks.map(({ href, label, Icon }) => (
                 <Link
                   key={href}
@@ -187,46 +188,50 @@ export default function TeacherCabinetHome({ orgslug }: { orgslug: string }) {
                   {label}
                 </Link>
               ))}
-            </div>
-          )}
-        </div>
-        <div className="flex flex-wrap items-center gap-2">
-          <Link
-            href={getUriWithOrg(orgslug, '/cabinet/courses?new=true')}
-            className="inline-flex items-center gap-2 rounded-lg bg-black px-4 py-2 text-sm font-bold text-white hover:bg-black/85"
-          >
-            <PlusCircle size={16} />
-            {t('dashboard.home.create_course', { defaultValue: 'Create course' })}
-          </Link>
-          {isOrgAnalyticsAvailable() && (
+            </>
+          ) : undefined
+        }
+        actions={
+          <>
             <Link
-              href={getUriWithOrg(orgslug, '/cabinet/analytics')}
-              className="inline-flex items-center gap-2 rounded-lg border border-neutral-200 bg-white px-4 py-2 text-sm font-semibold text-black/70 hover:text-black"
+              href={getUriWithOrg(orgslug, '/cabinet/courses?new=true')}
+              className="inline-flex items-center gap-2 rounded-lg bg-black px-4 py-2 text-sm font-bold text-white hover:bg-black/85"
             >
-              <ChartNoAxesColumn size={16} />
-              {t('dashboard.home.analytics', { defaultValue: 'Analytics' })}
+              <PlusCircle size={16} />
+              {t('dashboard.home.create_course', { defaultValue: 'Create course' })}
             </Link>
-          )}
-          {canManageOrg && (
-            <Link
-              href={getUriWithOrg(orgslug, '/cabinet/users/settings/users')}
-              className="inline-flex items-center gap-2 rounded-lg border border-neutral-200 bg-white px-4 py-2 text-sm font-semibold text-black/70 hover:text-black"
-            >
-              <Users size={16} />
-              {t('dashboard.home.members', { defaultValue: 'Members' })}
-            </Link>
-          )}
-          {canManageOrg && (
-            <Link
-              href={getUriWithOrg(orgslug, '/cabinet/org/settings/general')}
-              className="inline-flex items-center gap-2 rounded-lg border border-neutral-200 bg-white px-4 py-2 text-sm font-semibold text-black/70 hover:text-black"
-            >
-              <Settings size={16} />
-              {t('dashboard.home.settings', { defaultValue: 'Settings' })}
-            </Link>
-          )}
-        </div>
-      </div>
+            {isOrgAnalyticsAvailable() && (
+              <Link
+                href={getUriWithOrg(orgslug, '/cabinet/analytics')}
+                className="inline-flex items-center gap-2 rounded-lg border border-neutral-200 bg-white px-4 py-2 text-sm font-semibold text-black/70 hover:text-black"
+              >
+                <ChartNoAxesColumn size={16} />
+                {t('dashboard.home.analytics', { defaultValue: 'Analytics' })}
+              </Link>
+            )}
+            {canManageOrg && (
+              <Link
+                href={getUriWithOrg(orgslug, '/cabinet/users/settings/users')}
+                className="inline-flex items-center gap-2 rounded-lg border border-neutral-200 bg-white px-4 py-2 text-sm font-semibold text-black/70 hover:text-black"
+              >
+                <Users size={16} />
+                {t('dashboard.home.members', { defaultValue: 'Members' })}
+              </Link>
+            )}
+            {canManageOrg && (
+              <Link
+                href={getUriWithOrg(orgslug, '/cabinet/org/settings/general')}
+                className="inline-flex items-center gap-2 rounded-lg border border-neutral-200 bg-white px-4 py-2 text-sm font-semibold text-black/70 hover:text-black"
+              >
+                <Settings size={16} />
+                {t('dashboard.home.settings', { defaultValue: 'Settings' })}
+              </Link>
+            )}
+          </>
+        }
+      />
+
+      <CabinetFocusWidget />
 
       {/* Review queue: the teacher's most actionable block, built from the
           existing submissions API. Icons and card styling follow the cabinet. */}

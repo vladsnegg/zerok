@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react'
 import { createPortal } from 'react-dom'
 import { useTranslation } from 'react-i18next'
 import { Editor } from '@tiptap/core'
-import learnhouseAI_icon from 'public/learnhouse_ai_simple.png'
+const zerokAI_icon = '/zerok-ai.png'
 import Image from 'next/image'
 import { BookOpen, FormInput, Languages, MoreVertical } from 'lucide-react'
 import ToolTip from '@components/Objects/StyledElements/Tooltip/Tooltip'
@@ -156,7 +156,7 @@ function AICanvaToolkit(props: AICanvaToolkitProps) {
           <Image
             className="outline-1 outline-neutral-200/10 rounded-lg"
             width={24}
-            src={learnhouseAI_icon}
+            src={zerokAI_icon}
             alt=""
           />
           <div>AI</div>

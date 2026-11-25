@@ -79,8 +79,19 @@ describe('page registry', () => {
 
   const metaFiles = fs
     .readdirSync(path.join(webRoot, 'app/orgs/[orgslug]/(withmenu)'), { recursive: true })
-    .filter((f) => String(f).endsWith('page.search.ts') && !String(f).includes('account'))
-    .map((f) => path.join('app/orgs/[orgslug]/(withmenu)', String(f)))
+    .filter(
+      (f) =>
+        String(f).endsWith('page.search.ts') &&
+        !String(f).includes('account') &&
+        // The cabinet's metadata feeds the dashboard palette, not the learner
+        // site-search registry.
+        !String(f).includes('cabinet')
+    )
+    // `readdirSync` returns native separators on Windows; the registry always
+    // uses forward slashes. Normalize them so the import-path comparison works
+    // on every platform.
+    .map((f) => String(f).split(path.sep).join('/'))
+    .map((f) => `app/orgs/[orgslug]/(withmenu)/${f}`)
 
   test('finds the learner page metadata files', () => {
     expect(metaFiles.length).toBeGreaterThanOrEqual(11)

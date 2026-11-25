@@ -326,8 +326,11 @@ export default async function proxy(req: NextRequest) {
   if (!hasSessionCookie && !isAuthEntry) {
     // Guests land on the welcome screen; the page they wanted is carried as
     // ?next so the sign-in / registration forms can return them there.
+    // A real redirect (not a rewrite) so the address bar shows /welcome: after
+    // a sign-out the URL is the visible proof of the state change, and the
+    // back button cannot land on a page that merely *looks* signed in.
     if (pathname === '/') {
-      return NextResponse.rewrite(new URL('/welcome', req.url))
+      return NextResponse.redirect(new URL('/welcome', req.url))
     }
     const next = encodeURIComponent(`${pathname}${search}`)
     return NextResponse.redirect(new URL(`/welcome?next=${next}`, req.url))

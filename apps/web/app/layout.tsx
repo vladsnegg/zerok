@@ -48,6 +48,10 @@ export const metadata: Metadata = {
     template: '%s | zerok',
   },
   description: 'zerok — платформа для обучения и преподавания.',
+  icons: {
+    icon: '/zerok-icon.png',
+    shortcut: '/zerok-icon.png',
+  },
   appleWebApp: { capable: true, statusBarStyle: 'default' },
   formatDetection: { telephone: false },
 }

@@ -295,7 +295,7 @@ function BlockingInterstitial({
           <button
             type="button"
             onClick={() =>
-              signOut({ redirect: true, callbackUrl: getUriWithoutOrg('/') })
+              signOut({ redirect: true, callbackUrl: getUriWithoutOrg('/welcome') })
             }
             className="flex items-center gap-1.5 font-semibold text-gray-500 hover:text-gray-900 transition-colors"
           >

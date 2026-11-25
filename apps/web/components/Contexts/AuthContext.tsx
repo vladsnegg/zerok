@@ -19,6 +19,7 @@ import { safeRedirectUrl } from '@services/auth/redirects'
 import i18n from '@/lib/i18n'
 import { safeExternalUrl } from '@services/security/url'
 import { AUTH_EXPIRED_EVENT, AUTH_REFRESHED_EVENT } from '@/lib/auth/events'
+import { CABINET_HOME } from '@/lib/auth/home'
 
 // Types matching NextAuth's session structure
 export interface Session {
@@ -657,7 +658,7 @@ export function SessionProvider({
       code: string,
       options: { isBackupCode?: boolean; callbackUrl?: string; redirect?: boolean } = {}
     ): Promise<SignInResult> => {
-      const { isBackupCode = false, callbackUrl = '/', redirect = true } = options
+      const { isBackupCode = false, callbackUrl = CABINET_HOME, redirect = true } = options
 
       try {
         const response = await fetch('/api/auth/login/mfa', {
@@ -761,7 +762,7 @@ export function SessionProvider({
       token: string,
       options: { callbackUrl?: string; redirect?: boolean } = {}
     ): Promise<SignInResult> => {
-      const { callbackUrl = '/', redirect = true } = options
+      const { callbackUrl = CABINET_HOME, redirect = true } = options
 
       try {
         const response = await fetch('/api/auth/magic-link/verify', {
@@ -832,7 +833,7 @@ export function SessionProvider({
   // Sign in function
   const handleSignIn = useCallback(
     async (provider: string, options: SignInOptions = {}): Promise<SignInResult | void> => {
-      const { redirect = true, callbackUrl = '/' } = options
+      const { redirect = true, callbackUrl = CABINET_HOME } = options
 
       try {
         if (provider === 'credentials') {
@@ -1034,7 +1035,8 @@ export function SessionProvider({
 
   // Sign out function
   const handleSignOut = useCallback(async (options: SignOutOptions = {}) => {
-    const { callbackUrl = '/', redirect = true } = options
+    const { callbackUrl = '/welcome', redirect = true } = options
+    const target = redirect ? safeRedirectUrl(callbackUrl) : null
 
     let logoutSuccess = false
     try {
@@ -1062,26 +1064,33 @@ export function SessionProvider({
     refreshPromiseRef.current = null
     isRefreshingRef.current = false
 
-    // Clear any auth cookies on client side
-    const { secureAttr, domainAttr } = getCookieAttributes()
-    const expireAttr = '; expires=Thu, 01 Jan 1970 00:00:00 GMT'
-    document.cookie = `LH_oauth_orgslug=; path=/${expireAttr}${secureAttr}${domainAttr}`
-    document.cookie = `LH_oauth_org_id=; path=/${expireAttr}${secureAttr}${domainAttr}`
+    // Cookie/marker cleanup is best-effort: a throw here must never keep the
+    // user on the page they just signed out of.
+    try {
+      // Clear any auth cookies on client side
+      const { secureAttr, domainAttr } = getCookieAttributes()
+      const expireAttr = '; expires=Thu, 01 Jan 1970 00:00:00 GMT'
+      document.cookie = `LH_oauth_orgslug=; path=/${expireAttr}${secureAttr}${domainAttr}`
+      document.cookie = `LH_oauth_org_id=; path=/${expireAttr}${secureAttr}${domainAttr}`
 
-    // Clear OAuth state
-    clearOAuthStateCookie()
-    clearSessionMarker()
+      // Clear OAuth state
+      clearOAuthStateCookie()
+      clearSessionMarker()
 
-    // Notify other tabs about logout
-    broadcastChannelRef.current?.postMessage({ type: 'LOGOUT' })
-
-    if (redirect) {
-      window.location.href = safeRedirectUrl(callbackUrl)
+      // Notify other tabs about logout
+      broadcastChannelRef.current?.postMessage({ type: 'LOGOUT' })
+    } catch (error) {
+      console.error('Logout cleanup error:', error)
     }
 
     // If backend logout failed, log a warning (user is still logged out locally)
     if (!logoutSuccess) {
       console.warn('Backend logout may have failed. User logged out locally.')
+    }
+
+    if (target) {
+      // replace, not href: the back button must not return to the signed-in page.
+      window.location.replace(target)
     }
   }, [])
 
@@ -1097,8 +1106,18 @@ export function SessionProvider({
       authFailureHandledRef.current = true
 
       const detail = (event as CustomEvent<{ callbackUrl?: string }>).detail
+      const path = `${window.location.pathname}${window.location.search}`
+      const isPublicAuthPage =
+        window.location.pathname === '/welcome' ||
+        window.location.pathname === '/login' ||
+        window.location.pathname === '/register'
+      // An expired session is just a sign-out: land on the welcome screen and
+      // remember where the user was, so signing in again continues the task.
+      const fallback = isPublicAuthPage
+        ? '/welcome'
+        : `/welcome?next=${encodeURIComponent(path)}`
       const callbackUrl = detail?.callbackUrl
-        || (window.location.pathname.startsWith('/admin') ? '/admin/login' : '/login')
+        || (window.location.pathname.startsWith('/admin') ? '/admin/login' : fallback)
 
       handleSignOut({ callbackUrl, redirect: true }).catch((error) => {
         console.error('Forced sign-out failed:', error)
@@ -1262,7 +1281,7 @@ export async function signIn(
 
     // Generate CSRF token for state parameter
     const csrfToken = generateSecureToken()
-    const callbackUrl = options?.callbackUrl || '/'
+    const callbackUrl = options?.callbackUrl || CABINET_HOME
     const stateData: Record<string, any> = {
       callbackUrl,
       csrf: csrfToken,
@@ -1318,7 +1337,8 @@ export async function signIn(
 
 // signOut function - matches NextAuth's API
 export async function signOut(options?: SignOutOptions): Promise<void> {
-  const { callbackUrl = '/', redirect = true } = options || {}
+  const { callbackUrl = '/welcome', redirect = true } = options || {}
+  const target = redirect ? safeRedirectUrl(callbackUrl) : null
 
   try {
     // Use Next.js API route to ensure cookies are cleared correctly
@@ -1330,27 +1350,35 @@ export async function signOut(options?: SignOutOptions): Promise<void> {
     console.error('Logout error:', error)
   }
 
-  // Clear cookies
-  const { secureAttr, domainAttr } = getCookieAttributes()
-  const expireAttr = '; expires=Thu, 01 Jan 1970 00:00:00 GMT'
-  document.cookie = `LH_oauth_orgslug=; path=/${expireAttr}${secureAttr}${domainAttr}`
-  document.cookie = `LH_oauth_org_id=; path=/${expireAttr}${secureAttr}${domainAttr}`
-
-  // Clear OAuth state
-  clearOAuthStateCookie()
-  clearSessionMarker()
-
-  // Try to notify other tabs (if BroadcastChannel is available)
+  // Best-effort local cleanup. If any step throws, we still navigate below:
+  // leaving the user on a page they just signed out of is the one outcome
+  // that is never acceptable.
   try {
-    const bc = new BroadcastChannel(AUTH_BROADCAST_CHANNEL)
-    bc.postMessage({ type: 'LOGOUT' })
-    bc.close()
-  } catch {
-    // BroadcastChannel not available
+    // Clear cookies
+    const { secureAttr, domainAttr } = getCookieAttributes()
+    const expireAttr = '; expires=Thu, 01 Jan 1970 00:00:00 GMT'
+    document.cookie = `LH_oauth_orgslug=; path=/${expireAttr}${secureAttr}${domainAttr}`
+    document.cookie = `LH_oauth_org_id=; path=/${expireAttr}${secureAttr}${domainAttr}`
+
+    // Clear OAuth state
+    clearOAuthStateCookie()
+    clearSessionMarker()
+
+    // Try to notify other tabs (if BroadcastChannel is available)
+    try {
+      const bc = new BroadcastChannel(AUTH_BROADCAST_CHANNEL)
+      bc.postMessage({ type: 'LOGOUT' })
+      bc.close()
+    } catch {
+      // BroadcastChannel not available
+    }
+  } catch (error) {
+    console.error('Logout cleanup error:', error)
   }
 
-  if (redirect) {
-    window.location.href = safeRedirectUrl(callbackUrl)
+  if (target) {
+    // replace, not href: the back button must not return to the signed-in page.
+    window.location.replace(target)
   }
 }
 

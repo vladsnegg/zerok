@@ -1,6 +1,6 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import learnhouseAI_icon from 'public/learnhouse_ai_simple.png'
+const zerokAI_icon = '/zerok-ai.png'
 import { motion, AnimatePresence } from 'motion/react'
 import Image from 'next/image'
 import {
@@ -96,7 +96,7 @@ function AIEditorToolkit(props: AIEditorToolkitProps) {
                           <Image
                             className="outline outline-1 outline-neutral-200/20 rounded-lg"
                             width={24}
-                            src={learnhouseAI_icon}
+                            src={zerokAI_icon}
                             alt=""
                           />
                           <div className="flex items-center">
@@ -456,7 +456,7 @@ const UserFeedbackModal = (props: AIEditorToolkitProps) => {
           <Image
             className="outline outline-1 outline-neutral-200/20 rounded-lg"
             width={24}
-            src={learnhouseAI_icon}
+            src={zerokAI_icon}
             alt=""
           />
         </div>

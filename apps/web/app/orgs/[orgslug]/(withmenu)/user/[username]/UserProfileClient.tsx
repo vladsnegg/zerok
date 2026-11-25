@@ -15,6 +15,7 @@ import {
   Users,
   Calendar,
   Lightbulb,
+  Sparkles,
   X
 } from 'lucide-react'
 import { getUserAvatarMediaDirectory } from '@services/media/media'
@@ -25,6 +26,7 @@ import { useTranslation } from 'react-i18next'
 import { useQuery } from '@tanstack/react-query'
 import { asArray } from '@services/utils/ts/requests'
 import { MessageUserButton } from '@components/Messaging/EntryButtons'
+import { BADGE_COLORS, COVER_PRESETS, usePersonalization } from '@/lib/theme'
 
 interface UserProfileClientProps {
   userData: any;
@@ -91,6 +93,13 @@ function UserProfileClient({ userData, profile }: UserProfileClientProps) {
   });
 
   const userCourses: any[] = asArray(coursesResponse);
+  const { mounted, personalization } = usePersonalization()
+  const cover =
+    mounted && personalization.coverPreset !== 'none'
+      ? COVER_PRESETS.find((c) => c.id === personalization.coverPreset)
+      : null
+  const badgeStyle =
+    BADGE_COLORS.find((b) => b.id === personalization.badgeColor) || BADGE_COLORS[0]
 
   const IconComponent = ({ iconName }: { iconName: string }) => {
     const IconElement = ICON_MAP[iconName as keyof typeof ICON_MAP]
@@ -101,10 +110,11 @@ function UserProfileClient({ userData, profile }: UserProfileClientProps) {
   return (
     <div className="container mx-auto py-4 md:py-8 max-md:px-4">
       {/* Banner */}
-      <div className="h-28 md:h-48 w-full bg-gray-100 rounded-t-xl mb-0 relative overflow-hidden">
-        {/* Optional banner content */}
-      </div>
-      
+      <div
+        className="h-28 md:h-48 w-full bg-gray-100 rounded-t-xl mb-0 relative overflow-hidden"
+        style={cover && cover.background ? { background: cover.background } : undefined}
+      />
+
       {/* Profile Content */}
       <div className="bg-white rounded-b-xl nice-shadow p-5 md:p-8 relative">
         {/* Avatar Positioned on the banner (96px on phones; the inline size needs !) */}
@@ -145,9 +155,32 @@ function UserProfileClient({ userData, profile }: UserProfileClientProps) {
             {/* Left column with details - aligned with avatar */}
             <div className="w-full md:w-1/6 ps-2">
               {/* Name */}
-              <h1 className="text-2xl md:text-[32px] font-bold mb-3 md:mb-4">
+              <h1 className="text-2xl md:text-[32px] font-bold mb-2">
                 {userData.first_name} {userData.last_name}
               </h1>
+              {mounted && (personalization.customBadge || personalization.statusEmoji || personalization.statusText) && (
+                <div className="mb-4 flex flex-wrap items-center gap-2">
+                  {personalization.customBadge && (
+                    <span
+                      className="inline-flex items-center gap-1 rounded-full border px-2.5 py-0.5 text-xs font-bold"
+                      style={{
+                        backgroundColor: badgeStyle.bg,
+                        color: badgeStyle.text,
+                        borderColor: badgeStyle.border,
+                      }}
+                    >
+                      <Sparkles size={12} />
+                      {personalization.customBadge}
+                    </span>
+                  )}
+                  {(personalization.statusEmoji || personalization.statusText) && (
+                    <span className="inline-flex items-center gap-1.5 rounded-full border border-neutral-200 bg-neutral-50 px-2.5 py-0.5 text-xs font-medium text-gray-600">
+                      {personalization.statusEmoji && <span>{personalization.statusEmoji}</span>}
+                      {personalization.statusText && <span>{personalization.statusText}</span>}
+                    </span>
+                  )}
+                </div>
+              )}
               <div className="mb-6 md:mb-8">
                 <MessageUserButton userUuid={userData.user_uuid} userId={userData.id} />
               </div>

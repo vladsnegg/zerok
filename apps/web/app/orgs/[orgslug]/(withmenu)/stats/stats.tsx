@@ -8,6 +8,7 @@ import {
   BookOpen,
   CalendarDays,
   CheckCircle2,
+  Code2,
   Plus,
   ShieldCheck,
   Target,
@@ -28,15 +29,22 @@ import {
   addContest,
   addDefense,
   deleteContest,
+  getGlobalStats,
   getLeaderboard,
   getMyStats,
   listMyContests,
   type ContestEntry,
+  type GlobalStats,
   type Leaderboard,
   type MyStats,
   type StatsPeriod,
 } from '@services/stats/stats'
 import { formatDate } from '@/lib/format'
+import {
+  getInformaticsStatistics,
+  type InformaticsStatistics,
+} from '@services/informatics/informatics'
+import CourseStatDetailPanel from './CourseStatDetail'
 
 type TrailRun = {
   id: number
@@ -52,7 +60,7 @@ export default function StatsClient({ orgslug }: { orgslug: string }) {
   const { t, i18n } = useTranslation()
   const org = useOrg() as any
   const session = useLHSession() as any
-  const { isAdmin } = useAdminStatus() as any
+  const { isAdmin, rights } = useAdminStatus() as any
   const token = session?.data?.tokens?.access_token
   const user = session?.data?.user
 
@@ -60,6 +68,8 @@ export default function StatsClient({ orgslug }: { orgslug: string }) {
   const [scope, setScope] = useState<'organization' | 'course'>('organization')
   const [courseUuid, setCourseUuid] = useState<string | null>(null)
   const [stats, setStats] = useState<MyStats | null>(null)
+  const [globalStats, setGlobalStats] = useState<GlobalStats | null>(null)
+  const [informaticsStats, setInformaticsStats] = useState<InformaticsStatistics | null>(null)
   const [leaderboard, setLeaderboard] = useState<Leaderboard | null>(null)
   const [contests, setContests] = useState<ContestEntry[]>([])
   const [runs, setRuns] = useState<TrailRun[]>([])
@@ -70,6 +80,10 @@ export default function StatsClient({ orgslug }: { orgslug: string }) {
   const [contestTitle, setContestTitle] = useState('')
   const [contestDate, setContestDate] = useState(() => new Date().toISOString().slice(0, 10))
   const [busy, setBusy] = useState(false)
+  const [selectedCourse, setSelectedCourse] = useState<{
+    uuid: string
+    name: string
+  } | null>(null)
 
   // Courses the user actually studies (for the course-scope selector).
   useEffect(() => {
@@ -114,12 +128,19 @@ export default function StatsClient({ orgslug }: { orgslug: string }) {
       getMyStats(org.id, token, period, activeCourseUuid).catch(() => null),
       getLeaderboard(org.id, token, period, activeCourseUuid).catch(() => null),
       listMyContests(org.id, token, period).catch(() => ({ items: [] })),
+      getInformaticsStatistics(token, {
+        period,
+        course_uuid: activeCourseUuid,
+      }).catch(() => null),
+      getGlobalStats(org.id, token, null, period).catch(() => null),
     ])
-      .then(([nextStats, nextLeaderboard, nextContests]) => {
+      .then(([nextStats, nextLeaderboard, nextContests, nextInformatics, nextGlobal]) => {
         if (cancelled) return
         setStats(nextStats)
         setLeaderboard(nextLeaderboard)
         setContests(asArray<ContestEntry>(nextContests?.items))
+        setInformaticsStats(nextInformatics)
+        setGlobalStats(nextGlobal)
       })
       .finally(() => {
         if (!cancelled) setLoading(false)
@@ -131,14 +152,21 @@ export default function StatsClient({ orgslug }: { orgslug: string }) {
 
   const refresh = async () => {
     if (!token || !org?.id) return
-    const [nextStats, nextLeaderboard, nextContests] = await Promise.all([
+    const [nextStats, nextLeaderboard, nextContests, nextInformatics, nextGlobal] = await Promise.all([
       getMyStats(org.id, token, period, activeCourseUuid).catch(() => null),
       getLeaderboard(org.id, token, period, activeCourseUuid).catch(() => null),
       listMyContests(org.id, token, period).catch(() => ({ items: [] })),
+      getInformaticsStatistics(token, {
+        period,
+        course_uuid: activeCourseUuid,
+      }).catch(() => null),
+      getGlobalStats(org.id, token, null, period).catch(() => null),
     ])
     setStats(nextStats)
     setLeaderboard(nextLeaderboard)
     setContests(asArray<ContestEntry>(nextContests?.items))
+    setInformaticsStats(nextInformatics)
+    setGlobalStats(nextGlobal)
   }
 
   useEffect(() => {
@@ -269,6 +297,24 @@ export default function StatsClient({ orgslug }: { orgslug: string }) {
         ? t('stats.period_month', { defaultValue: 'Month' })
         : t('stats.period_all', { defaultValue: 'All time' })
 
+  const courseStatusLabel = (status: string) =>
+    status === 'locked'
+      ? t('stats.status_locked', { defaultValue: 'Закрыт' })
+      : status === 'available'
+        ? t('stats.status_available', { defaultValue: 'Доступен' })
+        : status === 'completed'
+          ? t('stats.status_completed', { defaultValue: 'Завершён' })
+          : t('stats.status_in_progress', { defaultValue: 'В процессе' })
+
+  const courseStatusClass = (status: string) =>
+    status === 'locked'
+      ? 'border-neutral-200 bg-neutral-100 text-neutral-500'
+      : status === 'available'
+        ? 'border-amber-200 bg-amber-50 text-amber-700'
+        : status === 'completed'
+          ? 'border-emerald-200 bg-emerald-50 text-emerald-700'
+          : 'border-sky-200 bg-sky-50 text-sky-700'
+
   return (
     <div className="mx-auto w-full max-w-5xl px-4 sm:px-6 py-10">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
@@ -301,13 +347,142 @@ export default function StatsClient({ orgslug }: { orgslug: string }) {
         </div>
       </div>
 
-      {/* KPI cards */}
-      <div className="mt-8 grid grid-cols-2 gap-4 lg:grid-cols-4">
+      {/* Global weighted KPI across the programme. */}
+      {globalStats && (
+        <section className="mt-8 overflow-hidden rounded-2xl border border-neutral-200 bg-white">
+          <div className="flex flex-col gap-5 border-b border-neutral-100 p-5 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-wide text-black/35">
+                {t('stats.global_kpi', { defaultValue: 'Общий KPI' })}{' '}
+                <span className="font-normal normal-case tracking-normal text-black/30">
+                  {periodLabel(period)}
+                </span>
+              </p>
+              <p className="mt-1 text-5xl font-black tracking-tight text-black tabular-nums">
+                {Math.round(globalStats.global_kpi)}
+              </p>
+              <p className="mt-1 text-xs text-black/40">
+                {t('stats.global_kpi_hint', {
+                  defaultValue: 'Взвешенный KPI по курсам программы',
+                })}
+              </p>
+            </div>
+            <div className="grid grid-cols-3 gap-4 sm:gap-7">
+              <div>
+                <p className="text-[10px] font-semibold uppercase tracking-wide text-black/35">
+                  {t('stats.coverage', { defaultValue: 'Охват' })}
+                </p>
+                <p className="mt-1 text-xl font-black text-black tabular-nums">
+                  {Math.round(globalStats.coverage)}%
+                </p>
+              </div>
+              <div>
+                <p className="text-[10px] font-semibold uppercase tracking-wide text-black/35">
+                  {t('stats.active_days', { defaultValue: 'Активных дней' })}
+                </p>
+                <p className="mt-1 text-xl font-black text-black tabular-nums">
+                  {globalStats.active_days}
+                </p>
+              </div>
+              <div>
+                <p className="text-[10px] font-semibold uppercase tracking-wide text-black/35">
+                  {t('stats.courses_started', { defaultValue: 'Курсов начато' })}
+                </p>
+                <p className="mt-1 text-xl font-black text-black tabular-nums">
+                  {globalStats.courses_started}/{globalStats.courses_included}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 gap-3 p-5 sm:grid-cols-2 lg:grid-cols-3">
+            {globalStats.courses.map((course) => (
+              <button
+                key={course.course_uuid}
+                type="button"
+                onClick={() =>
+                  setSelectedCourse({ uuid: course.course_uuid, name: course.name })
+                }
+                className={`rounded-xl border border-neutral-200 bg-white p-3 text-start transition-colors hover:border-black/25 hover:bg-neutral-50 ${
+                  course.status === 'locked' ? 'opacity-60' : ''
+                }`}
+              >
+                <div className="flex items-start justify-between gap-2">
+                  <div className="min-w-0">
+                    <p className="truncate text-sm font-bold text-black">
+                      {course.sequence_order}. {course.name}
+                    </p>
+                    <p className="mt-0.5 text-[11px] text-black/40">
+                      {t('stats.course_weight', { defaultValue: 'Вес' })}: {course.weight}
+                    </p>
+                  </div>
+                  <span
+                    className={`shrink-0 rounded-full border px-2 py-0.5 text-[10px] font-bold ${courseStatusClass(
+                      course.status,
+                    )}`}
+                  >
+                    {courseStatusLabel(course.status)}
+                  </span>
+                </div>
+                <div className="mt-3 flex items-end justify-between gap-2">
+                  <p className="text-2xl font-black tabular-nums text-black">
+                    {Math.round(course.course_kpi)}
+                  </p>
+                  <p className="text-[11px] font-semibold text-black/40 tabular-nums">
+                    {Math.round(course.course_percent)}%
+                  </p>
+                </div>
+                <div className="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-neutral-100">
+                  <div
+                    className="h-full rounded-full bg-[#c6ff4a]"
+                    style={{ width: `${Math.min(100, Math.max(0, course.course_percent))}%` }}
+                  />
+                </div>
+                <p className="mt-1 text-[10px] text-black/35">
+                  {course.included
+                    ? `${t('stats.course_contribution', {
+                        defaultValue: 'Вклад в KPI',
+                      })}: ${course.contribution}`
+                    : t('stats.course_excluded', {
+                        defaultValue: 'Не входит в общий KPI',
+                      })}
+                </p>
+                <p className="mt-1.5 text-[10px] font-semibold text-black/30">
+                  {t('stats.detail_open', { defaultValue: 'Подробнее' })} →
+                </p>
+              </button>
+            ))}
+          </div>
+          <p className="px-5 pb-4 text-[11px] leading-relaxed text-black/35">
+            {t('stats.global_note', {
+              defaultValue:
+                'Закрытые курсы не входят в общий KPI. Открытые, но ещё не начатые курсы входят с KPI 0.',
+            })}
+          </p>
+        </section>
+      )}
+
+      {/* Legacy period metrics. These feed the old leaderboard and do not
+          participate in the programme KPI above. */}
+      <div className="mt-10 flex flex-wrap items-end justify-between gap-2">
+        <div>
+          <h2 className="text-sm font-bold text-black">
+            {t('stats.period_metrics', { defaultValue: 'Метрики за период' })}
+          </h2>
+          <p className="mt-0.5 text-xs text-black/40">
+            {t('stats.period_metrics_hint', {
+              defaultValue:
+                'Учитывают выбранный период и не входят в общий KPI программы.',
+            })}
+          </p>
+        </div>
+      </div>
+      <div className="mt-3 grid grid-cols-2 gap-4 lg:grid-cols-4">
         <div className="rounded-2xl border border-neutral-200 bg-white p-5">
           <div className="flex items-center gap-2 text-black/45">
             <Trophy size={16} />
             <span className="text-xs font-semibold uppercase tracking-wide">
-              {t('stats.kpi_score', { defaultValue: 'КПД' })}
+              {t('stats.activity_score', { defaultValue: 'Баллы активности' })}
             </span>
           </div>
           <p className="mt-3 text-3xl font-black text-black">{loading ? '—' : Math.round(stats?.score || 0)}</p>
@@ -358,6 +533,94 @@ export default function StatsClient({ orgslug }: { orgslug: string }) {
           </p>
         </div>
       </div>
+
+      {/* Informatics (informatics.msk.ru) */}
+      <section className="mt-4 rounded-2xl border border-neutral-200 bg-white p-5">
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <div>
+            <h2 className="flex items-center gap-2 text-sm font-bold text-black">
+              <Code2 size={16} className="text-black/45" />
+              {t('stats.informatics_title', { defaultValue: 'Informatics' })}
+            </h2>
+            <p className="mt-1 text-xs text-black/40">
+              {t('stats.informatics_subtitle', {
+                defaultValue: 'Задачи и попытки на informatics.msk.ru',
+              })}
+            </p>
+          </div>
+          <Link
+            href={getUriWithOrg(orgslug, '/account/informatics')}
+            className="text-xs font-semibold text-black/45 transition-colors hover:text-black"
+          >
+            {t('stats.informatics_setup', { defaultValue: 'Настроить' })} →
+          </Link>
+        </div>
+
+        {informaticsStats && informaticsStats.total_attempts > 0 ? (
+          <>
+            <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
+              {[
+                {
+                  label: t('stats.informatics_solved', { defaultValue: 'Решено' }),
+                  value: informaticsStats.solved_problems,
+                },
+                {
+                  label: t('stats.informatics_attempts', { defaultValue: 'Попыток' }),
+                  value: informaticsStats.total_attempts,
+                },
+                {
+                  label: t('stats.informatics_accepted', { defaultValue: 'Зачтено' }),
+                  value: informaticsStats.accepted_attempts,
+                },
+                {
+                  label: t('stats.informatics_avg_score', { defaultValue: 'Средний балл' }),
+                  value:
+                    informaticsStats.average_score === null
+                      ? '—'
+                      : Math.round(informaticsStats.average_score),
+                },
+              ].map((item) => (
+                <div key={item.label} className="rounded-xl border border-neutral-100 bg-neutral-50 p-3">
+                  <p className="text-[10px] font-semibold uppercase tracking-wide text-black/40">
+                    {item.label}
+                  </p>
+                  <p className="mt-1 text-2xl font-black tabular-nums text-black">{item.value}</p>
+                </div>
+              ))}
+            </div>
+
+            {Object.keys(informaticsStats.by_verdict).length > 0 && (
+              <div className="mt-4 flex flex-wrap gap-1.5">
+                {Object.entries(informaticsStats.by_verdict).map(([verdict, count]) => (
+                  <span
+                    key={verdict}
+                    className={`rounded-full border px-2.5 py-0.5 text-[11px] font-semibold ${
+                      verdict === 'ACCEPTED'
+                        ? 'border-emerald-200 bg-emerald-50 text-emerald-700'
+                        : 'border-neutral-200 bg-neutral-50 text-black/55'
+                    }`}
+                  >
+                    {verdict}: {count}
+                  </span>
+                ))}
+              </div>
+            )}
+
+            {informaticsStats.last_activity && (
+              <p className="mt-3 text-[11px] text-black/35">
+                {t('stats.informatics_last_activity', { defaultValue: 'Последняя активность' })}:{' '}
+                {formatDate(informaticsStats.last_activity, i18n.language)}
+              </p>
+            )}
+          </>
+        ) : (
+          <p className="mt-4 text-xs text-black/45">
+            {t('stats.informatics_empty', {
+              defaultValue: 'Пока нет попыток в Informatics.',
+            })}
+          </p>
+        )}
+      </section>
 
       {/* Score breakdown */}
       {breakdown && (
@@ -732,6 +995,24 @@ export default function StatsClient({ orgslug }: { orgslug: string }) {
           </ul>
         )}
       </section>
+
+      {selectedCourse && token && org?.id && (
+        <CourseStatDetailPanel
+          key={selectedCourse.uuid}
+          orgId={org.id}
+          token={token}
+          courseUuid={selectedCourse.uuid}
+          courseName={selectedCourse.name}
+          period={period}
+          isStaff={Boolean(
+            isAdmin ||
+              rights?.courses?.action_update ||
+              rights?.courses?.action_update_own ||
+              rights?.courses?.action_create,
+          )}
+          onClose={() => setSelectedCourse(null)}
+        />
+      )}
     </div>
   )
 }

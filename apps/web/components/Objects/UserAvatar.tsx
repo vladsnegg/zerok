@@ -6,6 +6,12 @@ import { getUserAvatarMediaDirectory } from '@services/media/media'
 import { useLHSession } from '@components/Contexts/LHSessionContext'
 import UserProfilePopup from './UserProfilePopup'
 import { getUserByUsername, getUser } from '@services/users/users'
+import {
+  AVATAR_FRAMES,
+  usePersonalization,
+  type AvatarFrameId,
+  type AvatarShapeId,
+} from '@/lib/theme'
 
 type UserAvatarProps = {
   width?: number
@@ -20,6 +26,10 @@ type UserAvatarProps = {
   userId?: string
   username?: string
   shadow?: string
+  frameOverride?: AvatarFrameId
+  shapeOverride?: AvatarShapeId
+  emojiOverride?: string
+  showStatusEmoji?: boolean
 }
 
 function UserAvatar(props: UserAvatarProps) {
@@ -29,6 +39,7 @@ function UserAvatar(props: UserAvatarProps) {
   const params = useParams() as any
   const [userData, setUserData] = useState<any>(null)
   const [erroredUrl, setErroredUrl] = useState<string | null>(null)
+  const { mounted, personalization } = usePersonalization()
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -131,8 +142,34 @@ function UserAvatar(props: UserAvatarProps) {
   const hasError = erroredUrl === resolvedAvatarUrl
 
   const size = props.width ?? 50
+  const sessionUser = session?.data?.user
+  const isCurrentUser =
+    !props.predefined_avatar &&
+    ((!props.userId && !props.username) ||
+      (sessionUser &&
+        ((props.userId && String(props.userId) === String(sessionUser.id)) ||
+          (props.username && props.username === sessionUser.username))))
 
-  const avatarImage = (
+  const activeFrameId =
+    props.frameOverride ?? (mounted && isCurrentUser ? personalization.avatarFrame : 'none')
+  const activeShapeId =
+    props.shapeOverride ?? (mounted && isCurrentUser ? personalization.avatarShape : undefined)
+  const activeEmoji =
+    props.emojiOverride ?? (mounted && isCurrentUser ? personalization.statusEmoji : '')
+
+  const frameOption = AVATAR_FRAMES.find((f) => f.id === activeFrameId)
+  const hasFrame = Boolean(frameOption && frameOption.id !== 'none' && frameOption.gradient)
+
+  const shapeClass =
+    activeShapeId === 'circle'
+      ? 'rounded-full'
+      : activeShapeId === 'squircle'
+        ? 'rounded-[30%]'
+        : activeShapeId === 'rounded'
+          ? 'rounded-xl'
+          : (props.rounded ?? 'rounded-xl')
+
+  const rawImage = (
     <img
       alt={t('user.avatar_alt')}
       width={size}
@@ -148,27 +185,64 @@ function UserAvatar(props: UserAvatarProps) {
       }}
       className={`
         ${props.avatar_url && session?.data?.user?.avatar_image ? '' : 'bg-gray-700'}
-        ${props.border ? `border ${props.border}` : ''}
-        ${props.borderColor ?? 'border-white'}
+        ${!hasFrame && props.border ? `border ${props.border}` : ''}
+        ${!hasFrame ? (props.borderColor ?? 'border-white') : ''}
         ${props.backgroundColor ?? 'bg-gray-100'}
-        ${props.shadow ?? 'shadow-md shadow-gray-300/45'}
+        ${!hasFrame ? (props.shadow ?? 'shadow-md shadow-gray-300/45') : ''}
         aspect-square
         shrink-0
         object-cover
-        ${props.rounded ?? 'rounded-xl'}
+        ${shapeClass}
       `}
     />
   )
 
-  if (props.showProfilePopup && (props.userId || (userData?.id))) {
+  const showEmojiBadge = Boolean(activeEmoji && (props.showStatusEmoji || size >= 44))
+  const pad = size >= 72 ? 3.5 : size >= 44 ? 2.5 : 2
+
+  const avatarElement =
+    hasFrame || showEmojiBadge ? (
+      <span
+        className={`relative inline-flex shrink-0 items-center justify-center ${shapeClass}`}
+        style={
+          hasFrame
+            ? {
+                padding: `${pad}px`,
+                background: frameOption?.gradient,
+                boxShadow: frameOption?.glow,
+              }
+            : undefined
+        }
+      >
+        {rawImage}
+        {showEmojiBadge && (
+          <span
+            className="pointer-events-none absolute -bottom-1 -end-1 flex items-center justify-center rounded-full border border-neutral-200 bg-white shadow-sm"
+            style={{
+              width: size >= 72 ? 26 : 20,
+              height: size >= 72 ? 26 : 20,
+              fontSize: size >= 72 ? 14 : 11,
+              lineHeight: 1,
+            }}
+            title={mounted && isCurrentUser ? personalization.statusText || activeEmoji : activeEmoji}
+          >
+            {activeEmoji}
+          </span>
+        )}
+      </span>
+    ) : (
+      rawImage
+    )
+
+  if (props.showProfilePopup && (props.userId || userData?.id)) {
     return (
       <UserProfilePopup userId={props.userId || userData?.id}>
-        {avatarImage}
+        {avatarElement}
       </UserProfilePopup>
     )
   }
 
-  return avatarImage
+  return avatarElement
 }
 
 export default UserAvatar

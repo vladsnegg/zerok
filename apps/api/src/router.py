@@ -2,6 +2,7 @@ from fastapi import APIRouter, Depends
 from src.routers import admin as admin_router_module
 from src.routers import code_execution
 from src.routers import code_submissions
+from src.routers import informatics as informatics_router_module
 from src.routers import health
 from src.routers import demo as demo_router_module
 from src.routers import instance
@@ -18,6 +19,7 @@ from src.routers import api_tokens
 from src.routers import mcp_oauth
 from src.routers import calendar as calendar_router_module
 from src.routers import stats as stats_router_module
+from src.routers import practice as practice_router_module
 from src.routers import webhooks
 from src.routers.integrations import zapier as zapier_integration
 from src.routers.ai import ai, magicblocks, courseplanning, rag, images, quiz, assignment_gen, scenario, audio
@@ -27,6 +29,7 @@ from src.routers.orgs import custom_domains
 from src.routers.orgs import packs
 from src.routers.orgs import org_plan
 from src.routers.courses import chapters, courses, assignments, certifications
+from src.routers.courses import curriculum as curriculum_router_module
 from src.routers.folders import folders as folders_router_module
 from src.routers.paths import paths as paths_router_module
 from src.routers.messaging import messaging as messaging_router_module
@@ -128,6 +131,11 @@ v1_router.include_router(
     dependencies=[Depends(require_authenticated_user)],
 )
 v1_router.include_router(
+    practice_router_module.router,
+    prefix="/practice",
+    tags=["practice"],
+)
+v1_router.include_router(
     webhooks.router,
     prefix="/orgs",
     tags=["webhooks"],
@@ -212,6 +220,11 @@ v1_router.include_router(
     tags=["admin"],
 )
 v1_router.include_router(courses.router, prefix="/courses", tags=["courses"])
+v1_router.include_router(
+    curriculum_router_module.router,
+    prefix="/courses",
+    tags=["courses"],
+)
 v1_router.include_router(
     migration_router_module.router,
     prefix="/courses",
@@ -405,6 +418,15 @@ v1_router.include_router(
     prefix="/code/submissions",
     tags=["code_submissions"],
     dependencies=[Depends(require_authenticated_user)],
+)
+
+# Informatics account binding and userscript verdict ingest. The ingest
+# endpoint authenticates with a personal X-Ingest-Token, so this router cannot
+# take a global JWT dependency.
+v1_router.include_router(
+    informatics_router_module.router,
+    prefix="/informatics",
+    tags=["informatics"],
 )
 
 # Instance info (public, no auth)

@@ -10,6 +10,8 @@ import {
 } from '@components/Contexts/Assignments/AssignmentsTaskContext'
 import { useLHSession } from '@components/Contexts/LHSessionContext'
 import AssignmentBoxUI from '@components/Objects/Activities/Assignment/AssignmentBoxUI'
+import InformaticsSubmissionPanel from '@components/Objects/Activities/Assignment/InformaticsSubmissionPanel'
+import InformaticsTeacherPanel from '@components/Objects/Activities/Assignment/InformaticsTeacherPanel'
 import {
   getAssignmentTask,
   getAssignmentTaskSubmissionsUser,
@@ -93,6 +95,8 @@ type CodeTaskContents = {
   solution_code: string
   grading_mode: 'equal_weight' | 'binary' | 'custom_weights'
   test_cases: CodeTestCase[]
+  /** Informatics problem id, when this task is judged by informatics.msk.ru. */
+  informatics_problem_id: number
   // Student-facing behavior. All default to the classic behavior so existing
   // code tasks keep working unchanged after this upgrade.
   allow_student_run?: boolean             // student can click Run Tests (default true)
@@ -154,6 +158,7 @@ const DEFAULT_CONTENTS: CodeTaskContents = {
   test_cases: [
     { id: 'tc_' + uuidv4(), label: 'Test 1', stdin: '', expectedStdout: '', hidden: false, weight: 1 },
   ],
+  informatics_problem_id: 0,
   allow_student_run: true,
   show_test_details_on_fail: true,
   show_hidden_test_count: true,
@@ -170,6 +175,8 @@ function normalizeCodeContents(raw: any): CodeTaskContents {
     solution_code: raw?.solution_code ?? '',
     grading_mode: raw?.grading_mode ?? 'equal_weight',
     test_cases: raw?.test_cases ?? [],
+    informatics_problem_id:
+      raw?.informatics_problem_id ?? raw?._meta?.problem_id ?? 0,
     allow_student_run: raw?.allow_student_run ?? true,
     show_test_details_on_fail: raw?.show_test_details_on_fail ?? true,
     show_hidden_test_count: raw?.show_hidden_test_count ?? true,
@@ -392,10 +399,27 @@ function TaskCodeObject({ view, assignmentTaskUUID, user_id, onGraded }: TaskCod
   // --- SAVE (teacher) ---
   async function saveFC() {
     if (!assignmentTaskState?.assignmentTask?.assignment_task_uuid) return
+    const originalContents = assignmentTaskState?.assignmentTask?.contents as any
+    const originalMeta =
+      originalContents?._meta && typeof originalContents._meta === 'object'
+        ? originalContents._meta
+        : {}
     const updatedContents: CodeTaskContents = {
       ...contents,
       starter_code: code,
-    }
+      // Preserve the import metadata (the userscript and the verdict log match
+      // on `_meta.problem_id`) and keep it in sync with the teacher field.
+      ...(Object.keys(originalMeta).length || contents.informatics_problem_id
+        ? {
+            _meta: {
+              ...originalMeta,
+              ...(contents.informatics_problem_id
+                ? { problem_id: contents.informatics_problem_id }
+                : {}),
+            },
+          }
+        : {}),
+    } as CodeTaskContents
     const values = { contents: updatedContents }
     const res = await updateAssignmentTask(
       values,
@@ -755,6 +779,24 @@ function TaskCodeObject({ view, assignmentTaskUUID, user_id, onGraded }: TaskCod
                   <option value="custom_weights">{t('dashboard.assignments.editor.task_editor.code_object.custom_weights')}</option>
                 </select>
               </div>
+              <div className="flex flex-col space-y-1 flex-1">
+                <label className="text-xs font-semibold text-slate-500">
+                  Informatics problem ID
+                </label>
+                <input
+                  type="number"
+                  min={0}
+                  value={contents.informatics_problem_id || ''}
+                  onChange={(e) =>
+                    setContents((prev) => ({
+                      ...prev,
+                      informatics_problem_id: Number(e.target.value) || 0,
+                    }))
+                  }
+                  className="px-3 py-1.5 text-sm border border-gray-200 rounded-md bg-white"
+                  placeholder="например, 2936"
+                />
+              </div>
             </div>
 
             {/* Starter Code */}
@@ -942,6 +984,8 @@ function TaskCodeObject({ view, assignmentTaskUUID, user_id, onGraded }: TaskCod
 
             {/* Results (teacher) */}
             {showResults && results.length > 0 && <TestResultsPanel results={results} testCases={contents.test_cases} view="grading" />}
+
+            <InformaticsTeacherPanel assignmentTaskUuid={assignmentTaskUUID} />
           </>
         )}
 
@@ -1019,6 +1063,15 @@ function TaskCodeObject({ view, assignmentTaskUUID, user_id, onGraded }: TaskCod
                 </button>
               </div>
             )}
+
+            <InformaticsSubmissionPanel
+              problemId={contents.informatics_problem_id || null}
+              assignmentTaskUuid={assignmentTaskUUID}
+              assignmentUuid={assignment?.assignment_object?.assignment_uuid}
+              activityUuid={assignment?.activity_object?.activity_uuid}
+              sourceCode={code}
+              disabled={!canStudentSave}
+            />
 
             {/* Submission gating notice: when the teacher requires passing
                 all visible tests before save. */}

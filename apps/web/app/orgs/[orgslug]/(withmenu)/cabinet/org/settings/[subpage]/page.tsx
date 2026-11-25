@@ -62,7 +62,7 @@ const getSettingTabs = (t: any): TabConfig[] => [
   { id: 'menu', label: t('dashboard.organization.settings.tabs.menu') || 'Menu', icon: MenuIcon },
   { id: 'landing', label: t('dashboard.organization.settings.tabs.landing'), icon: LayoutDashboardIcon },
   { id: 'course-end', label: t('dashboard.organization.settings.tabs.course_end'), icon: Trophy },
-  { id: 'ai', label: t('dashboard.organization.settings.tabs.ai') || 'AI', customIcon: '/learnhouse_ai_simple_colored.png', requiredPlan: 'standard' },
+  { id: 'ai', label: t('dashboard.organization.settings.tabs.ai') || 'AI', customIcon: '/zerok-ai.png', requiredPlan: 'standard' },
   { id: 'analytics', label: t('dashboard.organization.settings.tabs.analytics'), icon: ChartLine },
   { id: 'usage', label: t('dashboard.organization.settings.tabs.usage') || 'Usage', icon: BarChart3 },
   { id: 'other', label: t('dashboard.organization.settings.tabs.other'), icon: CodeIcon },

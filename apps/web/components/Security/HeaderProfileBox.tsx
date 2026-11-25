@@ -2,8 +2,9 @@
 import React, { useMemo } from 'react'
 
 import Link from 'next/link'
-import { Crown, Shield, User, Users, SignOut, CaretDown, Globe, Check, ShoppingBag, House, Buildings, Plus, CreditCard, BookOpen } from '@phosphor-icons/react'
+import { Crown, Shield, User, Users, SignOut, CaretDown, Globe, Check, House, Buildings, Plus, CreditCard, BookOpen, Palette } from '@phosphor-icons/react'
 import UserAvatar from '@components/Objects/UserAvatar'
+import { BADGE_COLORS, usePersonalization } from '@/lib/theme'
 import useAdminStatus, { seesPlatformHubFromSession } from '@components/Hooks/useAdminStatus'
 import { useLHSession } from '@components/Contexts/LHSessionContext'
 import { useOrg } from '@components/Contexts/OrgContext'
@@ -50,6 +51,9 @@ export const HeaderProfileBox = ({ primaryColor = '' }: { primaryColor?: string 
   const { t, i18n } = useTranslation()
   const { track } = useLHAnalytics()
   const colors = getMenuColorClasses(primaryColor)
+  const { mounted, personalization } = usePersonalization()
+  const badgeStyle =
+    BADGE_COLORS.find((b) => b.id === personalization.badgeColor) || BADGE_COLORS[0]
 
   // The user's organizations (deduped) from the session roles, used by the
   // "My Organizations" submenu. Only relevant in multi-org (SaaS) mode, where
@@ -199,7 +203,14 @@ export const HeaderProfileBox = ({ primaryColor = '' }: { primaryColor?: string 
                       next to a full menu; the dropdown repeats both. */}
                   <div className="hidden min-[1780px]:flex flex-col items-start space-y-0">
                     <div className="flex items-center space-x-2">
-                      <p className={`text-sm font-semibold capitalize ${colors.profileName}`}>{session.data.user.username}</p>
+                      <p className={`text-sm font-semibold capitalize ${colors.profileName}`}>
+                        {session.data.user.username}
+                        {mounted && personalization.statusEmoji && (
+                          <span className="ms-1" title={personalization.statusText || undefined}>
+                            {personalization.statusEmoji}
+                          </span>
+                        )}
+                      </p>
                       {userRoleInfo && userRoleInfo.name !== 'USER' && (
                         <Tooltip 
                           content={userRoleInfo.description}
@@ -232,13 +243,35 @@ export const HeaderProfileBox = ({ primaryColor = '' }: { primaryColor?: string 
                   <CaretDown aria-hidden="true" size={16} weight="fill" className={`hidden min-[1780px]:block ${colors.profileMuted}`} />
                 </button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-56" align="end">
+              <DropdownMenuContent className="w-60" align="end">
                 <DropdownMenuLabel>
-                  <div className="flex items-center space-x-2">
-                    <UserAvatar border="border-2" rounded="rounded-full" width={24} />
-                    <div>
-                      <p className="text-sm font-medium">{session.data.user.username}</p>
-                      <p className="text-xs text-gray-500 capitalize">{session.data.user.email}</p>
+                  <div className="flex items-center space-x-2.5">
+                    <UserAvatar border="border-2" rounded="rounded-full" width={28} />
+                    <div className="min-w-0 flex-1">
+                      <div className="flex items-center gap-1.5">
+                        <p className="truncate text-sm font-medium">{session.data.user.username}</p>
+                        {mounted && personalization.statusEmoji && (
+                          <span className="text-xs">{personalization.statusEmoji}</span>
+                        )}
+                      </div>
+                      <p className="truncate text-xs text-gray-500">{session.data.user.email}</p>
+                      {mounted && personalization.customBadge && (
+                        <span
+                          className="mt-1 inline-flex items-center rounded-full border px-2 py-0.5 text-[10px] font-bold"
+                          style={{
+                            backgroundColor: badgeStyle.bg,
+                            color: badgeStyle.text,
+                            borderColor: badgeStyle.border,
+                          }}
+                        >
+                          {personalization.customBadge}
+                        </span>
+                      )}
+                      {mounted && personalization.statusText && (
+                        <p className="mt-1 truncate text-[11px] font-normal text-gray-500">
+                          {personalization.statusText}
+                        </p>
+                      )}
                     </div>
                   </div>
                 </DropdownMenuLabel>
@@ -255,20 +288,20 @@ export const HeaderProfileBox = ({ primaryColor = '' }: { primaryColor?: string 
                   <DropdownMenuItem asChild>
                     <Link href="/cabinet" className="flex items-center space-x-2">
                       <BookOpen size={16} weight="fill" />
-                      <span>{t('cabinet.title', { defaultValue: 'My learning' })}</span>
+                      <span>{t('cabinet.title', { defaultValue: 'Learning' })}</span>
                     </Link>
                   </DropdownMenuItem>
                 )}
                 <DropdownMenuItem asChild>
                   <Link href="/account/general" className="flex items-center space-x-2">
                     <User size={16} weight="fill" />
-                    <span>{t('user.user_settings')}</span>
+                    <span>{t('common.settings', { defaultValue: 'Settings' })}</span>
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                  <Link href={getUriWithOrg(org?.slug, '/account/purchases')} className="flex items-center space-x-2">
-                    <ShoppingBag size={16} weight="fill" />
-                    <span>{t('account.purchases')}</span>
+                  <Link href={getUriWithOrg(org?.slug, '/account/appearance')} className="flex items-center space-x-2">
+                    <Palette size={16} weight="fill" />
+                    <span>{t('account.theme_short', { defaultValue: 'Theme' })}</span>
                   </Link>
                 </DropdownMenuItem>
                 {multiOrg && showOrgSwitcher && (
@@ -319,7 +352,7 @@ export const HeaderProfileBox = ({ primaryColor = '' }: { primaryColor?: string 
                               <DropdownMenuItem asChild>
                                 <Link href={getMainDomainUri('/new')} className="flex items-center space-x-2 font-semibold">
                                   <Plus size={16} weight="bold" />
-                                  <span>{t('common.create_organization', { defaultValue: 'Create organization' })}</span>
+                                  <span>{t('common.new_org_short', { defaultValue: 'New org' })}</span>
                                 </Link>
                               </DropdownMenuItem>
                             </>
@@ -336,14 +369,26 @@ export const HeaderProfileBox = ({ primaryColor = '' }: { primaryColor?: string 
                     <span>{t('common.language')}</span>
                   </DropdownMenuSubTrigger>
                   <DropdownMenuPortal>
-                    <DropdownMenuSubContent>
+                    <DropdownMenuSubContent className="min-w-[168px]">
                       {AVAILABLE_LANGUAGES.map((language) => (
                         <DropdownMenuItem 
                           key={language.code}
-                          onClick={() => changeLanguage(language.code)}
-                          className="flex items-center justify-between"
+                          onClick={() => {
+                            try {
+                              localStorage.setItem('i18nextLng_userPicked', '1')
+                            } catch {
+                              /* ignore */
+                            }
+                            changeLanguage(language.code)
+                          }}
+                          className="flex items-center justify-between gap-3"
                         >
-                          <span>{t(language.translationKey)} ({language.nativeName})</span>
+                          <span className="flex items-center gap-2">
+                            <span className="w-5 font-mono text-[11px] font-bold uppercase opacity-50">
+                              {language.code}
+                            </span>
+                            <span>{language.nativeName}</span>
+                          </span>
                           {i18n.language.split('-')[0] === language.code && <Check size={14} weight="bold" />}
                         </DropdownMenuItem>
                       ))}
@@ -354,7 +399,7 @@ export const HeaderProfileBox = ({ primaryColor = '' }: { primaryColor?: string 
                 <DropdownMenuItem
                   onClick={() => {
                     track(AnalyticsEvent.LogoutClicked, { source: 'header_profile' })
-                    signOut({ callbackUrl: '/' })
+                    signOut({ callbackUrl: '/welcome' })
                   }}
                   className="flex items-center space-x-2 text-red-600 focus:text-red-600"
                 >

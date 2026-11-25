@@ -14,7 +14,6 @@ import {
   Bell,
   ChatsCircle,
   User,
-  ShoppingBag,
   Globe,
   Book,
   SignOut,
@@ -339,8 +338,7 @@ function MobileMoreSheet({
                 Icon={Bell}
                 label={t('notifications.title', { defaultValue: 'Notifications' })}
               />
-              <SheetRow href={getUriWithOrg(orgslug, '/account/purchases')} Icon={ShoppingBag} label={t('account.purchases')} />
-              <SheetRow href={getUriWithOrg(orgslug, '/account/general')} Icon={User} label={t('user.user_settings')} />
+              <SheetRow href={getUriWithOrg(orgslug, '/account/general')} Icon={User} label={t('common.settings', { defaultValue: 'Settings' })} />
             </SheetGroup>
           )}
 
@@ -372,7 +370,14 @@ function MobileMoreSheet({
                 <button
                   key={language.code}
                   type="button"
-                  onClick={() => changeLanguage(language.code)}
+                  onClick={() => {
+                    try {
+                      localStorage.setItem('i18nextLng_userPicked', '1')
+                    } catch {
+                      /* ignore */
+                    }
+                    changeLanguage(language.code)
+                  }}
                   className="flex w-full items-center justify-between ps-14 pe-4 min-h-[44px] text-start text-[15px] text-neutral-700 active:bg-black/[0.03]"
                 >
                   <span>{language.nativeName}</span>

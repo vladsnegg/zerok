@@ -21,6 +21,9 @@ import useAdminStatus from '@components/Hooks/useAdminStatus'
 import { getAPIUrl, getUriWithOrg } from '@services/config/config'
 import { RequestBodyWithAuthHeader, asArray } from '@services/utils/ts/requests'
 import { getCalendarEvents } from '@services/calendar/calendar'
+import { usePersonalization } from '@/lib/theme'
+import PageLoading from '@components/Objects/Loaders/PageLoading'
+import { CabinetFocusWidget, CabinetPersonalBanner } from './CabinetPersonalBanner'
 import TeacherCabinetHome from './teacher-home'
 
 type TrailRun = {
@@ -49,14 +52,10 @@ export default function CabinetPage({ params }: { params: Promise<{ orgslug: str
   const session = useLHSession() as any
   const { isAdmin, loading: rightsLoading } = useAdminStatus() as any
 
-  // While the role is being resolved, keep the skeleton neutral so neither
+  // While the role is being resolved, show the full-screen loader so neither
   // view flashes before we know who is asking.
   if (rightsLoading) {
-    return (
-      <div className="mx-auto w-full max-w-5xl px-4 sm:px-6 py-10">
-        <div className="h-24 animate-pulse rounded-2xl bg-neutral-100" />
-      </div>
-    )
+    return <PageLoading />
   }
 
   if (isAdmin) {
@@ -78,6 +77,7 @@ function StudentCabinetView({ orgslug }: { orgslug: string }) {
   // Greeting is computed after mount: the server cannot know the visitor's
   // local time, and computing it during render would break hydration.
   const [greetingKey, setGreetingKey] = useState<string | null>(null)
+  const { mounted, personalization } = usePersonalization()
 
   useEffect(() => {
     if (!token) return
@@ -181,41 +181,55 @@ function StudentCabinetView({ orgslug }: { orgslug: string }) {
       ? t('cabinet.welcome_name', { defaultValue: 'Welcome, {{name}}', name: displayName })
       : t('cabinet.welcome', { defaultValue: 'Welcome' })
 
+  const widgets = personalization.cabinetWidgets
+  const showContinueHero = !mounted || widgets.showContinueHero
+  const showStatsRow = !mounted || widgets.showStatsRow
+  const showDeadlines = !mounted || widgets.showDeadlines
+
+  if (loading) {
+    return <PageLoading />
+  }
+
   return (
     <div className="mx-auto w-full max-w-5xl px-4 sm:px-6 py-10">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-        <div>
-          <p className="text-xs font-semibold uppercase tracking-wide text-black/35">
-            {t('cabinet.eyebrow', { defaultValue: 'My learning' })}
-          </p>
-          <h1 className="mt-1 text-3xl font-black tracking-tight text-black">{greeting}</h1>
-          <p className="mt-1 text-sm text-black/45">
-            {t('cabinet.subtitle', {
-              defaultValue: 'Your courses, deadlines and progress in one place.',
-            })}
-          </p>
-          <div className="mt-3 flex flex-wrap items-center gap-2">
+      <CabinetPersonalBanner
+        orgslug={orgslug}
+        eyebrow={t('cabinet.eyebrow', { defaultValue: 'My learning' })}
+        greeting={greeting}
+        subtitle={t('cabinet.subtitle', {
+          defaultValue: 'Your courses, deadlines and progress in one place.',
+        })}
+        chips={
+          <>
             {currentRun && (
               <span className="inline-flex items-center gap-1.5 rounded-full bg-neutral-100 px-3 py-1.5 text-xs font-semibold text-black/60">
                 <TrendingUp size={14} className="text-black/40" />
-                {t('cabinet.progress_chip', { defaultValue: '{{percent}}% in your current course', percent: currentProgress })}
+                {t('cabinet.progress_chip', {
+                  defaultValue: '{{percent}}% in your current course',
+                  percent: currentProgress,
+                })}
               </span>
             )}
             {daysUntilNextEvent !== null && (
               <span className="inline-flex items-center gap-1.5 rounded-full border border-orange-200 bg-orange-50 px-3 py-1.5 text-xs font-semibold text-orange-700">
                 <Target size={14} />
-                {t('cabinet.deadline_chip', { defaultValue: 'Next deadline in {{days}} d.', days: daysUntilNextEvent })}
+                {t('cabinet.deadline_chip', {
+                  defaultValue: 'Next deadline in {{days}} d.',
+                  days: daysUntilNextEvent,
+                })}
               </span>
             )}
             <span className="inline-flex items-center gap-1.5 rounded-full border border-neutral-200 bg-white px-3 py-1.5 text-xs font-semibold text-black/50">
               <BookOpen size={14} className="text-black/40" />
               {stats.total} {t('cabinet.courses', { defaultValue: 'Courses' })}
             </span>
-          </div>
-        </div>
-      </div>
+          </>
+        }
+      />
 
-      {currentRun && currentUuid && (
+      <CabinetFocusWidget />
+
+      {showContinueHero && currentRun && currentUuid && (
         <div className="mt-8 flex flex-col items-start justify-between gap-6 overflow-hidden rounded-2xl border border-neutral-800 bg-[#0b0c0d] p-6 text-white sm:flex-row sm:items-center">
           <div className="min-w-0">
             <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-white/45">
@@ -247,35 +261,37 @@ function StudentCabinetView({ orgslug }: { orgslug: string }) {
         </div>
       )}
 
-      <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-3">
-        <div className="rounded-2xl border border-neutral-200 bg-white p-5">
-          <div className="flex items-center gap-2 text-black/45">
-            <BookOpen size={16} />
-            <span className="text-xs font-semibold uppercase tracking-wide">
-              {t('cabinet.courses', { defaultValue: 'Courses' })}
-            </span>
+      {showStatsRow && (
+        <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-3">
+          <div className="rounded-2xl border border-neutral-200 bg-white p-5">
+            <div className="flex items-center gap-2 text-black/45">
+              <BookOpen size={16} />
+              <span className="text-xs font-semibold uppercase tracking-wide">
+                {t('cabinet.courses', { defaultValue: 'Courses' })}
+              </span>
+            </div>
+            <p className="mt-3 text-3xl font-black text-black">{stats.total}</p>
           </div>
-          <p className="mt-3 text-3xl font-black text-black">{stats.total}</p>
-        </div>
-        <div className="rounded-2xl border border-neutral-200 bg-white p-5">
-          <div className="flex items-center gap-2 text-black/45">
-            <Clock3 size={16} />
-            <span className="text-xs font-semibold uppercase tracking-wide">
-              {t('cabinet.in_progress', { defaultValue: 'In progress' })}
-            </span>
+          <div className="rounded-2xl border border-neutral-200 bg-white p-5">
+            <div className="flex items-center gap-2 text-black/45">
+              <Clock3 size={16} />
+              <span className="text-xs font-semibold uppercase tracking-wide">
+                {t('cabinet.in_progress', { defaultValue: 'In progress' })}
+              </span>
+            </div>
+            <p className="mt-3 text-3xl font-black text-black">{stats.inProgress}</p>
           </div>
-          <p className="mt-3 text-3xl font-black text-black">{stats.inProgress}</p>
-        </div>
-        <div className="rounded-2xl border border-neutral-200 bg-white p-5">
-          <div className="flex items-center gap-2 text-black/45">
-            <CheckCircle2 size={16} />
-            <span className="text-xs font-semibold uppercase tracking-wide">
-              {t('cabinet.completed', { defaultValue: 'Completed' })}
-            </span>
+          <div className="rounded-2xl border border-neutral-200 bg-white p-5">
+            <div className="flex items-center gap-2 text-black/45">
+              <CheckCircle2 size={16} />
+              <span className="text-xs font-semibold uppercase tracking-wide">
+                {t('cabinet.completed', { defaultValue: 'Completed' })}
+              </span>
+            </div>
+            <p className="mt-3 text-3xl font-black text-black">{stats.completed}</p>
           </div>
-          <p className="mt-3 text-3xl font-black text-black">{stats.completed}</p>
         </div>
-      </div>
+      )}
 
       <div className="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-[1fr_320px]">
         <section className="rounded-2xl border border-neutral-200 bg-white p-5">
@@ -352,41 +368,43 @@ function StudentCabinetView({ orgslug }: { orgslug: string }) {
         </section>
 
         <aside className="space-y-4">
-          <section className="rounded-2xl border border-neutral-200 bg-white p-5">
-            <div className="flex items-center gap-2">
-              <CalendarDays size={16} className="text-black/45" />
-              <h2 className="text-sm font-bold text-black">
-                {t('cabinet.deadlines', { defaultValue: 'Deadlines & events' })}
-              </h2>
-            </div>
-            {loading && <p className="mt-4 text-sm text-black/35">…</p>}
-            {!loading && events.length === 0 && (
-              <p className="mt-4 text-sm text-black/40">
-                {t('cabinet.no_events', { defaultValue: 'Nothing scheduled.' })}
-              </p>
-            )}
-            <ul className="mt-4 space-y-3">
-              {events.slice(0, 5).map((event, index) => (
-                <li key={event.id ?? index} className="text-sm">
-                  <p className="font-medium text-black">
-                    {event.title || t('cabinet.event', { defaultValue: 'Event' })}
-                  </p>
-                  {event.start && (
-                    <p className="text-xs text-black/35">
-                      {new Date(event.start).toLocaleString()}
+          {showDeadlines && (
+            <section className="rounded-2xl border border-neutral-200 bg-white p-5">
+              <div className="flex items-center gap-2">
+                <CalendarDays size={16} className="text-black/45" />
+                <h2 className="text-sm font-bold text-black">
+                  {t('cabinet.deadlines', { defaultValue: 'Deadlines & events' })}
+                </h2>
+              </div>
+              {loading && <p className="mt-4 text-sm text-black/35">…</p>}
+              {!loading && events.length === 0 && (
+                <p className="mt-4 text-sm text-black/40">
+                  {t('cabinet.no_events', { defaultValue: 'Nothing scheduled.' })}
+                </p>
+              )}
+              <ul className="mt-4 space-y-3">
+                {events.slice(0, 5).map((event, index) => (
+                  <li key={event.id ?? index} className="text-sm">
+                    <p className="font-medium text-black">
+                      {event.title || t('cabinet.event', { defaultValue: 'Event' })}
                     </p>
-                  )}
-                </li>
-              ))}
-            </ul>
-            <Link
-              href={getUriWithOrg(orgslug, '/calendar')}
-              className="mt-4 inline-flex items-center gap-1 text-xs font-semibold text-black/45 hover:text-black"
-            >
-              {t('cabinet.open_calendar', { defaultValue: 'Open calendar' })}
-              <ArrowRight size={12} />
-            </Link>
-          </section>
+                    {event.start && (
+                      <p className="text-xs text-black/35">
+                        {new Date(event.start).toLocaleString()}
+                      </p>
+                    )}
+                  </li>
+                ))}
+              </ul>
+              <Link
+                href={getUriWithOrg(orgslug, '/calendar')}
+                className="mt-4 inline-flex items-center gap-1 text-xs font-semibold text-black/45 hover:text-black"
+              >
+                {t('cabinet.open_calendar', { defaultValue: 'Open calendar' })}
+                <ArrowRight size={12} />
+              </Link>
+            </section>
+          )}
 
           <section className="rounded-2xl border border-neutral-200 bg-white p-5">
             <div className="flex items-center gap-2">
@@ -402,6 +420,12 @@ function StudentCabinetView({ orgslug }: { orgslug: string }) {
                 className="text-xs font-semibold text-black/50 hover:text-black"
               >
                 {t('cabinet.account_settings', { defaultValue: 'Account settings' })}
+              </Link>
+              <Link
+                href={getUriWithOrg(orgslug, '/account/appearance')}
+                className="text-xs font-semibold text-black/50 hover:text-black"
+              >
+                {t('account.appearance', { defaultValue: 'Appearance & themes' })}
               </Link>
               <Link
                 href={getUriWithOrg(orgslug, '/account/security')}

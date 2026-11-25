@@ -8,8 +8,8 @@ import { AlertTriangle, BadgeInfo, NotebookTabs, Maximize2, Minimize2, PanelRigh
 import { motion, AnimatePresence } from 'motion/react'
 import { FlaskConical, MessageCircle, X } from 'lucide-react'
 import Image from 'next/image'
-import learnhouseAI_icon from 'public/learnhouse_ai_simple.png'
-import learnhouseAI_logo_black from 'public/learnhouse_ai_black_logo.png'
+const zerokAI_icon = '/zerok-ai.png'
+const zerokAI_wordmark = '/zerok-ai-wordmark.png'
 import React, { useEffect, useRef } from 'react'
 import {
   AIChatBotStateTypes,
@@ -84,7 +84,7 @@ function AIActivityAsk(props: AIActivityAskProps) {
               <Image
                 className="outline outline-1 outline-neutral-200/20 rounded-md"
                 width={20}
-                src={learnhouseAI_icon}
+                src={zerokAI_icon}
                 alt=""
               />
             </i>{' '}
@@ -351,7 +351,7 @@ function ActivityChatMessageBox(props: ActivityChatMessageBoxProps) {
                     className={`outline outline-1 outline-neutral-200/20 rounded-lg ${isInputDisabled ? 'animate-pulse' : ''
                       }`}
                     width={24}
-                    src={learnhouseAI_icon}
+                    src={zerokAI_icon}
                     alt=""
                   />
                   <span className="text-sm font-semibold text-white/70">
@@ -646,7 +646,7 @@ const AIMessagePlaceHolder = (props: {
             <Image
               width={100}
               className="mx-auto"
-              src={learnhouseAI_logo_black}
+              src={zerokAI_wordmark}
               alt=""
             />
             <p className="pt-3 text-2xl font-semibold text-white/70 flex justify-center space-x-2 items-center">
@@ -957,7 +957,7 @@ function AISidePanelInline(props: AISidePanelProps) {
               <Image
                 className={`outline outline-1 outline-neutral-200/20 rounded-lg ${isInputDisabled ? 'animate-pulse' : ''}`}
                 width={24}
-                src={learnhouseAI_icon}
+                src={zerokAI_icon}
                 alt=""
               />
               <span className="text-sm font-semibold text-white/70">AI</span>
@@ -1197,7 +1197,7 @@ const AISidePanelPlaceholder = (props: {
             <Image
               width={80}
               className="mx-auto"
-              src={learnhouseAI_logo_black}
+              src={zerokAI_wordmark}
               alt=""
             />
             <p className="pt-3 text-lg font-semibold text-white/70 flex flex-col justify-center items-center">

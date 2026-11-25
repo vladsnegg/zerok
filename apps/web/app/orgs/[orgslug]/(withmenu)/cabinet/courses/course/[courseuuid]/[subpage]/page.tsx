@@ -3,7 +3,7 @@ import React, { use, useEffect } from 'react';
 import { CourseProvider } from '@/components/Contexts/CourseContext'
 import { CourseOverviewTop } from '@components/Dashboard/Misc/CourseOverviewTop'
 import { motion } from 'motion/react'
-import { GalleryVerticalEnd, Globe, Info, UserPen, Award, Lock, Search, CalendarClock } from 'lucide-react'
+import { GalleryVerticalEnd, Globe, Info, UserPen, Award, Lock, Search, CalendarClock, ListTree } from 'lucide-react'
 import { ChartBar } from '@phosphor-icons/react'
 import { useCourseRights } from '@hooks/useCourseRights'
 import { useRouter } from 'next/navigation'
@@ -17,6 +17,7 @@ import { isOrgAnalyticsAvailable } from '@ee/components/Analytics/availability'
 
 // One chunk per tab: only the open tab's code (charts, editors) is loaded.
 const EditCourseStructure = dynamic(() => import('@components/Dashboard/Pages/Course/EditCourseStructure/EditCourseStructure'))
+const EditCourseCurriculum = dynamic(() => import('@components/Dashboard/Pages/Course/EditCourseCurriculum/EditCourseCurriculum'))
 const EditCourseGeneral = dynamic(() => import('@components/Dashboard/Pages/Course/EditCourseGeneral/EditCourseGeneral'))
 const EditCourseAccess = dynamic(() => import('@components/Dashboard/Pages/Course/EditCourseAccess/EditCourseAccess'))
 const EditCourseContributors = dynamic(() => import('@components/Dashboard/Pages/Course/EditCourseContributors/EditCourseContributors'))
@@ -59,6 +60,13 @@ function CourseOverviewPage(props: { params: Promise<CourseOverviewParams> }) {
       icon: GalleryVerticalEnd,
       href: `/cabinet/courses/course/${params.courseuuid}/content`,
       requiredPermission: 'update_content' as const
+    },
+    {
+      key: 'curriculum',
+      label: t('dashboard.courses.settings.tabs.curriculum', { defaultValue: 'Программа' }),
+      icon: ListTree,
+      href: `/cabinet/courses/course/${params.courseuuid}/curriculum`,
+      requiredPermission: 'update' as const
     },
     {
       key: 'schedule',
@@ -186,6 +194,9 @@ function CourseOverviewPage(props: { params: Promise<CourseOverviewParams> }) {
             ) : null}
             {!rightsLoading && params.subpage == 'content' && hasPermission('update_content') ? (
               <EditCourseStructure orgslug={params.orgslug} />
+            ) : null}
+            {!rightsLoading && params.subpage == 'curriculum' && hasPermission('update') ? (
+              <EditCourseCurriculum />
             ) : null}
             {!rightsLoading && params.subpage == 'general' && hasPermission('update') ? (
               <EditCourseGeneral orgslug={params.orgslug} />

@@ -34,6 +34,9 @@ const REDIS_IMAGE = process.env.LEARNHOUSE_DEV_REDIS_IMAGE || 'redis:7.4-alpine'
 const API_PORT = 1338
 const WEB_PORT = 3000
 const COLLAB_PORT = 4000
+// Judge0-compatible local code runner (Docker sandbox). The API talks to it
+// through LEARNHOUSE_JUDGE0_API_URL; it only needs Docker when code is run.
+const RUNNER_PORT = 2358
 
 const DB_PREFERRED_PORTS = [55432, 54432, 54032, 55332]
 const REDIS_PREFERRED_PORT = 6379
@@ -381,6 +384,7 @@ async function main() {
   await failIfPortTaken('API', API_PORT)
   await failIfPortTaken('Web', WEB_PORT)
   await failIfPortTaken('Collab', COLLAB_PORT)
+  await failIfPortTaken('Runner', RUNNER_PORT)
 
   ensureDependencies()
   const dbUrl = `postgresql://learnhouse:learnhouse@127.0.0.1:${state.dbPort}/learnhouse`
@@ -403,6 +407,10 @@ async function main() {
     LEARNHOUSE_INITIAL_ORG_SLUG: process.env.LEARNHOUSE_INITIAL_ORG_SLUG || 'default',
     LEARNHOUSE_DISABLE_EE: '1',
     LEARNHOUSE_IS_AI_ENABLED: 'false',
+    // Local, Judge0-compatible code runner started below. Override the env var
+    // to point at an external Judge0 instead.
+    LEARNHOUSE_JUDGE0_API_URL:
+      process.env.LEARNHOUSE_JUDGE0_API_URL || `http://127.0.0.1:${RUNNER_PORT}`,
     FORCE_COLOR: '1',
   }
 
@@ -427,25 +435,38 @@ async function main() {
     FORCE_COLOR: '1',
   }
 
+  const runnerEnv = {
+    FORCE_COLOR: '1',
+  }
+
   log.info('')
   log.info(color.bold('Starting services...'))
   const children = [
     spawnService('api', resolveUv(), ['run', 'python', 'app.py'], path.join(ROOT, 'apps/api'), apiEnv, color.bold),
     spawnService('web', 'bun', ['run', 'dev'], path.join(ROOT, 'apps/web'), webEnv, color.cyan),
     spawnService('collab', 'bun', ['run', 'dev'], path.join(ROOT, 'apps/collab'), collabEnv, color.yellow),
+    spawnService(
+      'runner',
+      resolveUv(),
+      ['run', 'uvicorn', 'src.services.code_runner.app:app', '--host', '127.0.0.1', '--port', String(RUNNER_PORT)],
+      path.join(ROOT, 'apps/api'),
+      runnerEnv,
+      color.green,
+    ),
   ]
 
   const shutdown = () => {
-    console.log('\n' + color.dim('Stopping API, Web and Collab (containers stay running)...'))
+    console.log('\n' + color.dim('Stopping API, Web, Collab and Runner (containers stay running)...'))
     for (const child of children) killTree(child)
     process.exit(0)
   }
   process.on('SIGINT', shutdown)
   process.on('SIGTERM', shutdown)
 
-  const [apiReady, webReady] = await Promise.all([
+  const [apiReady, webReady, runnerReady] = await Promise.all([
     waitForHttp(`http://localhost:${API_PORT}/api/v1/health`),
     waitForHttp(`http://localhost:${WEB_PORT}/login`),
+    waitForHttp(`http://127.0.0.1:${RUNNER_PORT}/`),
   ])
 
   console.log('')
@@ -454,6 +475,8 @@ async function main() {
   if (webReady) log.ok(`Web      http://localhost:${WEB_PORT}`)
   else log.fail('Web did not answer within 2 minutes (see logs above).')
   log.ok(`Collab   ws://localhost:${COLLAB_PORT}`)
+  if (runnerReady) log.ok(`Runner   http://127.0.0.1:${RUNNER_PORT} (local code judge)`)
+  else log.warn('Runner did not answer; code tests will be unavailable until it does.')
   console.log('')
   console.log(color.dim('  Ctrl+C stops the app servers. `node scripts/dev.mjs --stop` also stops DB/Redis.'))
   console.log('')

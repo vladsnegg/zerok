@@ -3,7 +3,7 @@ import { PaperPlaneTilt, CircleNotch, Sparkle, X } from '@phosphor-icons/react'
 import Image from 'next/image'
 import { cn } from '@/lib/utils'
 import type { MagicBlockMessage } from './types'
-import lrnaiIcon from 'public/lrnai_icon.png'
+const zerokAIIcon = '/zerok-ai.png'
 import { useTranslation } from 'react-i18next'
 
 interface MagicBlockChatProps {
@@ -82,7 +82,7 @@ function MagicBlockChat({
           <Image
             className="outline outline-1 outline-neutral-200/20 rounded-lg"
             width={20}
-            src={lrnaiIcon}
+            src={zerokAIIcon}
             alt={t('editor.blocks.magic_block_content.magic_chat')}
           />
           <span className="font-semibold text-sm text-white/70">{t('editor.blocks.magic_block_content.magic_chat')}</span>

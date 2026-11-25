@@ -1,15 +1,26 @@
 from typing import Optional
 
-from fastapi import APIRouter, Depends, Query, Request
+from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from pydantic import BaseModel
+from sqlmodel import select
 from sqlmodel.ext.asyncio.session import AsyncSession
 
 from src.core.events.database import get_db_session
+from src.db.courses.courses import Course
 from src.db.users import PublicUser
 from src.security.auth import get_current_user
+from src.services.stats import course_stats
 from src.services.stats import stats as stats_service
 
 router = APIRouter()
+
+
+def _validate_period(period: str) -> str:
+    if period not in course_stats.VALID_PERIODS:
+        raise HTTPException(
+            status_code=400, detail="period must be week, month or all"
+        )
+    return period
 
 
 class ContestBody(BaseModel):
@@ -46,6 +57,147 @@ async def api_my_stats(
     return await stats_service.get_my_stats(
         db_session, org_id, current_user, period=period, course_uuid=course_uuid
     )
+
+
+@router.get(
+    "/global",
+    summary="Global weighted KPI and course breakdown",
+    description=(
+        "Weighted average of every included course KPI. A locked course is "
+        "excluded; an unlocked but not started course enters with KPI 0."
+    ),
+)
+async def api_global_stats(
+    request: Request,
+    org_id: int = Query(...),
+    program_id: Optional[int] = Query(None),
+    period: str = Query("all"),
+    current_user: PublicUser = Depends(get_current_user),
+    db_session: AsyncSession = Depends(get_db_session),
+):
+    _validate_period(period)
+    try:
+        return await course_stats.get_global_stats(
+            db_session, int(current_user.id or 0), org_id, program_id, period
+        )
+    except ValueError as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
+
+
+@router.get(
+    "/courses",
+    summary="Per-course KPI for the current user",
+)
+async def api_course_stats(
+    request: Request,
+    org_id: int = Query(...),
+    program_id: Optional[int] = Query(None),
+    period: str = Query("all"),
+    current_user: PublicUser = Depends(get_current_user),
+    db_session: AsyncSession = Depends(get_db_session),
+):
+    _validate_period(period)
+    try:
+        data = await course_stats.get_global_stats(
+            db_session, int(current_user.id or 0), org_id, program_id, period
+        )
+    except ValueError as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
+    return {
+        "period": data["period"],
+        "global_kpi": data["global_kpi"],
+        "coverage": data["coverage"],
+        "courses": data["courses"],
+    }
+
+
+@router.get(
+    "/courses/{course_uuid}",
+    summary="Detailed course KPI for the current user",
+)
+async def api_course_detail(
+    request: Request,
+    course_uuid: str,
+    org_id: int = Query(...),
+    program_id: Optional[int] = Query(None),
+    period: str = Query("all"),
+    current_user: PublicUser = Depends(get_current_user),
+    db_session: AsyncSession = Depends(get_db_session),
+):
+    _validate_period(period)
+    try:
+        return await course_stats.get_course_stats(
+            db_session,
+            int(current_user.id or 0),
+            org_id,
+            course_uuid,
+            program_id,
+            period,
+        )
+    except ValueError as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
+
+
+@router.get(
+    "/courses/{course_uuid}/students",
+    summary="Teacher view of student KPIs in one course",
+)
+async def api_course_students(
+    request: Request,
+    course_uuid: str,
+    org_id: int = Query(...),
+    program_id: Optional[int] = Query(None),
+    limit: int = Query(200, ge=1, le=500),
+    current_user: PublicUser = Depends(get_current_user),
+    db_session: AsyncSession = Depends(get_db_session),
+):
+    course = (
+        await db_session.execute(
+            select(Course).where(
+                Course.course_uuid == course_uuid, Course.org_id == org_id
+            )
+        )
+    ).scalars().first()
+    if course is None:
+        raise HTTPException(status_code=404, detail="Course not found")
+    await stats_service._require_instructor(db_session, org_id, current_user, course)
+    try:
+        return await course_stats.get_course_students(
+            db_session, org_id, course_uuid, program_id, limit=limit
+        )
+    except ValueError as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
+
+
+@router.get(
+    "/informatics/problems",
+    summary="Problem-level Informatics statistics",
+)
+async def api_informatics_problems(
+    request: Request,
+    limit: int = Query(200, ge=1, le=1000),
+    current_user: PublicUser = Depends(get_current_user),
+    db_session: AsyncSession = Depends(get_db_session),
+):
+    return await course_stats.get_informatics_problems(db_session, limit=limit)
+
+
+@router.post(
+    "/recompute",
+    summary="Recompute programme statistics (admin)",
+)
+async def api_recompute_stats(
+    request: Request,
+    org_id: int = Query(...),
+    program_id: Optional[int] = Query(None),
+    current_user: PublicUser = Depends(get_current_user),
+    db_session: AsyncSession = Depends(get_db_session),
+):
+    await stats_service._require_instructor(db_session, org_id, current_user, None)
+    try:
+        return await course_stats.recompute_program(db_session, org_id, program_id)
+    except ValueError as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
 
 
 @router.get(

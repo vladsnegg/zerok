@@ -58,9 +58,9 @@ export default function ErrorActions({ resolutions, reset, eventId, loginNext }:
   const doSignOut = async () => {
     setSigningOut(true)
     try {
-      await signOut({ callbackUrl: '/login', redirect: true })
+      await signOut({ callbackUrl: '/welcome', redirect: true })
     } catch {
-      window.location.href = '/login'
+      window.location.href = '/welcome'
     }
   }
 

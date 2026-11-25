@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { getUriWithOrg } from '@services/config/config'
 import { HeaderProfileBox } from '@components/Security/HeaderProfileBox'
 import MenuLinks from './OrgMenuLinks'
+import { ThemeQuickSwitcher } from './ThemeQuickSwitcher'
 import { MobileTabBar, OPEN_MOBILE_MORE_EVENT } from './MobileNav'
 import UserAvatar from '@components/Objects/UserAvatar'
 import { getOrgLogoMediaDirectory } from '@services/media/media'
@@ -402,6 +403,7 @@ export const OrgMenu = (props: any) => {
             )}
 
             <div className="hidden lg:flex items-center gap-2">
+              <ThemeQuickSwitcher orgslug={orgslug} primaryColor={primaryColor} />
               {roleLabel && (
                 <span className="inline-flex items-center rounded-full border border-black/[0.08] bg-black/[0.04] px-3 py-1 text-[11px] font-semibold text-black/50">
                   {roleLabel}
@@ -413,6 +415,7 @@ export const OrgMenu = (props: any) => {
                 (MobileTabBar); the header keeps only what a native app puts
                 top-right: the inbox when signed in, sign-in otherwise. */}
             <div className="flex lg:hidden items-center gap-1">
+              <ThemeQuickSwitcher orgslug={orgslug} primaryColor={primaryColor} />
               {session?.status === 'authenticated' ? (
                 <>
                   {messagingVisible && (

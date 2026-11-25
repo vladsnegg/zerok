@@ -4,7 +4,7 @@ import { X, PencilSimple, ArrowsOut, DotsSixVertical, Lock } from '@phosphor-ico
 import React from 'react'
 import { v4 as uuidv4 } from 'uuid'
 import Image from 'next/image'
-import lrnaiIcon from 'public/lrnai_icon.png'
+const zerokAIIcon = '/zerok-ai.png'
 import { useEditorProvider } from '@components/Contexts/Editor/EditorContext'
 import { useLHSession } from '@components/Contexts/LHSessionContext'
 import { useCourse } from '@components/Contexts/CourseContext'
@@ -248,7 +248,7 @@ function MagicBlockComponent(props: ExtendedNodeViewProps) {
                 <Image
                   className="outline outline-1 outline-neutral-200/20 rounded-lg"
                   width={20}
-                  src={lrnaiIcon}
+                  src={zerokAIIcon}
                   alt={t('editor.blocks.magic_block_content.title')}
                 />
                 <span className="text-sm font-semibold text-white/70">
@@ -278,7 +278,7 @@ function MagicBlockComponent(props: ExtendedNodeViewProps) {
                     }}
                     className="p-4 rounded-full drop-shadow-md"
                   >
-                    <Image src={lrnaiIcon} alt={t('editor.blocks.magic_block_content.title')} width={32} height={32} />
+                    <Image src={zerokAIIcon} alt={t('editor.blocks.magic_block_content.title')} width={32} height={32} />
                   </div>
                   <div className="space-y-1">
                     <p className="font-semibold text-white/80">
@@ -298,7 +298,7 @@ function MagicBlockComponent(props: ExtendedNodeViewProps) {
                     <Image
                       className="outline outline-1 outline-neutral-200/20 rounded-md"
                       width={16}
-                      src={lrnaiIcon}
+                      src={zerokAIIcon}
                       alt=""
                     />
                     {t('editor.blocks.magic_block_content.generate_with_ai')}
@@ -322,7 +322,7 @@ function MagicBlockComponent(props: ExtendedNodeViewProps) {
                     <Image
                       className="outline outline-1 outline-neutral-200/20 rounded-md opacity-50 grayscale"
                       width={16}
-                      src={lrnaiIcon}
+                      src={zerokAIIcon}
                       alt=""
                     />
                     {t('editor.blocks.magic_block_content.generate_with_ai')}

@@ -7,13 +7,17 @@ import TaskFileObject from 'app/orgs/[orgslug]/(withmenu)/cabinet/assignments/[a
 import TaskQuizObject from 'app/orgs/[orgslug]/(withmenu)/cabinet/assignments/[assignmentuuid]/_components/TaskEditor/Subs/TaskTypes/TaskQuizObject'
 import TaskFormObject from 'app/orgs/[orgslug]/(withmenu)/cabinet/assignments/[assignmentuuid]/_components/TaskEditor/Subs/TaskTypes/TaskFormObject'
 import TaskCodeObject from 'app/orgs/[orgslug]/(withmenu)/cabinet/assignments/[assignmentuuid]/_components/TaskEditor/Subs/TaskTypes/TaskCodeObject'
+import TaskDescriptionMarkdown from './TaskDescriptionMarkdown'
 import TaskShortAnswerObject from 'app/orgs/[orgslug]/(withmenu)/cabinet/assignments/[assignmentuuid]/_components/TaskEditor/Subs/TaskTypes/TaskShortAnswerObject'
 import TaskNumberAnswerObject from 'app/orgs/[orgslug]/(withmenu)/cabinet/assignments/[assignmentuuid]/_components/TaskEditor/Subs/TaskTypes/TaskNumberAnswerObject'
 import toast from 'react-hot-toast';
-import { AlarmClockOff, BookOpenCheck, Calendar, Check, CheckCircle2, Circle, ClipboardCheck, ClipboardList, Download, Hourglass, Lightbulb, ListChecks, Lock, MessageSquare, PencilLine, RotateCcw, Send, Trophy, X } from 'lucide-react';
+import { AlarmClockOff, BookOpenCheck, Calendar, Check, CheckCircle2, Circle, ClipboardCheck, ClipboardList, Code2, Download, Hourglass, Lightbulb, ListChecks, Lock, MessageSquare, PencilLine, RefreshCw, RotateCcw, Send, Trophy, X } from 'lucide-react';
 import Link from 'next/link';
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next';
+import { useLHSession } from '@components/Contexts/LHSessionContext'
+import { getUriWithOrg } from '@services/config/config'
+import { getInformaticsAssignmentResults, getInformaticsRequirement, type InformaticsRequirement } from '@services/informatics/informatics'
 import { sortTasksByOrder } from '@/lib/assignments/taskOrder'
 import { ASSIGNMENT_SUBMIT_EVENT, taskSubmissionHasAnswer } from './assignmentUI'
 
@@ -67,6 +71,48 @@ function AssignmentStudentActivity() {
   const org = useOrg() as any;
   const submission = useAssignmentSubmission() as any;
   const taskSubmissionsMap = useAssignmentTaskSubmissions() as Record<string, any> | null;
+  const session = useLHSession() as any;
+  const accessToken = session?.data?.tokens?.access_token;
+  const assignmentUuid = assignments?.assignment_object?.assignment_uuid;
+  const courseUuid = assignments?.course_object?.course_uuid;
+  const [informaticsSolved, setInformaticsSolved] = useState<Record<string, { solved: boolean; run_id: number }>>({});
+  const [informaticsRequirement, setInformaticsRequirement] = useState<InformaticsRequirement | null>(null);
+  const [checkingRequirement, setCheckingRequirement] = useState(false);
+
+  useEffect(() => {
+    if (!accessToken || !assignmentUuid) return;
+    let cancelled = false;
+    getInformaticsAssignmentResults(assignmentUuid, accessToken)
+      .then((map) => {
+        if (!cancelled) setInformaticsSolved(map);
+      })
+      .catch(() => {
+        /* the badge is optional; never break the assignment view */
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [accessToken, assignmentUuid]);
+
+  const loadRequirement = useCallback(() => {
+    if (!accessToken || !courseUuid) return;
+    setCheckingRequirement(true);
+    getInformaticsRequirement(courseUuid, accessToken)
+      .then((value) => setInformaticsRequirement(value))
+      .catch(() => {
+        /* a missing requirement must never hide the assignment */
+      })
+      .finally(() => setCheckingRequirement(false));
+  }, [accessToken, courseUuid]);
+
+  useEffect(() => {
+    loadRequirement();
+  }, [loadRequirement]);
+
+  // Only a course that opted in can block work. Every other course gets
+  // `required: false` and behaves exactly as before.
+  const informaticsBlocked =
+    !!informaticsRequirement?.required && !informaticsRequirement.ready;
 
   // Per-task grading is rendered inline only after the whole assignment has
   // been graded; that's when raw task grades are guaranteed to reflect the
@@ -161,6 +207,9 @@ function AssignmentStudentActivity() {
   const submissionStatus = Array.isArray(submission) && submission.length > 0 ? submission[0]?.submission_status : null
   const isSubmitted = submissionStatus === 'SUBMITTED'
   const isAwaitingSubmission = !isSubmitted && !isGraded
+  // Blocking only makes sense while work can still change. A graded or already
+  // handed-in attempt stays readable even if the script is not installed.
+  const informaticsGateActive = informaticsBlocked && isAwaitingSubmission && !isPastDue
 
   // One status for the whole assignment, in the learner's words.
   const status = isGraded
@@ -268,6 +317,60 @@ function AssignmentStudentActivity() {
         </div>
       )}
 
+      {/* Informatics setup gate. Only shown in a course that opted in and only
+          while the learner can still change their work. The API enforces the
+          same rule, so hiding the editors is a courtesy, not the guard. */}
+      {informaticsGateActive && (
+        <div className='flex flex-col gap-4 rounded-2xl border border-amber-200 bg-amber-50/80 p-4 sm:p-5'>
+          <div className='flex items-start gap-3'>
+            <span className='flex h-10 w-10 flex-none items-center justify-center rounded-xl bg-amber-100 text-amber-700'>
+              <Code2 size={19} />
+            </span>
+            <div className='min-w-0'>
+              <p className='text-[11px] font-semibold uppercase tracking-wider text-amber-700'>
+                {t('informatics.gate_kicker', { defaultValue: 'Course requirement' })}
+              </p>
+              <p className='text-base font-semibold text-amber-950'>
+                {t('informatics.gate_title_v2', { defaultValue: 'Connect Informatics to start' })}
+              </p>
+              <p className='mt-1 text-sm leading-relaxed text-amber-900/80'>
+                {t('informatics.gate_body_connect_v2', {
+                  defaultValue:
+                    'This course is graded on informatics.msk.ru. Sign in with your Informatics login and password — the LMS submits code and reads the verdict automatically.',
+                })}
+              </p>
+            </div>
+          </div>
+          <ol className='list-decimal space-y-1.5 ps-5 text-sm leading-relaxed text-amber-900/80'>
+            <li>{t('informatics.gate_step_1', { defaultValue: 'Open the Informatics section in your account.' })}</li>
+            <li>{t('informatics.gate_step_2_v2', { defaultValue: 'Sign in with your Informatics login and password.' })}</li>
+            <li>{t('informatics.gate_step_3', { defaultValue: 'Open any informatics.msk.ru problem page, then come back and recheck.' })}</li>
+          </ol>
+          <div className='flex flex-wrap items-center gap-2'>
+            <Link
+              href={getUriWithOrg(org?.slug || '', '/account/informatics')}
+              className='lh-press flex h-10 items-center gap-2 rounded-xl bg-neutral-900 px-4 text-sm font-semibold text-white transition-colors hover:bg-neutral-800'>
+              <Code2 size={15} />
+              {t('informatics.gate_open', { defaultValue: 'Set up Informatics' })}
+            </Link>
+            <button
+              type='button'
+              onClick={loadRequirement}
+              disabled={checkingRequirement}
+              className='flex h-10 items-center gap-2 rounded-xl border border-amber-200 bg-white px-4 text-sm font-semibold text-amber-900 transition-colors hover:bg-amber-50 disabled:opacity-60'>
+              <RefreshCw size={15} className={checkingRequirement ? 'animate-spin' : ''} />
+              {t('informatics.gate_recheck', { defaultValue: 'Recheck' })}
+            </button>
+          </div>
+          <p className='text-xs leading-relaxed text-amber-800/70'>
+            {t('informatics.gate_hint_v2', {
+              defaultValue:
+                'The password is encrypted and never returned by the API; cookies are not stored. The LMS submits code and reads verdicts for you.',
+            })}
+          </p>
+        </div>
+      )}
+
       {/* Score summary once the work is graded. */}
       {isGraded && !isUngraded && totalPoints > 0 && (
         <div className={`flex items-center gap-4 rounded-2xl p-4 sm:p-5 nice-shadow ${scorePassed ? 'bg-emerald-50/70' : 'bg-rose-50/70'}`}>
@@ -343,7 +446,7 @@ function AssignmentStudentActivity() {
         </div>
       )}
 
-      {tasks.map((task: any, index: number) => {
+      {!informaticsGateActive && tasks.map((task: any, index: number) => {
         const taskSubmission = taskSubmissionsMap ? taskSubmissionsMap[task.assignment_task_uuid] : null;
         const taskGrade = taskSubmission?.grade ?? 0;
         const taskMax = task.max_grade_value || 0;
@@ -373,9 +476,21 @@ function AssignmentStudentActivity() {
                 <p className='text-[11px] font-semibold uppercase tracking-wider text-neutral-400'>
                   {t('assignments.task')} {index + 1}
                 </p>
-                <h3 id={`task-${task.assignment_task_uuid}`} className='text-base font-semibold leading-snug text-neutral-900 break-words'>
-                  {task.description}
-                </h3>
+                <div id={`task-${task.assignment_task_uuid}`} className='min-w-0 text-neutral-900 break-words'>
+                  {task.description || task.title ? (
+                    <TaskDescriptionMarkdown content={task.description || task.title || ''} />
+                  ) : (
+                    <p className='text-base font-semibold leading-snug text-neutral-900'>
+                      {t('assignments.task')} {index + 1}
+                    </p>
+                  )}
+                </div>
+                {informaticsSolved[task.assignment_task_uuid]?.solved && (
+                  <span className='mt-2 inline-flex items-center gap-1 rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-0.5 text-[11px] font-bold text-emerald-700'>
+                    <CheckCircle2 size={12} />
+                    Informatics: {t('informatics.status_solved', { defaultValue: 'Accepted' })}
+                  </span>
+                )}
                 {(task.hint || task.reference_file) && (
                   <div className='mt-2 flex flex-wrap gap-2'>
                     {task.hint && (
@@ -444,7 +559,7 @@ function AssignmentStudentActivity() {
 
       {/* Where the work ends: hand it in, or see where it stands. The button
           opens the same confirmation as the activity bar's submit control. */}
-      {tasks.length > 0 && isAwaitingSubmission && !isPastDue && (
+      {!informaticsGateActive && tasks.length > 0 && isAwaitingSubmission && !isPastDue && (
         <div className='flex flex-col sm:flex-row sm:items-center gap-4 rounded-2xl bg-neutral-900 p-4 sm:p-5 text-white'>
           <div className='min-w-0 flex-1'>
             <p className='text-base font-semibold'>{t('assignments.handin_ready_title', { defaultValue: 'Ready to hand in?' })}</p>

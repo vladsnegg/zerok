@@ -6,27 +6,11 @@ import en from '../locales/en.json';
 import { loadDateLocale } from './format';
 
 const LOCALE_LOADERS: Record<string, () => Promise<{ default: any }>> = {
+  ru: () => import('../locales/ru.json'),
+  es: () => import('../locales/es.json'),
   fr: () => import('../locales/fr.json'),
   de: () => import('../locales/de.json'),
-  es: () => import('../locales/es.json'),
   ar: () => import('../locales/ar.json'),
-  ja: () => import('../locales/ja.json'),
-  pt: () => import('../locales/pt.json'),
-  ru: () => import('../locales/ru.json'),
-  zh: () => import('../locales/zh.json'),
-  hi: () => import('../locales/hi.json'),
-  ko: () => import('../locales/ko.json'),
-  it: () => import('../locales/it.json'),
-  tr: () => import('../locales/tr.json'),
-  vi: () => import('../locales/vi.json'),
-  id: () => import('../locales/id.json'),
-  pl: () => import('../locales/pl.json'),
-  uk: () => import('../locales/uk.json'),
-  nl: () => import('../locales/nl.json'),
-  th: () => import('../locales/th.json'),
-  bn: () => import('../locales/bn.json'),
-  fa: () => import('../locales/fa.json'),
-  sk: () => import('../locales/sk.json'),
 };
 
 // Only bundle English; lazy-load all other locales on demand
@@ -37,6 +21,14 @@ const resources = {
 const STORAGE_KEY = 'i18nextLng'
 const COOKIE_NAME = 'i18next'
 const COOKIE_MAX_AGE = 60 * 60 * 24 * 365
+
+/** Every UI language the app ships. */
+export const SUPPORTED_LANGUAGES = ['en', ...Object.keys(LOCALE_LOADERS)]
+
+function normalizeSupportedCode(lng: string | null | undefined): string {
+  const base = String(lng || '').split('-')[0].toLowerCase()
+  return SUPPORTED_LANGUAGES.includes(base) ? base : 'en'
+}
 
 function readCookie(name: string): string | null {
   try {
@@ -63,22 +55,22 @@ export function detectLanguage(): string {
 
   try {
     const stored = window.localStorage.getItem(STORAGE_KEY)
-    if (stored) return stored
+    if (stored) return normalizeSupportedCode(stored)
   } catch {
     /* storage blocked: fall through to the cookie */
   }
 
   const fromCookie = readCookie(COOKIE_NAME)
-  if (fromCookie) return fromCookie
+  if (fromCookie) return normalizeSupportedCode(fromCookie)
 
   const fromQuery = new URLSearchParams(window.location.search).get('lng')
-  if (fromQuery) return fromQuery
+  if (fromQuery) return normalizeSupportedCode(fromQuery)
 
-  return navigator.language || 'en'
+  return normalizeSupportedCode(navigator.language || 'en')
 }
 
 async function loadLocale(lng: string) {
-  const code = lng.split('-')[0]
+  const code = normalizeSupportedCode(lng)
   if (code === 'en' || !LOCALE_LOADERS[code]) return;
   if (i18n.hasResourceBundle(code, 'common')) return;
 
@@ -108,22 +100,20 @@ i18n
     }
   });
 
-/** Every UI language the app ships. */
-export const SUPPORTED_LANGUAGES = ['en', ...Object.keys(LOCALE_LOADERS)]
-
 export async function changeLanguage(lng: string) {
-  await Promise.all([loadLocale(lng), loadDateLocale(lng)])
-  const result = await i18n.changeLanguage(lng)
+  const safeCode = normalizeSupportedCode(lng)
+  await Promise.all([loadLocale(safeCode), loadDateLocale(safeCode)])
+  const result = await i18n.changeLanguage(safeCode)
 
   // Persist the choice here, because detection no longer caches it implicitly.
   if (typeof window !== 'undefined') {
     try {
-      window.localStorage.setItem(STORAGE_KEY, lng)
+      window.localStorage.setItem(STORAGE_KEY, safeCode)
     } catch {
       /* storage blocked: the cookie below still carries the choice */
     }
     try {
-      document.cookie = `${COOKIE_NAME}=${encodeURIComponent(lng)}; path=/; max-age=${COOKIE_MAX_AGE}; samesite=lax`
+      document.cookie = `${COOKIE_NAME}=${encodeURIComponent(safeCode)}; path=/; max-age=${COOKIE_MAX_AGE}; samesite=lax`
     } catch {
       /* cookies blocked */
     }
